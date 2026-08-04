@@ -1,0 +1,15 @@
+# What NOT to upload with `vercel deploy`.
+#
+# This file has to exist. Without it the Vercel CLI falls back to .gitignore,
+# and .gitignore excludes public/thumbs and public/detail — 187 MB of artwork
+# that is deliberately kept out of the repository but must still be deployed.
+# Relying on the fallback would ship a site with no images and no error.
+
+node_modules
+.next
+.git
+.env*
+docs
+scripts
+*.test.ts
+vitest.config.ts

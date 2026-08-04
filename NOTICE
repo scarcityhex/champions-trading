@@ -1,0 +1,45 @@
+champions-trading
+Copyright 2026 Artur (scarcityhex)
+
+This repository is licensed in two parts.
+
+  contracts/    Apache License 2.0 — see contracts/LICENSE
+  everything    GNU Affero General Public License v3.0 — see LICENSE
+  else
+
+The contracts are permissive on purpose. They are a small, reusable escrow
+pattern, and the Ergo ecosystem is better off being able to copy them without
+conditions. The application is AGPL because it is a website: anyone may run
+their own instance, and anyone who modifies it and serves it to others has to
+publish those modifications.
+
+
+WHAT IS NOT COVERED BY EITHER LICENCE
+─────────────────────────────────────
+
+The artwork of Ergo Champions, Ergo Mummy and Mage Champions is NOT ours and is
+NOT licensed by this repository.
+
+It is hosted with the written permission of the collection owner, for the sole
+purpose of serving it on this marketplace. That permission is to display the
+work. It is not permission for anyone else to copy, redistribute or relicense
+it, and nothing in the LICENSE files above should be read as granting that.
+
+For this reason the image files are deliberately excluded from the repository
+(see .gitignore). They are uploaded straight to the host at deploy time and
+never enter git history — so that the permission remains something the owner
+can withdraw, rather than something published irrevocably.
+
+Anyone running their own instance needs their own arrangement with the
+collection owner, or should serve the artwork from IPFS, which is where it
+canonically lives. Every token's on-chain R9 register holds that address and R8
+holds the SHA-256 of the file, so an IPFS-only instance is fully functional and
+verifiable.
+
+The collection metadata in data/ is derived from the Ergo blockchain: token
+ids, issuer addresses, trait values, and the burn audit. The facts are public
+records. The trait names and descriptions originate with the collection
+authors and are reproduced here only to identify their tokens.
+
+The interface sprites in public/ui/ are cut from the author's own game and are
+covered by the AGPL like the rest of the application.

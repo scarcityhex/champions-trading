@@ -1,0 +1,14 @@
+# Derived image tiers and catalogue data. Marked binary so git does not try to
+# diff or merge them — they are regenerated wholesale, never edited by hand, and
+# a textual merge of a WebP is meaningless.
+*.webp   binary
+*.png    binary
+
+# The catalogue and audit files are generated too. Diffing them is useful (an
+# unexpected change to data/supply.json is exactly the thing to notice in
+# review), so they stay text — just never hand-edited.
+data/*.json text eol=lf
+
+# Keep line endings stable for the contract sources: their compiled hash is
+# pinned in lib/contract.ts, and a CRLF checkout would change the address.
+*.es     text eol=lf

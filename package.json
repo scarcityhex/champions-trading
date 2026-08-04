@@ -1,0 +1,36 @@
+{
+  "name": "champions-trading",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "verify:catalog": "tsx scripts/verify-catalog.mjs",
+    "index:sales": "tsx scripts/index-sales.mjs",
+    "audit:supply": "tsx scripts/audit-supply.mjs",
+    "preflight": "bash scripts/preflight.sh"
+  },
+  "dependencies": {
+    "@fleet-sdk/core": "^0.12.0",
+    "next": "^16.0.7",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
+  },
+  "devDependencies": {
+    "@fleet-sdk/compiler": "^0.12.0",
+    "@fleet-sdk/mock-chain": "^0.12.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "tsx": "^4.23.5",
+    "typescript": "^5",
+    "vitest": "^3.2.7"
+  }
+}

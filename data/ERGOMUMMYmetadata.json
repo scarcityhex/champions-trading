@@ -1,0 +1,5767 @@
+{
+ "collection": {
+  "name": "Ergo Mummy",
+  "idPrefix": "ERGOMU",
+  "chain": "ERGO",
+  "standard": "EIP-004",
+  "ownership": {
+   "issuerAddress": "9gtuMt4YTz5e1cskqyUAzVCXcQMHNtrF7RyfbnhHvNiQ1UoR697",
+   "anchorTokenId": "6b6756e661c7a92e4fcab4ac5424a7a0f0310bb9d37cc71508ca75747c66d1c9",
+   "explorer": "https://api.ergoplatform.com/api/v1",
+   "tokenCount": 140,
+   "tokenIds": [
+    "28048a181868f66dc9898d00a9c747a38e56369f83307e4660010bfc530bd3b6",
+    "554f1dd6714064ccd72c06c093af2d722f3a52c9e96b3f3ff4bd86af07ea1913",
+    "e3b034194bd8ee18dbb684b71d52261190eee09d006e88605c9dc1cbd96a86af",
+    "eabb4f30004bfd8085d3f8a0a6d2d554d1c31f66666a56b8c9cb395cf36de716",
+    "6e4d207303b465d8df17ec8e173b44d6ad7c8fece6eaced7f7707c2b203b3bc9",
+    "e0be18f3fa8bc64a3ed4af5c60f97fc717c24e327b24148a5119a2c431f39be4",
+    "3ce8e6be4a2a21838a066b6e205190e0d2b601c582e70c8c883113709fa38505",
+    "c6198194dcd86dba700d4a178c4af74afff27f9915c945079cf559684059ab59",
+    "3be82f9e27907fa644867eb20af831d447882cfa0505d539cf698032349f7470",
+    "34aa6a724ffd5eaa02baef3bb46445acc9a35991b47764a01bc97f45cf21da92",
+    "5cb69f4de880925da2ad7972bdaab5b6991c0bd62ca869734fe5e1c36558e0d7",
+    "7bc29af69bb9e07800cbdc8651d363dc5ac34e695f07d084e629e3173b3cea1d",
+    "748abd5de6192044e0599cbbe57e9919cc0944bc160cbc8c4f7d3e3ec1326aae",
+    "8957b393d938144320718a5fd0956acae58c0d01f40fd68304594a6f20baddb9",
+    "d3f25b3f1dd4238703992950d5b55a34f9a00e51bdccfbc6f411ab7b7991d0ad",
+    "4c7407593406bc36d9f07c56ef47913926779996da818580e584f3f39f651571",
+    "d5fe357aa5886912944b40b3c446d41802bef0cdaf3efd65d5d4d57bff4b5266",
+    "aaace7d50fe9e85f371c634a3c4f8dedb4039c856174b6b03eb607f5d1ecd6f0",
+    "91f1c321db450b0d1c65a534cf6dca8595588d065dff8ea5e7aff95a5babc51c",
+    "402b34b01874da17a05177dd69a16d4c90d8376fde2bb86fb523f8d02d1fc314",
+    "ab1a4c9da121a0ff6574013f77109bec0003eac6ca1317407b25a7e21b1d5acd",
+    "4faed7ebb918f4f5b69a69d6369344cd3329305e5e70677b392f439dbe0120e7",
+    "1d62e61dbf27a8a4a2139811b6870da2414181c518ed27ed6b159e0235a9a455",
+    "75cb0d0c8485f5276551810d5361f6cbdb2c29c7e963cf37db0a195aab5c6c5e",
+    "953885cee2acbe335088fa7458b4bf2cb2126c6017bc81ca42c032715e2f1a0b",
+    "d149aeaac75e2b41931974fb09616d6c0f2a8e6637a26a8c87b902f2b4c004ba",
+    "8d458a5d8fabac8f15dff62f68a47e2df4aa7b84ed662a470f4dce1736fb1378",
+    "24935b697d862702e05655ee77eb527173b1cf6f0a2c693d2e61933b78cc22d2",
+    "e594b76ae0e3e767899c3fc7cd70e046b667c7b9253a436c444300ed0e729a80",
+    "1575bdcb4481fd33df65e9095e48d71f6a36154717c0301b371fbee42bffcb33",
+    "adad5daadb996430f9ad0317180c951f7bcdbb3c4b9932ea223f676ec0a99c53",
+    "a6effb85fa98f5c2966775804b8f3a18198627a6eaf79cbb31623d07408aff37",
+    "a2699fc1d287c7ea9a21f0a68bf4c6ac247b61ee97eb31a701280c9f6da80239",
+    "e515f658aa7a8e1b7328333c48d17f4b7e99fc31bb59925b891cbc759508e354",
+    "d0f80834009029250a87306d59fd3f7ee5f7f280881cec3d0dab0be37bcbaea2",
+    "14e22f73affd22e803095ea04c30e171f540a8d53ca540da4385e29ba2b7349a",
+    "cb27b3a73ed4ac47ccac261b67769cd90d2da9e41e9636386f3df926c2afe61b",
+    "8a7472c55d979b77610319e8b57b5e8328d24bfe0d0aaa5b39eb7faa70a5d44e",
+    "567f479b2406bc95d3a90f799f55da806d633acfeed6ab25baa5fd10676d5680",
+    "1929ccce12333bf9c856950f6a6bd25a1e41da019b54446043bb66dd8da426bc",
+    "ba2e4a12557bfb930a43b9b73b9ea623eefb58313807411dd6931735124aa1c0",
+    "bc70423db2659337e43739135eb218c59568fcd8f694caf26808ea6245ee59b0",
+    "61b95dbbc6715d800a6a92e863c89d3d5e83c48662d2141bdffa17c47831c6e3",
+    "75ed1d83ce1ddb72be75066a2aac02df37ab4163922907ab8c62718ab12eab9c",
+    "2469d708e87798a3bd263cc27dfca318b8cc105e02bee9c1b6779939d0a65f36",
+    "4705dcdac555dd2297ad8c81d3be752de58337d0e1915229c3106abbe7b13124",
+    "11e3b27f8d7165d770acfde16ecd4a31054b74bc31c65f5c868401d53aa6dee2",
+    "a1cc255991fca4dcf59f0ae9e43e8b366b47cb719b956275c43029255d026f7b",
+    "b2dc8b4cd1d2e6a21574601a28b5356d630f66dda7e0aaa9983bba5870780388",
+    "7b3827464f67c8378a10d47ac20ec56fd0436d60081cee6af0ff65f473f006b4",
+    "7dee9c521f873a071176d4e92e859ee4dd0fd25f4573eee94a76fe6bb1165018",
+    "f0f52a04bb092febcf7310f09b153fd4ff963cbc7cd5a43c004125199b059dde",
+    "eced389b39d08b86ceb8f1be69315f284e47832b6a237afe4f97013433c7be2e",
+    "8ea7a92a124ee9072c7485b304bd405073ba332f5f2001fbbff9393ac17e0f08",
+    "fe0837df7679b282c3d9c5ed2684ba4464fe3b0900ea22bce033354f4fafe4db",
+    "4146250f4263f2f2b9ba1c2b121e667755c88c1b848b4f389f38a6abad213105",
+    "615bfe7d3aa399a48981066261da91104f5c97ccfebe35eda2a9ce8a32cce412",
+    "6e955d0c82b35f3231ccf6c672ea6e8cac63239f7f46db465b9ce75409f19142",
+    "ad932d793402df96be5e7d2086beffc24e01838fcb7d4d2731416fcb87a34486",
+    "6b6756e661c7a92e4fcab4ac5424a7a0f0310bb9d37cc71508ca75747c66d1c9",
+    "076753192c2cc867e1eb4ef1179e616e55ca90d5a6c0978f5f327b6b21245dd2",
+    "0ab076edae58473d02d4688d7d3da0fc4a0d4e7df1104b026c73738c7d4907c7",
+    "a18c62871697211813c29ae9d6f707525b712a230429a86dcab281fffedc3a79",
+    "f9563687cac4983cc8e0f62ab4adfb596f1741f88627b83a33dbae913dc7c602",
+    "518f17f5dabd265e92af7dfced645b8d283a67c01970be4dc9c5e4688b54257f",
+    "4180fd9a2435eaddbe2e6e3abfc86f473ca62f538df69e2db50616d6a14e23a5",
+    "2dd55fc19779c4061ab215b731048152bda9cdfa57dda3a198ff6fa3db6548aa",
+    "90c262fac31b9338f23d24b9adf84af6490f16154e6fda00da972164a89b8d97",
+    "69bf27c3139c9cab6f0ef4a6f774b380ea9465b586d3d0d3ad79df73672df0df",
+    "94780cf2ac4442ffa539e299d6811a1e20f9621fc969498fef44c0111cef1e5e",
+    "4d8f5d0530def65742e892b12cb29f038887d360165b56f82e6ad27c534940ae",
+    "1c482d5ded418243333fe91994243e518e608df0d571a911198a8e72695b088b",
+    "93ea881599b3058fe4709bba76e5437ad006a83f6fdb0f4cd938971a95855eb3",
+    "dad2eb24babc5a1f9921752fea19a4bb8d085f19b808fcb33632235268207004",
+    "7a61a5b0ac3961e0b0044262bc8eac3849e8ad1f393000c64752757e263f9c80",
+    "b9adbb08d73ab6f440fb90ac0903c07a1e5e65ed003f0686660ecc00db306fa0",
+    "82b0be7b1a12b1aef15629e0833b7881ba11f93ebf5dd69f889eecc464ededd3",
+    "e649faf2557f67d0787834a61ccea3c3aec1eed3af8472edea1463caa84aefe5",
+    "7abeea05afab7ccb97d1c270818b7371b59684a41c8ffcfc1b07ad83f24ddca1",
+    "c411b4648b730e071d7065e85db5381e27ccab4e3313f71ee2f2ee3bf19cf84d",
+    "a7d1e975c2de94115a0911bbdfae9e6890eae42447a8b9b042b368f27ac25029",
+    "c7226852e0dffa91a40ced157ad8d89e2dc319aeeee7180ff4da1144c20ad79d",
+    "dc496c146e1cb647b5b8499d81723c6a4640da1decdb8d06bc2e16f957ed7648",
+    "ef3d5104994414d825ec1fa92bd0c801ef84010a4d3c5f5061e8d57d3aac8dc6",
+    "e75c4d642d86760e4e8016f5fe8dcd5d72a00c2f6d771b745cafa2aed1352f8f",
+    "f1011a656f398ae8cf3e74c8ec14bb8956b53d6ef305f0061c3b0d74b477315d",
+    "a676501e1a9a4d63bdb5453d6b8de8a1394c37561078114d9b7a66a5caf9a2dd",
+    "17c98f5e6268dd56a19b14b753a941ef6818191956b57b725fc96d894e07e360",
+    "8f128c51163ca120b287eab72f4aab1a4fb09742369bdc292749a48cc8fbadcc",
+    "55d3e8b2e2b4efe55709ac88fcc4835c6db497094227b96f41c6bf8d591f5be0",
+    "a34dffb1520460e996bbcce76d577c60d6845954c5e8ff196d422824b3b0082c",
+    "52cb5f2190f649bc6608d38df478558c679e435616e3f23b55974704de75cfb5",
+    "0ac51face86afa22ce91c6b188a77033e76ae502a4470ee7c34b5ea3c45bab61",
+    "56df0554e89656ce2f536ee99806694a1022c15866ae002b3ea60f5fd1f78e39",
+    "bb02fa1c0943b60b0bc32c7d420b1fb1eec8db16f50459d5cb328050222c3309",
+    "db5a7c11ffdb71e02f0a7481945d4b745ac594bc2638cdffc8bc498d04eeb1fe",
+    "d1ebde4e24e5ccfa007693d6c87d37036c4433b4926c1aa256c0ddf6afe0a601",
+    "4f5fedba0d75ec1ec18193e1b632423301c7a3bc52c356a0ee3efad46a696764",
+    "72dcc323bcba29e50b5d03434352c969b818df757651b678708f02159d502352",
+    "64555172b342acfc81c62df4410590ab7090b138bbe3436200557a153ebe1b8f",
+    "ae1de55236b89dea0f05a9dd1b2e4554106e5f3fd8d2d289745de0e18ed0e55d",
+    "142b23a40be9d256550a40c2020e81ee2ad04c01209637179486a4cf1130eee8",
+    "043a913dc0c14cdde688d2010552b261b58f2223ee48d8f888ec1d386d36a9a7",
+    "543de86203ed3ebe73ac32ffdce198676bf05738f890f245dc7844d909506a7b",
+    "f67823fc268dde5fb107c6d1bd57680af40d5f77e326f3c2aefb40b52d98ecc3",
+    "091fbccda964e1f332addad0099de403642c3adaed4e3420fc4668217282f2e1",
+    "1d3a137838ad2939c0157382414029d32d9f4d07e37e073934225df69d005bee",
+    "1c24e11fdf52c2ccff7e1e22d10a48e00497f9a2c3a95cd1551d1a9f5f022223",
+    "f1679c4e9ed68f255b338d1df5b0a84cd80831ded07286a9c3fbb5b8471d7cfc",
+    "3fab9724b123c2d5a5562116f17b5c711e73e14f1505995d552b54a1cafe7736",
+    "b75a9ddcf555dcb1655ce70356cb6ce62cfbea1536bd7dbdf5359712e384480c",
+    "e1d66c06db7dac5dd404195d43293540e8eb7f30c597da2aa9faaed8f7a90ca8",
+    "2c8f442effe2278a0bb56044aafd57fd9950b16e624775569dd51ef43550ed10",
+    "b2e1a1fb90b22ce9a766ebf11c2ff5e91958240cdd26416e7ffe851952f3dd5a",
+    "c40e62fa29e4452df5b886f2dae97d7dc276af38f3bb7245b853d7eff0e4ad5b",
+    "87f7493d7e73a6c3913324fcfa576423e140ea539ef328aaa50b915d6d83e15d",
+    "938b063563771435d341995b9dda8194bfddfb824bc2639a50a81e9eb2a28ae2",
+    "cca080351a62a6971ee350fa5bfc24e03b67c17002d2095ea20da4bea22d5b8e",
+    "9ef9e102a0bf13f24bb7fd7ceca0c132efadd6f9c483f7a4b98f5e0f0eb3b40d",
+    "f3b23e87265260a99865daaa4f9686c56518684c861ca4efd5f34405c35a13cd",
+    "e4a0c3d8ffc13005f264a450e1ef8c2c58e984821e5000b7e2f416a028a19b49",
+    "531fde3530ce5edff2c2f382f696a8b8a6524347d6890d2c74bc203a0d5be881",
+    "e28a2835bafe9f0e521bc0310d578ab1552844c24db69e26cecb05072f2ff811",
+    "36f8cfc04273535a84ef8c904ed141dfda6dc0189572dd3e1833a6ab01141892",
+    "d92335c29d7e9c00d0b36917162263b57c44001594ffad69dfa35bfaf1d3eb3d",
+    "2aa15f83e3439a9829ccfabefe2003de5671635e9ddce29855545b07aa898ae6",
+    "310569703dda4d8f4e4aac1f5f32851fccd29b625d4c96ac0ef88cb19f2517a5",
+    "7f1844f85fdbc81a0fcd52717d1523d7ebb2792714750fa5edc63b03293461fd",
+    "2d56cfc1890d1c3eb9d052af2893efec872a3d772a9acc58e606379d3f6d65ad",
+    "30da5c08f813245d725682bf41abc717136be8f83e5c608c788a75d6f1e907a3",
+    "7501ba84eb6d5c99068474f9667c4c86ad7da61fb6239a7ac02460d89c651d7d",
+    "62d8dbffd782f4f5697f4d3eb4e62a9ffc11ccb26a4cdada1114f6499829c97f",
+    "91795bbdf1a3eb8c0188d0649a7c92fc01bf03b48d99c20c8d49df8c0e159cae",
+    "d1462eb48839d0f7e89e5d7381ac6d54a237d9a0bc9b72c1d0c6b28eeddeb37f",
+    "27730405f8623eee8d4855b59ae1bf7dfc1ce2fd969a1e208568c943d506d0e4",
+    "7c96d87c958924eb89e81be56ee41839f8a21e0e8bb796c6092c21a74c3e1ba0",
+    "5f9840c5b6849277b30f2e72edba997725ad7b6c780455f4f76a98ef0510f555",
+    "fb69741da6b72a8081fe75655f19518399d162dd78df6db7dc177d1d9e4ba6c0",
+    "7ba5f164a145d832c11a7980697feece3623b52823d59f91c14200efe55c25ae",
+    "c8e196cc8770613440c062c6e58d81582bfdd5c8a401de10d8f31b06b8062e24"
+   ]
+  },
+  "audit": {
+   "expectedSupply": 125,
+   "distinctEditions": 125,
+   "missingEditions": [],
+   "duplicateEditions": [
+    37,
+    104,
+    108,
+    111,
+    112,
+    114,
+    116,
+    119,
+    120,
+    122,
+    123,
+    125
+   ],
+   "rejectedTokens": [
+    {
+     "id": "d87c4e79ee4371bb034114ab7b4ee538e60326fa5b0bb5f6fbba40f96a12873f",
+     "name": "Ergo Mummy #1",
+     "issuer": "9gYsBHTuEQnKoAY6Jzbx3keyyJRgVosUBzoS9LzRUGFBq9wCCsU"
+    },
+    {
+     "id": "5371340e80e8b82048d785680f0732e288ada471b9ea91604033bc065bc783f2",
+     "name": "Ergo Mummy #5",
+     "issuer": "9gYsBHTuEQnKoAY6Jzbx3keyyJRgVosUBzoS9LzRUGFBq9wCCsU"
+    },
+    {
+     "id": "f054f9ef730af6da10ef60e660a6319125f2be9c0e8ceb8e1bc78808e5a3874b",
+     "name": "Ergo Mummy #115",
+     "issuer": "9hsC2hQBfbZ8Ndamk9XTv48vazE8xig9gMYznsXmiiZRZB8UM5U"
+    }
+   ],
+   "contestedNames": 15,
+   "nonNftTokens": [],
+   "generatedAt": "2026-08-03T12:10:19.002Z"
+  },
+  "traits": {
+   "Primary color": {
+    "tokensWithTrait": 140,
+    "distinctValues": 5,
+    "values": {
+     "Gray": 12,
+     "Red": 18,
+     "Beige": 22,
+     "Black": 28,
+     "White": 60
+    }
+   },
+   "Secondary color": {
+    "tokensWithTrait": 140,
+    "distinctValues": 16,
+    "values": {
+     "Emerald green": 5,
+     "Golden circles": 6,
+     "Green": 6,
+     "Highlighted red": 6,
+     "Orange": 6,
+     "Orange circles": 6,
+     "Purple": 6,
+     "Turquoise": 6,
+     "Cyan": 8,
+     "Gray": 8,
+     "Highlighted pink": 9,
+     "Mossy green": 9,
+     "Green straight lines": 12,
+     "Forest green": 14,
+     "Ocean blue": 14,
+     "Beige": 19
+    }
+   },
+   "Eyes/Strips color": {
+    "tokensWithTrait": 140,
+    "distinctValues": 8,
+    "values": {
+     "Purple": 2,
+     "Orange": 17,
+     "Violet": 18,
+     "Blue": 19,
+     "Brown": 20,
+     "Lime": 20,
+     "Pink": 22,
+     "Red": 22
+    }
+   },
+   "Eyes shape": {
+    "tokensWithTrait": 140,
+    "distinctValues": 3,
+    "values": {
+     "Crosshair": 34,
+     "Happy": 51,
+     "Plus sign": 55
+    }
+   },
+   "Accessory": {
+    "tokensWithTrait": 140,
+    "distinctValues": 25,
+    "values": {
+     "Blitz skin": 1,
+     "BTC crown": 1,
+     "BTC crown-suit": 1,
+     "BTC crown-suit-sword": 1,
+     "BTC crown-sword": 1,
+     "BTC suit": 1,
+     "BTC sword": 1,
+     "ERG crown": 1,
+     "ERG crown-suit": 1,
+     "ERG crown-suit-sword": 1,
+     "ERG suit": 1,
+     "ERG suit-sword": 1,
+     "ERG sword": 1,
+     "Golden wings": 2,
+     "Silver wings": 3,
+     "Ancient sceptre": 5,
+     "Arrow": 5,
+     "Red gem stick": 6,
+     "Blue gem stick": 10,
+     "Ancient crown": 11,
+     "Golden spear": 15,
+     "The Ankh": 15,
+     "Golden axe": 16,
+     "Crook": 19,
+     "None": 20
+    }
+   },
+   "Background": {
+    "tokensWithTrait": 140,
+    "distinctValues": 15,
+    "values": {
+     "ErgoGames 2": 1,
+     "Light green": 1,
+     "Stonks legendary": 2,
+     "Cyan": 3,
+     "ErgoGames 1": 3,
+     "Stonks rare": 4,
+     "Stonks common": 6,
+     "Purple": 10,
+     "Violet": 13,
+     "Blue": 14,
+     "Orange": 14,
+     "Golden": 16,
+     "Green": 17,
+     "Light blue": 18,
+     "Red": 18
+    }
+   }
+  }
+ },
+ "tokens": [
+  {
+   "id": "ERGOMU1",
+   "metadata": {
+    "name": "Ergo Mummy #1",
+    "edition": 1,
+    "tokenId": "28048a181868f66dc9898d00a9c747a38e56369f83307e4660010bfc530bd3b6",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Golden circles"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "The Ankh"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreierwdhtpe6g7whdphriyuuld7f7kqp7rfwlx3eg7izxry3lbgelia",
+    "contentHash": "91b0cf3793c6fd8e379e28c528b1fcbf541ff896cbbec86fa3378e36b0988b40"
+   }
+  },
+  {
+   "id": "ERGOMU2",
+   "metadata": {
+    "name": "Ergo Mummy #2",
+    "edition": 2,
+    "tokenId": "554f1dd6714064ccd72c06c093af2d722f3a52c9e96b3f3ff4bd86af07ea1913",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiaxpxxfsfrirdycob7zypsl5u7wisgyeqwpgxpba4z6s3itczvapy",
+    "contentHash": "177dee59162888f02707f9c3e4bed3f6448d8242cf35de10733e96d13166a07e"
+   }
+  },
+  {
+   "id": "ERGOMU3",
+   "metadata": {
+    "name": "Ergo Mummy #3",
+    "edition": 3,
+    "tokenId": "e3b034194bd8ee18dbb684b71d52261190eee09d006e88605c9dc1cbd96a86af",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Cyan"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Ancient crown"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Orange"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiapyelfwskr34z3tc6njppdv3t6p6si3ab2n5c2er2s3v2yswzg4a",
+    "contentHash": "0fc1165b4951df33b98bcd4bde3aee7e7fa48d803a6f45a24752dd75895b26e0"
+   }
+  },
+  {
+   "id": "ERGOMU4",
+   "metadata": {
+    "name": "Ergo Mummy #4",
+    "edition": 4,
+    "tokenId": "eabb4f30004bfd8085d3f8a0a6d2d554d1c31f66666a56b8c9cb395cf36de716",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Forest green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreicnxuawk3vrsnikqoiwby5gn5c55lhkf6wfqswkw7rsttgdk3r2sq",
+    "contentHash": "4dbd01656eb19350a839160e3a66f45deacea2fac584acab7e329ccc356e3a94"
+   }
+  },
+  {
+   "id": "ERGOMU5",
+   "metadata": {
+    "name": "Ergo Mummy #5",
+    "edition": 5,
+    "tokenId": "6e4d207303b465d8df17ec8e173b44d6ad7c8fece6eaced7f7707c2b203b3bc9",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Highlighted red"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Blue gem stick"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreihkupl3fklvpzhz47lts6uvjy7vkamcct45vbbgopemw336jckl5a",
+    "contentHash": "eaa3d7b2a9757e4f9e7d7397a954e3f55018214f9da842673c8cb6f7e4894be8"
+   }
+  },
+  {
+   "id": "ERGOMU6",
+   "metadata": {
+    "name": "Ergo Mummy #6",
+    "edition": 6,
+    "tokenId": "e0be18f3fa8bc64a3ed4af5c60f97fc717c24e327b24148a5119a2c431f39be4",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Purple"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Orange"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreif4rlcoyaosrsqw6ytxpe4wdcelvmybhncxylsj7gmazssowzycqm",
+    "contentHash": "bc8ac4ec01d28ca16f6277793961888bab3013b457c2e49f9980cca4eb670283"
+   }
+  },
+  {
+   "id": "ERGOMU7",
+   "metadata": {
+    "name": "Ergo Mummy #7",
+    "edition": 7,
+    "tokenId": "3ce8e6be4a2a21838a066b6e205190e0d2b601c582e70c8c883113709fa38505",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Ocean blue"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden axe"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Violet"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifkirpo6ctvkmmg3hpbxo5mpm2zunkfloywshl27fot5r7gv26rea",
+    "contentHash": "aa445eef0a7553186d9de1bbbac7b359a35455bb1691d7af95d3ec7e6aebd120"
+   }
+  },
+  {
+   "id": "ERGOMU8",
+   "metadata": {
+    "name": "Ergo Mummy #8",
+    "edition": 8,
+    "tokenId": "c6198194dcd86dba700d4a178c4af74afff27f9915c945079cf559684059ab59",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green straight lines"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "The Ankh"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifdypfcvkux5xohxomic4r5jd6xue2l2vxaed5h7zznjsqc5l4hg4",
+    "contentHash": "a3c3ca2aaa97eddc7bb9881723d48fd7a134bd56e020fa7fe72d4ca02eaf8737"
+   }
+  },
+  {
+   "id": "ERGOMU9",
+   "metadata": {
+    "name": "Ergo Mummy #9",
+    "edition": 9,
+    "tokenId": "3be82f9e27907fa644867eb20af831d447882cfa0505d539cf698032349f7470",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Emerald green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Golden"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreidpugb3m2jjaidsdc2yssiqkxuam7est6c3wwjiq7she6cvnkd2x4",
+    "contentHash": "6fa183b669290207218b589491055e8067c929f85bb592887e47278556a87abf"
+   }
+  },
+  {
+   "id": "ERGOMU10",
+   "metadata": {
+    "name": "Ergo Mummy #10",
+    "edition": 10,
+    "tokenId": "34aa6a724ffd5eaa02baef3bb46445acc9a35991b47764a01bc97f45cf21da92",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Mossy green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreidbqhat6mjgeerlhjl4u2tfaxppap5miu3onjpmpykw7xruc3tdli",
+    "contentHash": "6181c13f31262122b3a57ca6a6505def03fac4536e6a5ec7e156fde3416e635a"
+   }
+  },
+  {
+   "id": "ERGOMU11",
+   "metadata": {
+    "name": "Ergo Mummy #11",
+    "edition": 11,
+    "tokenId": "5cb69f4de880925da2ad7972bdaab5b6991c0bd62ca869734fe5e1c36558e0d7",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Highlighted pink"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "The Ankh"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreib4fcuzfkssnthhzt2xeul2yj52folppk6tyb7ykvou7ubcnrz6ry",
+    "contentHash": "3c28a992aa526cce7ccf572517ac27ba2b96f7abd3c07f8555d4fd0226c73e8e"
+   }
+  },
+  {
+   "id": "ERGOMU12",
+   "metadata": {
+    "name": "Ergo Mummy #12",
+    "edition": 12,
+    "tokenId": "7bc29af69bb9e07800cbdc8651d363dc5ac34e695f07d084e629e3173b3cea1d",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Ancient crown"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiegsvd64pipn6yi27a6f7dfqwb5pjiesbqjgrttnrq747rrs6dany",
+    "contentHash": "869547ee3d0f6fb08d7c1e2fc658583d7a50490609346736c61fe7e31978606e"
+   }
+  },
+  {
+   "id": "ERGOMU13",
+   "metadata": {
+    "name": "Ergo Mummy #13",
+    "edition": 13,
+    "tokenId": "748abd5de6192044e0599cbbe57e9919cc0944bc160cbc8c4f7d3e3ec1326aae",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Ocean blue"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreif56jhocswigui6ljqsfgz44wcj7fuu4sklwatcfpzmnxwxpre4vm",
+    "contentHash": "bdf24ee14ac83511e5a61229b3ce5849f9694e494bb02622bf2c6ded77c49cab"
+   }
+  },
+  {
+   "id": "ERGOMU14",
+   "metadata": {
+    "name": "Ergo Mummy #14",
+    "edition": 14,
+    "tokenId": "8957b393d938144320718a5fd0956acae58c0d01f40fd68304594a6f20baddb9",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Emerald green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden spear"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreihiztfjpugs4lvthsvrxmehcfgmty5dovaohr2d7rhfpsuthl5tau",
+    "contentHash": "e8ccca97d0d2e2eb33cab1bb087114cc9e3a37540e3c743fc4e57ca933afb305"
+   }
+  },
+  {
+   "id": "ERGOMU15",
+   "metadata": {
+    "name": "Ergo Mummy #15",
+    "edition": 15,
+    "tokenId": "d3f25b3f1dd4238703992950d5b55a34f9a00e51bdccfbc6f411ab7b7991d0ad",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Forest green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden axe"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifmdo5nzm5vqt3cmhstqrlnmfobmvtuusdu2po7prwnf3u3qnhocm",
+    "contentHash": "ac1bbadcb3b584f6261e538456d615c165674a4874d3ddf7c6cd2ee9b834ee13"
+   }
+  },
+  {
+   "id": "ERGOMU16",
+   "metadata": {
+    "name": "Ergo Mummy #16",
+    "edition": 16,
+    "tokenId": "4c7407593406bc36d9f07c56ef47913926779996da818580e584f3f39f651571",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Forest green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Blue gem stick"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreig5gcb7nhgdvfcnckll6uipfw6lwc7fnbn62hzaq4mposm7jrsj7e",
+    "contentHash": "dd3083f69cc3a944d1296bf510f2dbcbb0be5685bed1f208718f7499f4c649f9"
+   }
+  },
+  {
+   "id": "ERGOMU17",
+   "metadata": {
+    "name": "Ergo Mummy #17",
+    "edition": 17,
+    "tokenId": "d5fe357aa5886912944b40b3c446d41802bef0cdaf3efd65d5d4d57bff4b5266",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Orange circles"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Orange"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreigwpwpigyxewcc2td6hwz7delrvxfkltezzfx3ap6sshucuzx27pu",
+    "contentHash": "d67d9e8362e4b085a98fc7b67e322e35b954b993392df607fa523d054cdf5f7d"
+   }
+  },
+  {
+   "id": "ERGOMU18",
+   "metadata": {
+    "name": "Ergo Mummy #18",
+    "edition": 18,
+    "tokenId": "aaace7d50fe9e85f371c634a3c4f8dedb4039c856174b6b03eb607f5d1ecd6f0",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden spear"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiezvumt42ml7cjmudpyaghdttoj3xyukc3wrk3ny4vmah6yv46dqm",
+    "contentHash": "99ad193e698bf892ca0df8018e39cdc9ddf1450b768ab6dc72ac01fd8af3c383"
+   }
+  },
+  {
+   "id": "ERGOMU19",
+   "metadata": {
+    "name": "Ergo Mummy #19",
+    "edition": 19,
+    "tokenId": "91f1c321db450b0d1c65a534cf6dca8595588d065dff8ea5e7aff95a5babc51c",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Ancient crown"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiffwlr76nxha5zdmbgbm6iudsmbn5dz4j5pdstwxtjikqon6kbv74",
+    "contentHash": "a5b2e3ff36e707723604c1679141c9816f479e27af1ca76bcd28541cdf2835ff"
+   }
+  },
+  {
+   "id": "ERGOMU20",
+   "metadata": {
+    "name": "Ergo Mummy #20",
+    "edition": 20,
+    "tokenId": "402b34b01874da17a05177dd69a16d4c90d8376fde2bb86fb523f8d02d1fc314",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden axe"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreieifcnvff3rqf5mnkt73kohd7ergnqq3xn3bkz6svx4cpcrx2ys5e",
+    "contentHash": "88289b529771817ac6aa7fda9c71fc9133610dddbb0ab3e956fc13c51beb12e9"
+   }
+  },
+  {
+   "id": "ERGOMU21",
+   "metadata": {
+    "name": "Ergo Mummy #21",
+    "edition": 21,
+    "tokenId": "ab1a4c9da121a0ff6574013f77109bec0003eac6ca1317407b25a7e21b1d5acd",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreihcar5cffqeinezfiiezpaavqv2cdayv3e5nmxhr27i33hx54r3qu",
+    "contentHash": "e2047a229604434992a104cbc00ac2ba10c18aec9d6b2e78ebe8decf7ef23b85"
+   }
+  },
+  {
+   "id": "ERGOMU22",
+   "metadata": {
+    "name": "Ergo Mummy #22",
+    "edition": 22,
+    "tokenId": "4faed7ebb918f4f5b69a69d6369344cd3329305e5e70677b392f439dbe0120e7",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Mossy green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Ancient crown"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Orange"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreih4ifgqaekfifp2zsboszedobh2zgsbgfycdoxwer4vbsvxxn56ee",
+    "contentHash": "fc414d001145415facc82e96483704fac9a41317021baf6247950cab7bb7be21"
+   }
+  },
+  {
+   "id": "ERGOMU23",
+   "metadata": {
+    "name": "Ergo Mummy #23",
+    "edition": 23,
+    "tokenId": "1d62e61dbf27a8a4a2139811b6870da2414181c518ed27ed6b159e0235a9a455",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Highlighted pink"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden spear"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreia7vdpydul6tyf6unyua4yi6zis4kluphno74liqaatwgk5vrelxi",
+    "contentHash": "1fa8df81d17e9e0bea371407308f6512e297479daeff16880013b195dac48bba"
+   }
+  },
+  {
+   "id": "ERGOMU24",
+   "metadata": {
+    "name": "Ergo Mummy #24",
+    "edition": 24,
+    "tokenId": "75cb0d0c8485f5276551810d5361f6cbdb2c29c7e963cf37db0a195aab5c6c5e",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green straight lines"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreib5tb4yl4y77w4glouupawps6edlteo2fvdnjyxcz4zrileyp2gbm",
+    "contentHash": "3d987985f31ffdb865ba94782cf978835cc8ed16a36a717167998a164c3f460b"
+   }
+  },
+  {
+   "id": "ERGOMU25",
+   "metadata": {
+    "name": "Ergo Mummy #25",
+    "edition": 25,
+    "tokenId": "953885cee2acbe335088fa7458b4bf2cb2126c6017bc81ca42c032715e2f1a0b",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Turquoise"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "The Ankh"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Golden"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreidb5kwmd26zxuqdcugecobfxs4oepbvo5mzvwpd5dm6vfegmkt4se",
+    "contentHash": "61eaacc1ebd9bd203150c413825bcb8e23c3577599ad9e3e8d9ea948662a7c91"
+   }
+  },
+  {
+   "id": "ERGOMU26",
+   "metadata": {
+    "name": "Ergo Mummy #26",
+    "edition": 26,
+    "tokenId": "d149aeaac75e2b41931974fb09616d6c0f2a8e6637a26a8c87b902f2b4c004ba",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Mossy green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Violet"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiaqkrwehqse3bdwnkutuurmamub5mfzzo7eyza4znczy5dvj5g72a",
+    "contentHash": "10546c43c244d84766aa93a522c03281eb0b9cbbe4c641ccb459c74754f4dfd0"
+   }
+  },
+  {
+   "id": "ERGOMU27",
+   "metadata": {
+    "name": "Ergo Mummy #27",
+    "edition": 27,
+    "tokenId": "8d458a5d8fabac8f15dff62f68a47e2df4aa7b84ed662a470f4dce1736fb1378",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green straight lines"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden spear"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Golden"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifoo5pzekfvzfybvqzfdorlrjbejit3x2t5vrzv2yvbuagu6amm7e",
+    "contentHash": "ae775f9228b5c9701ac3251ba2b8a4244a27bbea7dac735d62a1a00d4f018cf9"
+   }
+  },
+  {
+   "id": "ERGOMU28",
+   "metadata": {
+    "name": "Ergo Mummy #28",
+    "edition": 28,
+    "tokenId": "24935b697d862702e05655ee77eb527173b1cf6f0a2c693d2e61933b78cc22d2",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Cyan"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Arrow"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Purple"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiftjzegbqhaey32fd67fn5wxyw4yudmsoj267aw3ynga6quw35xs4",
+    "contentHash": "b34e4860c0e02637a28fdf2b7b6be2dcc506c9393af7c16de1a607a14b6fb797"
+   }
+  },
+  {
+   "id": "ERGOMU29",
+   "metadata": {
+    "name": "Ergo Mummy #29",
+    "edition": 29,
+    "tokenId": "e594b76ae0e3e767899c3fc7cd70e046b667c7b9253a436c444300ed0e729a80",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Forest green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "The Ankh"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifgctrremkmqtdq5n4ahjow4ip36sajpmq6qkxgjm5mvggezibhy4",
+    "contentHash": "a614e312314c84c70eb7803a5d6e21fbf48097b21e82ae64b3aca98c4ca027c7"
+   }
+  },
+  {
+   "id": "ERGOMU30",
+   "metadata": {
+    "name": "Ergo Mummy #30",
+    "edition": 30,
+    "tokenId": "1575bdcb4481fd33df65e9095e48d71f6a36154717c0301b371fbee42bffcb33",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Golden"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifzkjqmouofguwdcu5hzisli6zq3yqctdv6mff7tpcxxgronvitbm",
+    "contentHash": "b95260c751c5352c3153a7ca24b47b30de20298ebe614bf9bc57b9a2e6d5130b"
+   }
+  },
+  {
+   "id": "ERGOMU31",
+   "metadata": {
+    "name": "Ergo Mummy #31",
+    "edition": 31,
+    "tokenId": "adad5daadb996430f9ad0317180c951f7bcdbb3c4b9932ea223f676ec0a99c53",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green straight lines"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Ancient crown"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreibsruhjdafudzyytib4p2hz3prks3jx77gbg4k7cyiqjs67mno6cq",
+    "contentHash": "328d0e9180b41e7189a03c7e8f9dbe2a96d37ffcc13715f161104cbdf635de14"
+   }
+  },
+  {
+   "id": "ERGOMU32",
+   "metadata": {
+    "name": "Ergo Mummy #32",
+    "edition": 32,
+    "tokenId": "a6effb85fa98f5c2966775804b8f3a18198627a6eaf79cbb31623d07408aff37",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Blue gem stick"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreigqhm5mk5i7itx74oqfgy3pwm7softxhjougsnyfokemwxihzrxp4",
+    "contentHash": "d03b3ac5751f44effe3a053636fb33f2716773a5d4349b82b94465ae83e6377f"
+   }
+  },
+  {
+   "id": "ERGOMU33",
+   "metadata": {
+    "name": "Ergo Mummy #33",
+    "edition": 33,
+    "tokenId": "a2699fc1d287c7ea9a21f0a68bf4c6ac247b61ee97eb31a701280c9f6da80239",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Turquoise"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden axe"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreia2nasx67opjx4z74fpyg4japljyqo22vuluf7ddr6a3xv6dnrivy",
+    "contentHash": "1a68257f7dcf4df99ff0afc1b8903d69c41dad568ba17e31c7c0ddebe1b628ae"
+   }
+  },
+  {
+   "id": "ERGOMU34",
+   "metadata": {
+    "name": "Ergo Mummy #34",
+    "edition": 34,
+    "tokenId": "e515f658aa7a8e1b7328333c48d17f4b7e99fc31bb59925b891cbc759508e354",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Ocean blue"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden spear"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Violet"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreicqvf4ijvcozd4fqb73wftab2gmrsf3ejwieze3zaraqutginxqra",
+    "contentHash": "50a97884d44ec8f85807fbb16600e8cc8c8bb226c82649bc822085266436f088"
+   }
+  },
+  {
+   "id": "ERGOMU35",
+   "metadata": {
+    "name": "Ergo Mummy #35",
+    "edition": 35,
+    "tokenId": "d0f80834009029250a87306d59fd3f7ee5f7f280881cec3d0dab0be37bcbaea2",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Orange circles"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreick2kzp3vjx4jlog5z6n4lsvstbwra4zdgfkcv5mwyib2b2vwogxi",
+    "contentHash": "4ad2b2fdd537e256e3773e6f172aca61b441cc8cc550abd65b080e83aad9c6ba"
+   }
+  },
+  {
+   "id": "ERGOMU36",
+   "metadata": {
+    "name": "Ergo Mummy #36",
+    "edition": 36,
+    "tokenId": "14e22f73affd22e803095ea04c30e171f540a8d53ca540da4385e29ba2b7349a",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Emerald green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden axe"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Violet"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreih2o6ib3ssq2wwhv34lbbq43tm6muekznowji667t3vlbabdulcoa",
+    "contentHash": "fa77901dca50d5ac7aef8b0861cdcd9e6508acb5d64a3defcf75584011d16270"
+   }
+  },
+  {
+   "id": "ERGOMU37",
+   "metadata": {
+    "name": "Ergo Mummy #37",
+    "edition": 37,
+    "tokenId": "cb27b3a73ed4ac47ccac261b67769cd90d2da9e41e9636386f3df926c2afe61b",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Highlighted pink"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Golden"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiaine7plkm4fmwgqdim5c64nxndfzbozofaarvip567zsn5jdbntq",
+    "contentHash": "08693ef5a99c2b2c680d0ce8bdc6dda32e42ecb8a0046a87f7dfcc9bd48c2d9c"
+   }
+  },
+  {
+   "id": "ERGOMU37",
+   "metadata": {
+    "name": "Ergo Mummy #37",
+    "edition": 37,
+    "tokenId": "8a7472c55d979b77610319e8b57b5e8328d24bfe0d0aaa5b39eb7faa70a5d44e",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Highlighted pink"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Golden"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiaine7plkm4fmwgqdim5c64nxndfzbozofaarvip567zsn5jdbntq",
+    "contentHash": "08693ef5a99c2b2c680d0ce8bdc6dda32e42ecb8a0046a87f7dfcc9bd48c2d9c"
+   }
+  },
+  {
+   "id": "ERGOMU38",
+   "metadata": {
+    "name": "Ergo Mummy #38",
+    "edition": 38,
+    "tokenId": "567f479b2406bc95d3a90f799f55da806d633acfeed6ab25baa5fd10676d5680",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Purple"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Ancient crown"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreidopj7nducoe5wdndlfiqoqdpyk44cziso2o3arofjfxsmrd5qdya",
+    "contentHash": "6e7a7ed1d04e276c368d65441d01bf0ae7059449da76c1171525bc9911f603c0"
+   }
+  },
+  {
+   "id": "ERGOMU39",
+   "metadata": {
+    "name": "Ergo Mummy #39",
+    "edition": 39,
+    "tokenId": "1929ccce12333bf9c856950f6a6bd25a1e41da019b54446043bb66dd8da426bc",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Ocean blue"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Ancient sceptre"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Orange"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreigr5qc5c6iytsgufwfqtbrrrmtyfq4lhvwcg6nz23tjxyftbeizua",
+    "contentHash": "d1ec05d179189c8d42d8b0986318b2782c38b3d6c2379b9d6e69be0b309119a0"
+   }
+  },
+  {
+   "id": "ERGOMU40",
+   "metadata": {
+    "name": "Ergo Mummy #40",
+    "edition": 40,
+    "tokenId": "ba2e4a12557bfb930a43b9b73b9ea623eefb58313807411dd6931735124aa1c0",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden axe"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreib5ny77euztcm4ffct6f7qb3zpsmjza5p2zh6qcxzlsdr6uilnpgu",
+    "contentHash": "3d6e3ff253331338528a7e2fe01de5f262720ebf593fa02be5721c7d442daf35"
+   }
+  },
+  {
+   "id": "ERGOMU41",
+   "metadata": {
+    "name": "Ergo Mummy #41",
+    "edition": 41,
+    "tokenId": "bc70423db2659337e43739135eb218c59568fcd8f694caf26808ea6245ee59b0",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreieszbmz374znn7v66mccnymm57fkekroiiatlur6ojhkjhoqwutw4",
+    "contentHash": "92c8599dff996b7f5f79821370c677e551151721009ae91f3927524ee85a93b7"
+   }
+  },
+  {
+   "id": "ERGOMU42",
+   "metadata": {
+    "name": "Ergo Mummy #42",
+    "edition": 42,
+    "tokenId": "61b95dbbc6715d800a6a92e863c89d3d5e83c48662d2141bdffa17c47831c6e3",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiavu6zdhnbhahc6jf6uvnx34k5qtyyegvxuu6wmgisn2unzp7lkwu",
+    "contentHash": "15a7b233b42701c5e497d4ab6fbe2bb09e304356f4a7acc3224dd51b97fd6ab5"
+   }
+  },
+  {
+   "id": "ERGOMU43",
+   "metadata": {
+    "name": "Ergo Mummy #43",
+    "edition": 43,
+    "tokenId": "75ed1d83ce1ddb72be75066a2aac02df37ab4163922907ab8c62718ab12eab9c",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green straight lines"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "The Ankh"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreigohf26bgsfllsaq3whdkfy5jsccj3r7ctft3wydzb5mlfiy7bexa",
+    "contentHash": "ce3975e09a455ae4086ec71a8b8ea64212771f8a659eed81e43d62ca8c7c24b8"
+   }
+  },
+  {
+   "id": "ERGOMU44",
+   "metadata": {
+    "name": "Ergo Mummy #44",
+    "edition": 44,
+    "tokenId": "2469d708e87798a3bd263cc27dfca318b8cc105e02bee9c1b6779939d0a65f36",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Blue gem stick"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Violet"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreid4msmu4l33cy4q2swwyz5gjrbppsr4zrmmm76x24zeby5r3lmf2u",
+    "contentHash": "7c64994e2f7b16390d4ad6c67a64c42f7ca3ccc58c67fd7d73240e3b1dad85d5"
+   }
+  },
+  {
+   "id": "ERGOMU45",
+   "metadata": {
+    "name": "Ergo Mummy #45",
+    "edition": 45,
+    "tokenId": "4705dcdac555dd2297ad8c81d3be752de58337d0e1915229c3106abbe7b13124",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Ocean blue"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreif64ofqt7j4yegf4yr7djgvpqgzdv57hwaql6i5acxi6e5xc64nua",
+    "contentHash": "bee38b09fd3cc10c5e623f1a4d57c0d91d7bf3d8105f91d00ae8f13b717b8da0"
+   }
+  },
+  {
+   "id": "ERGOMU46",
+   "metadata": {
+    "name": "Ergo Mummy #46",
+    "edition": 46,
+    "tokenId": "11e3b27f8d7165d770acfde16ecd4a31054b74bc31c65f5c868401d53aa6dee2",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Ocean blue"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden spear"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiaapjtgmpt5qd4vkpbb6bfmek3272gu2bapuuqhyd7yiotuiiodeu",
+    "contentHash": "007a66663e7d80f9553c21f04ac22b7afe8d4d040fa5207c0ff843a74421c325"
+   }
+  },
+  {
+   "id": "ERGOMU47",
+   "metadata": {
+    "name": "Ergo Mummy #47",
+    "edition": 47,
+    "tokenId": "a1cc255991fca4dcf59f0ae9e43e8b366b47cb719b956275c43029255d026f7b",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Golden circles"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Ancient sceptre"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Purple"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreihovnphf3f5pmixgwjhyy3xmm2j7rribj7g35wbc3yqurvtooptqa",
+    "contentHash": "eeab5e72ecbd7b11735927c637763349fc6280a7e6df6c116f10a46b3739f380"
+   }
+  },
+  {
+   "id": "ERGOMU48",
+   "metadata": {
+    "name": "Ergo Mummy #48",
+    "edition": 48,
+    "tokenId": "b2dc8b4cd1d2e6a21574601a28b5356d630f66dda7e0aaa9983bba5870780388",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Forest green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "The Ankh"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiho3vomoqogxx5un7gh3fjpkubh4oxvajjfpfdye5fh774mgtz6fi",
+    "contentHash": "eedd5cc741c6bdfb46fcc7d952f55027e3af50252579478274a7fff8c34f3e2a"
+   }
+  },
+  {
+   "id": "ERGOMU49",
+   "metadata": {
+    "name": "Ergo Mummy #49",
+    "edition": 49,
+    "tokenId": "7b3827464f67c8378a10d47ac20ec56fd0436d60081cee6af0ff65f473f006b4",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Turquoise"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Blue gem stick"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Orange"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreigflb562az2hi635r6ahhvitozlbpyyyac2rks74extqhddnxn26u",
+    "contentHash": "c5587bed033a3a3dbec7c039ea89bb2b0bf18c005a8aa5fe12f381c636ddbaf5"
+   }
+  },
+  {
+   "id": "ERGOMU50",
+   "metadata": {
+    "name": "Ergo Mummy #50",
+    "edition": 50,
+    "tokenId": "7dee9c521f873a071176d4e92e859ee4dd0fd25f4573eee94a76fe6bb1165018",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Highlighted red"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Ancient crown"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Violet"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreih5nvmesrxosksq26wyuuackt5farj273iqidalgnzgj2r6sx2wqu",
+    "contentHash": "fd6d584946ee92a50d7ad8a500254fa50453afed1040c0b337264ea3e95f5685"
+   }
+  },
+  {
+   "id": "ERGOMU51",
+   "metadata": {
+    "name": "Ergo Mummy #51",
+    "edition": 51,
+    "tokenId": "f0f52a04bb092febcf7310f09b153fd4ff963cbc7cd5a43c004125199b059dde",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Orange circles"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "ERG crown"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Stonks common"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreibalrb4orsvemytw7w7resztmgu2pjcoqdizgqlphfpu5o6kkixbq",
+    "contentHash": "205c43c7465523313b7edf892599b0d4d3d2274068c9a0b79cafa75de529170c"
+   }
+  },
+  {
+   "id": "ERGOMU52",
+   "metadata": {
+    "name": "Ergo Mummy #52",
+    "edition": 52,
+    "tokenId": "eced389b39d08b86ceb8f1be69315f284e47832b6a237afe4f97013433c7be2e",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden wings"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Cyan"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreihjfxk52nkilrehrzid6qs5qq4qjrxa2ojbk26ahspcxveti3wraa",
+    "contentHash": "e92dd5dd35485c4878e503f425d843904c6e0d392156bc03c9e2bd49346ed100"
+   }
+  },
+  {
+   "id": "ERGOMU53",
+   "metadata": {
+    "name": "Ergo Mummy #53",
+    "edition": 53,
+    "tokenId": "8ea7a92a124ee9072c7485b304bd405073ba332f5f2001fbbff9393ac17e0f08",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Mossy green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "ERG suit"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Stonks common"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreidygqwg6rw6z6gnh2qgfbuexlnh5o2fasdtu5yzd3ccxu4u4hgexy",
+    "contentHash": "78342c6f46decf8cd3ea0628684bada7ebb4504873a77191ec42bd394e1cc4be"
+   }
+  },
+  {
+   "id": "ERGOMU54",
+   "metadata": {
+    "name": "Ergo Mummy #54",
+    "edition": 54,
+    "tokenId": "fe0837df7679b282c3d9c5ed2684ba4464fe3b0900ea22bce033354f4fafe4db",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Golden circles"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden spear"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Violet"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifikjghkhfzhi3kijmr7jebpmbmndaoiw3g6cpeiyd77vmpgcd2sq",
+    "contentHash": "a8524c751cb93a36a42591fa4817b02c68c0e45b66f09e44607ffd58f3087a94"
+   }
+  },
+  {
+   "id": "ERGOMU55",
+   "metadata": {
+    "name": "Ergo Mummy #55",
+    "edition": 55,
+    "tokenId": "4146250f4263f2f2b9ba1c2b121e667755c88c1b848b4f389f38a6abad213105",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Turquoise"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Ancient crown"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreicdepabsljb5osavwuu4nt2sh73p7zb747werzdgu2l4mutgbxhxm",
+    "contentHash": "4323c0192d21eba40ada94e367a91ffb7ff21ff3f6247233534be3293306e7bb"
+   }
+  },
+  {
+   "id": "ERGOMU56",
+   "metadata": {
+    "name": "Ergo Mummy #56",
+    "edition": 56,
+    "tokenId": "615bfe7d3aa399a48981066261da91104f5c97ccfebe35eda2a9ce8a32cce412",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Ancient sceptre"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiescxc65g7vzgxal54hayg7tsaiso6wkhtkeks26vtxop7zzzbp2m",
+    "contentHash": "9215c5ee9bf5c9ae05f787060df9c80893bd651e6a22a5af567773ff9ce42fd3"
+   }
+  },
+  {
+   "id": "ERGOMU57",
+   "metadata": {
+    "name": "Ergo Mummy #57",
+    "edition": 57,
+    "tokenId": "6e955d0c82b35f3231ccf6c672ea6e8cac63239f7f46db465b9ce75409f19142",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "BTC crown-suit-sword"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Stonks legendary"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreihfemkmdsj45yeqmnitdhl42pw4mphschkmjde7svhua6lkrwzeq4",
+    "contentHash": "e52314c1c93cee0906351319d7cd3edc63cf211d4c48c9f954f40796a8db2487"
+   }
+  },
+  {
+   "id": "ERGOMU58",
+   "metadata": {
+    "name": "Ergo Mummy #58",
+    "edition": 58,
+    "tokenId": "ad932d793402df96be5e7d2086beffc24e01838fcb7d4d2731416fcb87a34486",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Mossy green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreicpbtbufoonwkn4djklljg2qb37qxs225xtxalne5v67vy47xwpia",
+    "contentHash": "4f0cc342b9cdb29bc1a54b5a4da8077f85e5ad76f3b816d276befd71cfdecf40"
+   }
+  },
+  {
+   "id": "ERGOMU59",
+   "metadata": {
+    "name": "Ergo Mummy #59",
+    "edition": 59,
+    "tokenId": "6b6756e661c7a92e4fcab4ac5424a7a0f0310bb9d37cc71508ca75747c66d1c9",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Purple"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Golden"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreicycfwzijkvrnvia6jofxta32qpbndjhwcnucfl6yk6zchhs5qesi",
+    "contentHash": "58116d9425558b6a80792e2de60dea0f0b4693d84da08abf615ec88e79760492"
+   }
+  },
+  {
+   "id": "ERGOMU60",
+   "metadata": {
+    "name": "Ergo Mummy #60",
+    "edition": 60,
+    "tokenId": "076753192c2cc867e1eb4ef1179e616e55ca90d5a6c0978f5f327b6b21245dd2",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Ocean blue"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "BTC crown-suit"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Stonks rare"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifa4z2fiqwhna6hyrxfmcflvxp3bwavst7dgs6o7zlfw2ug6xdwrm",
+    "contentHash": "a0e6745442c7683c7c46e5608abaddfb0d81594fe334bcefe565b6a86f5c768b"
+   }
+  },
+  {
+   "id": "ERGOMU61",
+   "metadata": {
+    "name": "Ergo Mummy #61",
+    "edition": 61,
+    "tokenId": "0ab076edae58473d02d4688d7d3da0fc4a0d4e7df1104b026c73738c7d4907c7",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Forest green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Arrow"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreielye6qajafhr5bidcdgwhgphtgky3qjgtrnfp2vedui45gwgmosa",
+    "contentHash": "8bc13d0024053c7a140c43358e679e665637049a71695faa9074473a6b198e90"
+   }
+  },
+  {
+   "id": "ERGOMU62",
+   "metadata": {
+    "name": "Ergo Mummy #62",
+    "edition": 62,
+    "tokenId": "a18c62871697211813c29ae9d6f707525b712a230429a86dcab281fffedc3a79",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Highlighted pink"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "ERG suit-sword"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Stonks rare"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiagxdfjxidwojzwjxmdofcahnnealitfbty5f655vbi63n3mfprne",
+    "contentHash": "06b8ca9ba076727364dd83714403b5a402d1328678e97dded428f6dbb615f169"
+   }
+  },
+  {
+   "id": "ERGOMU63",
+   "metadata": {
+    "name": "Ergo Mummy #63",
+    "edition": 63,
+    "tokenId": "f9563687cac4983cc8e0f62ab4adfb596f1741f88627b83a33dbae913dc7c602",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Orange circles"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden axe"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreidza26peiqkd75zdhekervaeuyyzok5meu3px22m67fh5zkxyzefy",
+    "contentHash": "7906bcf2220a1ffb919c8a246a025318cb95d6129b7df5a67be53f72abe3242e"
+   }
+  },
+  {
+   "id": "ERGOMU64",
+   "metadata": {
+    "name": "Ergo Mummy #64",
+    "edition": 64,
+    "tokenId": "518f17f5dabd265e92af7dfced645b8d283a67c01970be4dc9c5e4688b54257f",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "The Ankh"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Golden"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreicwjajo72ab673d4vrhgxmnlrvubneae3xhmhxevn4bnhwsyr6rxm",
+    "contentHash": "564812efe801f7f63e562735d8d5c6b40b48026ee761ee4ab78169ed2c47d1bb"
+   }
+  },
+  {
+   "id": "ERGOMU65",
+   "metadata": {
+    "name": "Ergo Mummy #65",
+    "edition": 65,
+    "tokenId": "4180fd9a2435eaddbe2e6e3abfc86f473ca62f538df69e2db50616d6a14e23a5",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "BTC crown"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Stonks common"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreihtwzanxngjhcbv6iurae4hxk5jjmdwqcaltwu2gheie7rwxazma4",
+    "contentHash": "f3b640dbb4c938835f229101387baba94b0768080b9da9a31c8827e36b832c07"
+   }
+  },
+  {
+   "id": "ERGOMU66",
+   "metadata": {
+    "name": "Ergo Mummy #66",
+    "edition": 66,
+    "tokenId": "2dd55fc19779c4061ab215b731048152bda9cdfa57dda3a198ff6fa3db6548aa",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Forest green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Red gem stick"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiderwlefanriy5wtnyfdpaghlyrfwfkum5ipmyrk5vt3zhjzigcnq",
+    "contentHash": "648d964281b1463b69b7051bc063af112d8aaa33a87b311576b3de4e9ca0c26c"
+   }
+  },
+  {
+   "id": "ERGOMU67",
+   "metadata": {
+    "name": "Ergo Mummy #67",
+    "edition": 67,
+    "tokenId": "90c262fac31b9338f23d24b9adf84af6490f16154e6fda00da972164a89b8d97",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Highlighted red"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Golden"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreidmxpdmp6plr2vvhgznq7mbgccg2gzirbprod3n7pqjixmydjcgma",
+    "contentHash": "6cbbc6c7f9eb8eab539b2d87d8130846d1b28885f170f6dfbe0945d981a44660"
+   }
+  },
+  {
+   "id": "ERGOMU68",
+   "metadata": {
+    "name": "Ergo Mummy #68",
+    "edition": 68,
+    "tokenId": "69bf27c3139c9cab6f0ef4a6f774b380ea9465b586d3d0d3ad79df73672df0df",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Ocean blue"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "BTC suit"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Stonks common"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiaj2z447tgsl7i3gkp7tyrdzx3ovudk7qqoq7hcis73pv5indsha4",
+    "contentHash": "09d679cfccd25fd1b329ff9e223cdf6ead06afc20e87ce244bfb7d7a868e4707"
+   }
+  },
+  {
+   "id": "ERGOMU69",
+   "metadata": {
+    "name": "Ergo Mummy #69",
+    "edition": 69,
+    "tokenId": "94780cf2ac4442ffa539e299d6811a1e20f9621fc969498fef44c0111cef1e5e",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Highlighted pink"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Ancient sceptre"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Cyan"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreigycus7nbe4snjf2e3nikvwc34ddczbicaofievyiaoi6fwlrgs2i",
+    "contentHash": "d81525f6849c93525d136d42ab616f8318b214080e2a095c200e478b65c4d2d2"
+   }
+  },
+  {
+   "id": "ERGOMU70",
+   "metadata": {
+    "name": "Ergo Mummy #70",
+    "edition": 70,
+    "tokenId": "4d8f5d0530def65742e892b12cb29f038887d360165b56f82e6ad27c534940ae",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden axe"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Violet"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreihwwocaycoaqvfwxntgovpczhh2fe6klvxzdhon5phdt6grjjqeta",
+    "contentHash": "f6b3840c09c0854b6bb666755e2c9cfa293ca5d6f919dcdebce39f8d14a60498"
+   }
+  },
+  {
+   "id": "ERGOMU71",
+   "metadata": {
+    "name": "Ergo Mummy #71",
+    "edition": 71,
+    "tokenId": "1c482d5ded418243333fe91994243e518e608df0d571a911198a8e72695b088b",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Ocean blue"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Blue gem stick"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreieo77lf7cmitwrkhnfy6y77o7ix4xrksiqzxg4jxorld5kz5zfbmq",
+    "contentHash": "8effd65f89889da2a3b4b8f63ff77d17e5e2a92219b9b89bba2b1f559ee4a164"
+   }
+  },
+  {
+   "id": "ERGOMU72",
+   "metadata": {
+    "name": "Ergo Mummy #72",
+    "edition": 72,
+    "tokenId": "93ea881599b3058fe4709bba76e5437ad006a83f6fdb0f4cd938971a95855eb3",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green straight lines"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "ERG crown-suit-sword"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Stonks legendary"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreigfw24jlbtmdgpw3almm4yzpiwyq44ipprxdau43rb2lvthtkdefa",
+    "contentHash": "c5b6b895866c199f6d816c673197a2d8873887be371829cdc43a5d6679a86428"
+   }
+  },
+  {
+   "id": "ERGOMU73",
+   "metadata": {
+    "name": "Ergo Mummy #73",
+    "edition": 73,
+    "tokenId": "dad2eb24babc5a1f9921752fea19a4bb8d085f19b808fcb33632235268207004",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden spear"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Orange"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreihcludcflxw76uxaq747r5qe7423lbh2xegvephetgdnba3nwwr4u",
+    "contentHash": "e25d0622aef6ffa97043fcfc7b027f9adac27d5c86a91e724cc36841b6dad1e5"
+   }
+  },
+  {
+   "id": "ERGOMU74",
+   "metadata": {
+    "name": "Ergo Mummy #74",
+    "edition": 74,
+    "tokenId": "7a61a5b0ac3961e0b0044262bc8eac3849e8ad1f393000c64752757e263f9c80",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Purple"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Red gem stick"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreihqc4b7glxfcwclqswtzdfkf3guqd4jidvxvgheutklfyhcbrvnom",
+    "contentHash": "f01703f32ee51584b84ad3c8caa2ecd480f8940eb7a98e4a4d4b2e0e20c6ad73"
+   }
+  },
+  {
+   "id": "ERGOMU75",
+   "metadata": {
+    "name": "Ergo Mummy #75",
+    "edition": 75,
+    "tokenId": "b9adbb08d73ab6f440fb90ac0903c07a1e5e65ed003f0686660ecc00db306fa0",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Golden circles"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreievkc7rpnm54wp6tzab6kjzat57enudvyqutwbicsdw7t47mnrpiy",
+    "contentHash": "9550bf17b59de59fe9e401f293904fbf23683ae2149d82814876fcf9f6362f46"
+   }
+  },
+  {
+   "id": "ERGOMU76",
+   "metadata": {
+    "name": "Ergo Mummy #76",
+    "edition": 76,
+    "tokenId": "82b0be7b1a12b1aef15629e0833b7881ba11f93ebf5dd69f889eecc464ededd3",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Highlighted red"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Silver wings"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifhlld2t2padok4agfmbll66brfmscqmkp32pfmrhsmsrghceew44",
+    "contentHash": "a75ac7a9e9e01b95c018ac0ad7ef062564850629fbd3cac89e4c944c711096e7"
+   }
+  },
+  {
+   "id": "ERGOMU77",
+   "metadata": {
+    "name": "Ergo Mummy #77",
+    "edition": 77,
+    "tokenId": "e649faf2557f67d0787834a61ccea3c3aec1eed3af8472edea1463caa84aefe5",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreif3habqiwvqovcq4wivcie4wevaihob4dx6lrjpapdvuq2xncsaua",
+    "contentHash": "bb3803045ab075450e59151209cb12a041dc1e0efe5c52f03c75a435768a40a0"
+   }
+  },
+  {
+   "id": "ERGOMU78",
+   "metadata": {
+    "name": "Ergo Mummy #78",
+    "edition": 78,
+    "tokenId": "7abeea05afab7ccb97d1c270818b7371b59684a41c8ffcfc1b07ad83f24ddca1",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreicaze6vyfqsfv477kl36uy2qvnulo64zrwcsr75crpcd56bm2bqu4",
+    "contentHash": "40c93d5c16122d79ffa97bf531a855b45bbdccc6c2947fd145e21f7c166830a7"
+   }
+  },
+  {
+   "id": "ERGOMU79",
+   "metadata": {
+    "name": "Ergo Mummy #79",
+    "edition": 79,
+    "tokenId": "c411b4648b730e071d7065e85db5381e27ccab4e3313f71ee2f2ee3bf19cf84d",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Cyan"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden spear"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreibakre2ua3pmc5xycigai4j3ivz3f6vj3ah5zyjoas3dvcu6ilzby",
+    "contentHash": "205449aa036f60bb7c090602389da2b9d97d54ec07ee7097025b1d454f21790e"
+   }
+  },
+  {
+   "id": "ERGOMU80",
+   "metadata": {
+    "name": "Ergo Mummy #80",
+    "edition": 80,
+    "tokenId": "a7d1e975c2de94115a0911bbdfae9e6890eae42447a8b9b042b368f27ac25029",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Orange circles"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Arrow"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Cyan"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreibmi7tdbdkz3ktayd4dmc3aatevcouid6opr6uwq3fmytacfvcmse",
+    "contentHash": "2c47e6308d59daa60c0f8360b6004c9513a881f9cf8fa9686cacc4c022d44c91"
+   }
+  },
+  {
+   "id": "ERGOMU81",
+   "metadata": {
+    "name": "Ergo Mummy #81",
+    "edition": 81,
+    "tokenId": "c7226852e0dffa91a40ced157ad8d89e2dc319aeeee7180ff4da1144c20ad79d",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Ocean blue"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden axe"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreid75bjdbwivwvfneyl72yfxuokuz3hcfi3g2cvwvwnj64gvhhtgki",
+    "contentHash": "7fe85230d915b54ad2617fd60b7a3954cece22a366d0ab6ad9a9f70d539e6652"
+   }
+  },
+  {
+   "id": "ERGOMU82",
+   "metadata": {
+    "name": "Ergo Mummy #82",
+    "edition": 82,
+    "tokenId": "dc496c146e1cb647b5b8499d81723c6a4640da1decdb8d06bc2e16f957ed7648",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Ocean blue"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden wings"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifpyohjnyexuexfyby23tfkl7llb6cjxg5pwu2syfdcmqiutwvtim",
+    "contentHash": "afc38e96e097a12e5c071adccaa5fd6b0f849b9bafb5352c1462641149dab343"
+   }
+  },
+  {
+   "id": "ERGOMU83",
+   "metadata": {
+    "name": "Ergo Mummy #83",
+    "edition": 83,
+    "tokenId": "ef3d5104994414d825ec1fa92bd0c801ef84010a4d3c5f5061e8d57d3aac8dc6",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "ERG crown-suit"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Stonks rare"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreibrcx6m37zut65p47cdrxhnx4uom7shofzxwq276m3cecsvt7bium",
+    "contentHash": "3115fccdff349fbafe7c438dcedbf28e67e4771737b435ff336220a559fc28a3"
+   }
+  },
+  {
+   "id": "ERGOMU84",
+   "metadata": {
+    "name": "Ergo Mummy #84",
+    "edition": 84,
+    "tokenId": "e75c4d642d86760e4e8016f5fe8dcd5d72a00c2f6d771b745cafa2aed1352f8f",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green straight lines"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Red gem stick"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreihxhvzd2tyxthxmxhjopcett33luuajsb2zzx2pwdatpra527nmeq",
+    "contentHash": "f73d723d4f1799eecb9d2e788939ef6ba500990759cdf4fb0c137c41dd7dac24"
+   }
+  },
+  {
+   "id": "ERGOMU85",
+   "metadata": {
+    "name": "Ergo Mummy #85",
+    "edition": 85,
+    "tokenId": "f1011a656f398ae8cf3e74c8ec14bb8956b53d6ef305f0061c3b0d74b477315d",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Highlighted pink"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "ERG sword"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Stonks common"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifgtdb5xlmcrxnt2pnq6fs4o3imtwx3yy43kmfly3vfrchomtvopu",
+    "contentHash": "a698c3dbad828ddb3d3db0f165c76d0c9dafbc639b530abc6ea5888ee64eae7d"
+   }
+  },
+  {
+   "id": "ERGOMU86",
+   "metadata": {
+    "name": "Ergo Mummy #86",
+    "edition": 86,
+    "tokenId": "a676501e1a9a4d63bdb5453d6b8de8a1394c37561078114d9b7a66a5caf9a2dd",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Golden circles"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Red gem stick"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Orange"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreihjpqiok67zwgybcuz6qbqwnrkmtfnfvxgkuwoyikdj4rteknlemu",
+    "contentHash": "e97c10e57bf9b1b011533e806166c54c995a5adccaa59d842869e46645356465"
+   }
+  },
+  {
+   "id": "ERGOMU87",
+   "metadata": {
+    "name": "Ergo Mummy #87",
+    "edition": 87,
+    "tokenId": "17c98f5e6268dd56a19b14b753a941ef6818191956b57b725fc96d894e07e360",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Silver wings"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Golden"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiexajhtfkl2jiapc26jeliq42gv7cnvzvkiqmqgtjgpado7oiqfji",
+    "contentHash": "97024f32a97a4a00f16bc922d10e68d5f89b5cd548832069a4cf00ddf722054a"
+   }
+  },
+  {
+   "id": "ERGOMU88",
+   "metadata": {
+    "name": "Ergo Mummy #88",
+    "edition": 88,
+    "tokenId": "8f128c51163ca120b287eab72f4aab1a4fb09742369bdc292749a48cc8fbadcc",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green straight lines"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden axe"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreig74ian5hdzvjdvafx66dm35hjzs7u6o7shvtpf5mr47idmqlx6zu",
+    "contentHash": "dfe200de9c79aa475016fef0d9be9d3997e9e77e47acde5eb23cfa06c82efecd"
+   }
+  },
+  {
+   "id": "ERGOMU89",
+   "metadata": {
+    "name": "Ergo Mummy #89",
+    "edition": 89,
+    "tokenId": "55d3e8b2e2b4efe55709ac88fcc4835c6db497094227b96f41c6bf8d591f5be0",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "The Ankh"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Orange"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreib22cra2mgf4l6fjxfqolkg4pukpxd5lq7cih2wtdhtfkwhs33iky",
+    "contentHash": "3ad0a20d30c5e2fc54dcb072d46e3e8a7dc7d5c3e241f5698cf32aac796f6856"
+   }
+  },
+  {
+   "id": "ERGOMU90",
+   "metadata": {
+    "name": "Ergo Mummy #90",
+    "edition": 90,
+    "tokenId": "a34dffb1520460e996bbcce76d577c60d6845954c5e8ff196d422824b3b0082c",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Forest green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Ancient sceptre"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Purple"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiaixxcfkw4ltn4kimgjiuwobaglirv4v7aap4mixgnpij6luayvvm",
+    "contentHash": "08bdc4555b8b9b78a430c9452ce080cb446bcafc007f188b99af427cba0315ab"
+   }
+  },
+  {
+   "id": "ERGOMU91",
+   "metadata": {
+    "name": "Ergo Mummy #91",
+    "edition": 91,
+    "tokenId": "52cb5f2190f649bc6608d38df478558c679e435616e3f23b55974704de75cfb5",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Mossy green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Red gem stick"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreig4sz6xweqvwkzkctqhy67ctowb4jancuedp2w5hb5tnvcvq7za54",
+    "contentHash": "dc967d7b1215b2b2a14e07c7be29bac1e240d150837eadd387b36d45587f20ef"
+   }
+  },
+  {
+   "id": "ERGOMU92",
+   "metadata": {
+    "name": "Ergo Mummy #92",
+    "edition": 92,
+    "tokenId": "0ac51face86afa22ce91c6b188a77033e76ae502a4470ee7c34b5ea3c45bab61",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Cyan"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Golden"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreidaawhkqmumft27ji3jpxfzu4vwxpr5t3haj7da7kkbash2jnsfmi",
+    "contentHash": "60058ea8328c2cf5f4a3697dcb9a72b6bbe3d9ece04fc60fa941048fa4b64562"
+   }
+  },
+  {
+   "id": "ERGOMU93",
+   "metadata": {
+    "name": "Ergo Mummy #93",
+    "edition": 93,
+    "tokenId": "56df0554e89656ce2f536ee99806694a1022c15866ae002b3ea60f5fd1f78e39",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Turquoise"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden spear"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Violet"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreihvtna7uq7xx27hnaab3zdpaf7d6gubqycop66ztpsvxgj2gxag5m",
+    "contentHash": "f59b41fa43f7bebe768001de46f017e3f1a818604e7fbd99be55b993a35c06eb"
+   }
+  },
+  {
+   "id": "ERGOMU94",
+   "metadata": {
+    "name": "Ergo Mummy #94",
+    "edition": 94,
+    "tokenId": "bb02fa1c0943b60b0bc32c7d420b1fb1eec8db16f50459d5cb328050222c3309",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Forest green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Orange"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreigj73pxuwehpsurtxy7b7z3jvuu72jgfagfxeot5xylen5obioe6q",
+    "contentHash": "c9fedf7a58877ca919df1f0ff3b4d694fe926280c5b91d3edf0b237ae0a1c4f4"
+   }
+  },
+  {
+   "id": "ERGOMU95",
+   "metadata": {
+    "name": "Ergo Mummy #95",
+    "edition": 95,
+    "tokenId": "db5a7c11ffdb71e02f0a7481945d4b745ac594bc2638cdffc8bc498d04eeb1fe",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Purple"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "BTC crown-sword"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Stonks rare"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifh7lvwdu3snsyjnj5xw7rblftlk4pcvavvms3mk7zgoyoeqdhnau",
+    "contentHash": "a7faeb61d3726cb096a7b7b7e215966b571e2a82b564b6c57f26761c480ced05"
+   }
+  },
+  {
+   "id": "ERGOMU96",
+   "metadata": {
+    "name": "Ergo Mummy #96",
+    "edition": 96,
+    "tokenId": "d1ebde4e24e5ccfa007693d6c87d37036c4433b4926c1aa256c0ddf6afe0a601",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green straight lines"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden axe"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreihumgwonedqry43ufn4bcvejx4bans6zwiiqjxse23eas6iqehbue",
+    "contentHash": "f461ace690708e39ba15bc08aa44df810365ecd908826f226b6404bc8810e1a1"
+   }
+  },
+  {
+   "id": "ERGOMU97",
+   "metadata": {
+    "name": "Ergo Mummy #97",
+    "edition": 97,
+    "tokenId": "4f5fedba0d75ec1ec18193e1b632423301c7a3bc52c356a0ee3efad46a696764",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden spear"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Orange"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreidvruzgaqfgwpmalapkobz4npziwm7tk6cmizlguiaz6gzl5hc4km",
+    "contentHash": "758d326040a6b3d80581ea7073c6bf28b33f35784c46566a2019f1b2be9c5c53"
+   }
+  },
+  {
+   "id": "ERGOMU98",
+   "metadata": {
+    "name": "Ergo Mummy #98",
+    "edition": 98,
+    "tokenId": "72dcc323bcba29e50b5d03434352c969b818df757651b678708f02159d502352",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Silver wings"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Purple"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreic4tu56n7ca6iaxnx6y5obpoaiph2ngkleukggyrp5m4gz2walrcq",
+    "contentHash": "5c9d3be6fc40f20176dfd8eb82f7010f3e9a652c94518d88bface1b3ab017114"
+   }
+  },
+  {
+   "id": "ERGOMU99",
+   "metadata": {
+    "name": "Ergo Mummy #99",
+    "edition": 99,
+    "tokenId": "64555172b342acfc81c62df4410590ab7090b138bbe3436200557a153ebe1b8f",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Cyan"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreie2wzx4e2seuicgwftgwdp4vdyt4ghhixkshxoipwdrnl4ufps5iy",
+    "contentHash": "9ab66fc26a44a2046b1666b0dfca8f13e18e745d523ddc87d8716af942be5d46"
+   }
+  },
+  {
+   "id": "ERGOMU100",
+   "metadata": {
+    "name": "Ergo Mummy #100",
+    "edition": 100,
+    "tokenId": "ae1de55236b89dea0f05a9dd1b2e4554106e5f3fd8d2d289745de0e18ed0e55d",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Forest green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden spear"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiexz2awcpf57cjn4woieudseabk7nxhxq6wvcqrff4wbyaxoth2fa",
+    "contentHash": "97ce81613cbdf892de59c8250722002afb6e7bc3d6a8a11297960e01774cfa28"
+   }
+  },
+  {
+   "id": "ERGOMU101",
+   "metadata": {
+    "name": "Ergo Mummy #101",
+    "edition": 101,
+    "tokenId": "142b23a40be9d256550a40c2020e81ee2ad04c01209637179486a4cf1130eee8",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green straight lines"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Golden"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreie4w5abwjkedgoqozdx7q6h4g35fnmoaoqiltvxq44pifr3a5mrk4",
+    "contentHash": "9cb7401b2544199d076477fc3c7e1b7d2b58e03a085ceb78738f4163b0759157"
+   }
+  },
+  {
+   "id": "ERGOMU102",
+   "metadata": {
+    "name": "Ergo Mummy #102",
+    "edition": 102,
+    "tokenId": "043a913dc0c14cdde688d2010552b261b58f2223ee48d8f888ec1d386d36a9a7",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Blue gem stick"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiddtkjd3nodqg4txanaowb2rv67a5xrzrq6grfcmfiux2au6ikuxu",
+    "contentHash": "639a923db5c381b93b81a07583a8d7df076f1cc61e344a261514be814f2154bd"
+   }
+  },
+  {
+   "id": "ERGOMU103",
+   "metadata": {
+    "name": "Ergo Mummy #103",
+    "edition": 103,
+    "tokenId": "543de86203ed3ebe73ac32ffdce198676bf05738f890f245dc7844d909506a7b",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Forest green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden spear"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Violet"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiby7mj3vmpibktb67ruqjcrnxsixhc46o7bh7igpn4kkmk5x6ptgi",
+    "contentHash": "38fb13bab1e80aa61f7e34824516de48b9c5cf3be13fd067b78a5315dbf9f332"
+   }
+  },
+  {
+   "id": "ERGOMU104",
+   "metadata": {
+    "name": "Ergo Mummy #104",
+    "edition": 104,
+    "tokenId": "f67823fc268dde5fb107c6d1bd57680af40d5f77e326f3c2aefb40b52d98ecc3",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Purple"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifzotd52lwwrnebjcppab4jfiucelg3tbphoagmeoxv7wap3vzlzu",
+    "contentHash": "b974c7dd2ed68b481489ef007892a28222cdb985e7700cc23af5fd80fdd72bcd"
+   }
+  },
+  {
+   "id": "ERGOMU104",
+   "metadata": {
+    "name": "Ergo Mummy #104",
+    "edition": 104,
+    "tokenId": "091fbccda964e1f332addad0099de403642c3adaed4e3420fc4668217282f2e1",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifzotd52lwwrnebjcppab4jfiucelg3tbphoagmeoxv7wap3vzlzu",
+    "contentHash": "b974c7dd2ed68b481489ef007892a28222cdb985e7700cc23af5fd80fdd72bcd"
+   }
+  },
+  {
+   "id": "ERGOMU105",
+   "metadata": {
+    "name": "Ergo Mummy #105",
+    "edition": 105,
+    "tokenId": "1d3a137838ad2939c0157382414029d32d9f4d07e37e073934225df69d005bee",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Blue gem stick"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifwxungan5ku5krmf7ewvtzh4lwn2cgnqm364l3rmcmvpcoxrbrhy",
+    "contentHash": "b6bd1a6037aaa7551617e4b56793f1766e8466c19bf717b8b04cabc4ebc4313e"
+   }
+  },
+  {
+   "id": "ERGOMU106",
+   "metadata": {
+    "name": "Ergo Mummy #106",
+    "edition": 106,
+    "tokenId": "1c24e11fdf52c2ccff7e1e22d10a48e00497f9a2c3a95cd1551d1a9f5f022223",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Forest green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Ancient crown"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Orange"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifteoltdoghyeyhmr7h7xxdmutqlo3th3d2uhujeeggjb5yqjz4xe",
+    "contentHash": "b3239731b8c7c1307647e7fdee3652705bb733ec7aa1e89210c6487b88273cb9"
+   }
+  },
+  {
+   "id": "ERGOMU107",
+   "metadata": {
+    "name": "Ergo Mummy #107",
+    "edition": 107,
+    "tokenId": "f1679c4e9ed68f255b338d1df5b0a84cd80831ded07286a9c3fbb5b8471d7cfc",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Golden circles"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreifwf4thp4opcdvuyxmelbzxrtyzvy54oosxvxy3uql7aeluyec7gi",
+    "contentHash": "b62f2677f1cf10eb4c5d84587378cf19ae3bc73a57adf1ba417f01174c105f32"
+   }
+  },
+  {
+   "id": "ERGOMU108",
+   "metadata": {
+    "name": "Ergo Mummy #108",
+    "edition": 108,
+    "tokenId": "3fab9724b123c2d5a5562116f17b5c711e73e14f1505995d552b54a1cafe7736",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiepxuze5xwm73p6jhbqsel63kz26kcsinyhezrf52rc2lygdcrici",
+    "contentHash": "8fbd324edeccfedfe49c309117edab3af28524370726625eea22d2f0618a2812"
+   }
+  },
+  {
+   "id": "ERGOMU108",
+   "metadata": {
+    "name": "Ergo Mummy #108",
+    "edition": 108,
+    "tokenId": "b75a9ddcf555dcb1655ce70356cb6ce62cfbea1536bd7dbdf5359712e384480c",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Ancient crown"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiepxuze5xwm73p6jhbqsel63kz26kcsinyhezrf52rc2lygdcrici",
+    "contentHash": "8fbd324edeccfedfe49c309117edab3af28524370726625eea22d2f0618a2812"
+   }
+  },
+  {
+   "id": "ERGOMU109",
+   "metadata": {
+    "name": "Ergo Mummy #109",
+    "edition": 109,
+    "tokenId": "e1d66c06db7dac5dd404195d43293540e8eb7f30c597da2aa9faaed8f7a90ca8",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Ocean blue"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Lime"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "The Ankh"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Golden"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreicsmibpczp7gciokzzzcpxh4pkehn2dkdl46d6gylc3ciivtpbxou",
+    "contentHash": "526202f165ff3090e5673913ee7e3d443b74350d7cf0fc6c2c5b121159bc3775"
+   }
+  },
+  {
+   "id": "ERGOMU110",
+   "metadata": {
+    "name": "Ergo Mummy #110",
+    "edition": 110,
+    "tokenId": "2c8f442effe2278a0bb56044aafd57fd9950b16e624775569dd51ef43550ed10",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Forest green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden axe"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreihhudkjtaaff7k6e2fvamw5dqhlvboz2zxnsbkgjr47g5z6bsvcr4",
+    "contentHash": "e7a0d49980052fd5e268b5032dd1c0eba85d9d66ed905464c79f3773e0caa28f"
+   }
+  },
+  {
+   "id": "ERGOMU111",
+   "metadata": {
+    "name": "Ergo Mummy #111",
+    "edition": 111,
+    "tokenId": "b2e1a1fb90b22ce9a766ebf11c2ff5e91958240cdd26416e7ffe851952f3dd5a",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Highlighted pink"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Purple"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Blue gem stick"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreibob5hlfmvxri3wgtvvf2eo64r6iqgu7lonva4cj46hud433hgs3u",
+    "contentHash": "2e0f4eb2b2b78a37634eb52e88ef723e440d4fadcda83824f3c7a0f9bd9cd2dd"
+   }
+  },
+  {
+   "id": "ERGOMU111",
+   "metadata": {
+    "name": "Ergo Mummy #111",
+    "edition": 111,
+    "tokenId": "c40e62fa29e4452df5b886f2dae97d7dc276af38f3bb7245b853d7eff0e4ad5b",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Highlighted pink"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Blue gem stick"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Red"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreibob5hlfmvxri3wgtvvf2eo64r6iqgu7lonva4cj46hud433hgs3u",
+    "contentHash": "2e0f4eb2b2b78a37634eb52e88ef723e440d4fadcda83824f3c7a0f9bd9cd2dd"
+   }
+  },
+  {
+   "id": "ERGOMU111",
+   "metadata": {
+    "name": "Ergo Mummy #111",
+    "edition": 111,
+    "tokenId": "87f7493d7e73a6c3913324fcfa576423e140ea539ef328aaa50b915d6d83e15d",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Forest green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Red gem stick"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Purple"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreibt2ids6fazzl76uhqjo3dwncpxnfdtq32emuqi6yb3pccy4bmpta",
+    "contentHash": "33d2072f1419caffea1e0976c76689f76947386f4465208f603b78858e058f98"
+   }
+  },
+  {
+   "id": "ERGOMU112",
+   "metadata": {
+    "name": "Ergo Mummy #112",
+    "edition": 112,
+    "tokenId": "938b063563771435d341995b9dda8194bfddfb824bc2639a50a81e9eb2a28ae2",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Turquoise"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreibag4hy7b2lqii2wypaapqa66qiy5p3nyxw6ssilzkzipzp23pouu",
+    "contentHash": "20370f8f874b8211ab61e003e00f7a08c75fb6e2f6f4a485e55943f2fd6deea5"
+   }
+  },
+  {
+   "id": "ERGOMU112",
+   "metadata": {
+    "name": "Ergo Mummy #112",
+    "edition": 112,
+    "tokenId": "cca080351a62a6971ee350fa5bfc24e03b67c17002d2095ea20da4bea22d5b8e",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Arrow"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Purple"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreidxnhzdgmnl44wqkunselew4t5y33cnhghkvgtmrdwme2gaini72u",
+    "contentHash": "7769f23331abe72d0551b222c96e4fb8dec4d398eaa9a6c88ecc268c04351fd5"
+   }
+  },
+  {
+   "id": "ERGOMU113",
+   "metadata": {
+    "name": "Ergo Mummy #113",
+    "edition": 113,
+    "tokenId": "9ef9e102a0bf13f24bb7fd7ceca0c132efadd6f9c483f7a4b98f5e0f0eb3b40d",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Highlighted red"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden axe"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Light blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreidg2dfa3ec6i7ixigvwkga2osvzbi7revslrqnbyc4rj2rfih232q",
+    "contentHash": "66d0ca0d905e47d1741ab65181a74ab90a3f12564b8c1a1c0b914ea2541f5bd4"
+   }
+  },
+  {
+   "id": "ERGOMU114",
+   "metadata": {
+    "name": "Ergo Mummy #114",
+    "edition": 114,
+    "tokenId": "f3b23e87265260a99865daaa4f9686c56518684c861ca4efd5f34405c35a13cd",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Purple"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiflzkkgumyqhdumxcfea2wr5i6rtbotgxh7fai7ysfpkokkmeoloq",
+    "contentHash": "abca946a331038e8cb88a406ad1ea3d1985d335cff2811fc48af5394a611cb74"
+   }
+  },
+  {
+   "id": "ERGOMU114",
+   "metadata": {
+    "name": "Ergo Mummy #114",
+    "edition": 114,
+    "tokenId": "e4a0c3d8ffc13005f264a450e1ef8c2c58e984821e5000b7e2f416a028a19b49",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Violet"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiflzkkgumyqhdumxcfea2wr5i6rtbotgxh7fai7ysfpkokkmeoloq",
+    "contentHash": "abca946a331038e8cb88a406ad1ea3d1985d335cff2811fc48af5394a611cb74"
+   }
+  },
+  {
+   "id": "ERGOMU115",
+   "metadata": {
+    "name": "Ergo Mummy #115",
+    "edition": 115,
+    "tokenId": "531fde3530ce5edff2c2f382f696a8b8a6524347d6890d2c74bc203a0d5be881",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Orange circles"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "The Ankh"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Golden"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreienlj3wxdez3gwqe5uin3ob46z3tjnxcfz7rinclpocz3otxllooe",
+    "contentHash": "8d5a776b8c99d9ad0276886edc1e7b3b9a5b71173f8a1a25bdc2cedd3bad6e71"
+   }
+  },
+  {
+   "id": "ERGOMU116",
+   "metadata": {
+    "name": "Ergo Mummy #116",
+    "edition": 116,
+    "tokenId": "e28a2835bafe9f0e521bc0310d578ab1552844c24db69e26cecb05072f2ff811",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Mossy green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden axe"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiarqi2ariiaqq4avilwqjdbnivtjmgdtssoqr2viugjgscjite4ve",
+    "contentHash": "11823408a10084380aa176824616a2b34b0c39ca4e84755450c93484944c9ca9"
+   }
+  },
+  {
+   "id": "ERGOMU116",
+   "metadata": {
+    "name": "Ergo Mummy #116",
+    "edition": 116,
+    "tokenId": "36f8cfc04273535a84ef8c904ed141dfda6dc0189572dd3e1833a6ab01141892",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Mossy green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden axe"
+     },
+     {
+      "trait_type": "Background",
+      "value": "ErgoGames 1"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreia6fhilzfz2spsabe3tssqyihgsjnvyyawh5rhomp6dorzztgjeka",
+    "contentHash": "1e29d0bc973a93e400937394a1841cd24b6b8c02c7ec4ee63fc3747399992450"
+   }
+  },
+  {
+   "id": "ERGOMU116",
+   "metadata": {
+    "name": "Ergo Mummy #116",
+    "edition": 116,
+    "tokenId": "d92335c29d7e9c00d0b36917162263b57c44001594ffad69dfa35bfaf1d3eb3d",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Mossy green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden axe"
+     },
+     {
+      "trait_type": "Background",
+      "value": "ErgoGames 1"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreig23fvjkgalladno3s26sltap42luzxuousbosgmvbpllqblhvu4e",
+    "contentHash": "dad96a95180b5806d76e5af497303f9a5d337a3a920ba466542f5ae0159eb4e1"
+   }
+  },
+  {
+   "id": "ERGOMU117",
+   "metadata": {
+    "name": "Ergo Mummy #117",
+    "edition": 117,
+    "tokenId": "2aa15f83e3439a9829ccfabefe2003de5671635e9ddce29855545b07aa898ae6",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "The Ankh"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreief2waf45fxysfuikm4dd2ey2ozrlkeneqsrcixvxykmrsylqyioi",
+    "contentHash": "85d5805e74b7c48b44299c18f44c69d98ad446921288917adf0a646585c30872"
+   }
+  },
+  {
+   "id": "ERGOMU118",
+   "metadata": {
+    "name": "Ergo Mummy #118",
+    "edition": 118,
+    "tokenId": "310569703dda4d8f4e4aac1f5f32851fccd29b625d4c96ac0ef88cb19f2517a5",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Blue"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden spear"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Golden"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreicx6k4hwiumh5euj7t7id2a2lphle2zaa3yp35egoy3ehygenkw7y",
+    "contentHash": "57f2b87b228c3f4944fe7f40f40d2de759359003787efa433b1b21f0623556fe"
+   }
+  },
+  {
+   "id": "ERGOMU119",
+   "metadata": {
+    "name": "Ergo Mummy #119",
+    "edition": 119,
+    "tokenId": "7f1844f85fdbc81a0fcd52717d1523d7ebb2792714750fa5edc63b03293461fd",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green straight lines"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Orange"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiczbk3s53dlh6n54o2lm2e2ux4jyw5kdgtbczgjl2acrq3jotwou4",
+    "contentHash": "590ab72eec6b3f9bde3b4b6689aa5f89c5baa19a61164c95e8028c36974ecea7"
+   }
+  },
+  {
+   "id": "ERGOMU119",
+   "metadata": {
+    "name": "Ergo Mummy #119",
+    "edition": 119,
+    "tokenId": "2d56cfc1890d1c3eb9d052af2893efec872a3d772a9acc58e606379d3f6d65ad",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Green straight lines"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "BTC sword"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Stonks common"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreif3zyxueagzg6woxuh656n4hcvnzihy2dsbp4yf5xgmz7ozftbqu4",
+    "contentHash": "bbce2f4200d937acebd0feef9bc38aadca0f8d0e417f305edccccfdd92cc30a7"
+   }
+  },
+  {
+   "id": "ERGOMU120",
+   "metadata": {
+    "name": "Ergo Mummy #120",
+    "edition": 120,
+    "tokenId": "30da5c08f813245d725682bf41abc717136be8f83e5c608c788a75d6f1e907a3",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Cyan"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Purple"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreid22k3qct55ojl2tmikfq7wccwo4qzctt5ysg53jiylbnktpjgnxy",
+    "contentHash": "7ad2b7014fbd7257a9b10a2c3f610acee43229cfb891bbb4a30b0b5537a4cdbe"
+   }
+  },
+  {
+   "id": "ERGOMU120",
+   "metadata": {
+    "name": "Ergo Mummy #120",
+    "edition": 120,
+    "tokenId": "7501ba84eb6d5c99068474f9667c4c86ad7da61fb6239a7ac02460d89c651d7d",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Cyan"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "The Ankh"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Purple"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreid22k3qct55ojl2tmikfq7wccwo4qzctt5ysg53jiylbnktpjgnxy",
+    "contentHash": "7ad2b7014fbd7257a9b10a2c3f610acee43229cfb891bbb4a30b0b5537a4cdbe"
+   }
+  },
+  {
+   "id": "ERGOMU120",
+   "metadata": {
+    "name": "Ergo Mummy #120",
+    "edition": 120,
+    "tokenId": "62d8dbffd782f4f5697f4d3eb4e62a9ffc11ccb26a4cdada1114f6499829c97f",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Cyan"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Pink"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "The Ankh"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Violet"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreid22k3qct55ojl2tmikfq7wccwo4qzctt5ysg53jiylbnktpjgnxy",
+    "contentHash": "7ad2b7014fbd7257a9b10a2c3f610acee43229cfb891bbb4a30b0b5537a4cdbe"
+   }
+  },
+  {
+   "id": "ERGOMU121",
+   "metadata": {
+    "name": "Ergo Mummy #121",
+    "edition": 121,
+    "tokenId": "91795bbdf1a3eb8c0188d0649a7c92fc01bf03b48d99c20c8d49df8c0e159cae",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Purple"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Crosshair"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Golden spear"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Green"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreig7wr2xjtjniiujplmkdltup6iqgn4nc47kwaelb26ymb35u4ieeq",
+    "contentHash": "dfb47574cd2d422897ad8a1ae747f9103378d173eab008b0ebd86077da710424"
+   }
+  },
+  {
+   "id": "ERGOMU122",
+   "metadata": {
+    "name": "Ergo Mummy #122",
+    "edition": 122,
+    "tokenId": "d1462eb48839d0f7e89e5d7381ac6d54a237d9a0bc9b72c1d0c6b28eeddeb37f",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Ocean blue"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "The Ankh"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Golden"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreieprw4b4bqjpssjqhworiuwqqhkf5a4tpwvjslfnm2dkfrs2cj264",
+    "contentHash": "8f8db81e06097ca4981ece8a296840ea2f41c9bed54c9656b34351632d093af7"
+   }
+  },
+  {
+   "id": "ERGOMU122",
+   "metadata": {
+    "name": "Ergo Mummy #122",
+    "edition": 122,
+    "tokenId": "27730405f8623eee8d4855b59ae1bf7dfc1ce2fd969a1e208568c943d506d0e4",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Black"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Ocean blue"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Arrow"
+     },
+     {
+      "trait_type": "Background",
+      "value": "ErgoGames 1"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreieen5mjerhyc5liqahabrnmvw3xdlzb4nrhffkbt6xzuxodcdpqwq",
+    "contentHash": "846f589244f817568800e00c5acadb771af21e3627295419faf9a5dc310df0b4"
+   }
+  },
+  {
+   "id": "ERGOMU123",
+   "metadata": {
+    "name": "Ergo Mummy #123",
+    "edition": 123,
+    "tokenId": "7c96d87c958924eb89e81be56ee41839f8a21e0e8bb796c6092c21a74c3e1ba0",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Highlighted red"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Brown"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Blue"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiddsk2km4yfoclgzm77vvwpazzb7gd2exammvvmsugppmygnllnum",
+    "contentHash": "6392b4a6730570966cb3ffad6cf06721f987a25c0c656ac950cf7b3066ad6da3"
+   }
+  },
+  {
+   "id": "ERGOMU123",
+   "metadata": {
+    "name": "Ergo Mummy #123",
+    "edition": 123,
+    "tokenId": "5f9840c5b6849277b30f2e72edba997725ad7b6c780455f4f76a98ef0510f555",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Beige"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Gray"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Blitz skin"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Purple"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreihslguxe55jtvbbs6lm5jaml5jtqpjzgjspytlumtlszozhhsusdu",
+    "contentHash": "f259a97277a99d4219796cea40c5f53383d393264fc4d7464d72cbb273ca921d"
+   }
+  },
+  {
+   "id": "ERGOMU124",
+   "metadata": {
+    "name": "Ergo Mummy #124",
+    "edition": 124,
+    "tokenId": "fb69741da6b72a8081fe75655f19518399d162dd78df6db7dc177d1d9e4ba6c0",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Orange"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Violet"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Happy"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Crook"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Violet"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreieypolxbzvjn3bjjsckrowwyrc53sfnf4llsoumswqnqk7q66kg7q",
+    "contentHash": "987b9770e6a96ec294c84a8bad6c445ddc8ad2f16b93a8c95a0d82bf0f7946fc"
+   }
+  },
+  {
+   "id": "ERGOMU125",
+   "metadata": {
+    "name": "Ergo Mummy #125",
+    "edition": 125,
+    "tokenId": "7ba5f164a145d832c11a7980697feece3623b52823d59f91c14200efe55c25ae",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Emerald green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "Ancient crown"
+     },
+     {
+      "trait_type": "Background",
+      "value": "Orange"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreiddqbxlezczl3wol6migeuwsveimdsvjfp4oj7dvbdaqsfun2w5qq",
+    "contentHash": "63806eb264595eece5f988312969548860e55495fc727e3a8460848b46eadd84"
+   }
+  },
+  {
+   "id": "ERGOMU125",
+   "metadata": {
+    "name": "Ergo Mummy #125",
+    "edition": 125,
+    "tokenId": "c8e196cc8770613440c062c6e58d81582bfdd5c8a401de10d8f31b06b8062e24",
+    "collection": "Ergo Mummy",
+    "attributes": [
+     {
+      "trait_type": "Primary color",
+      "value": "White"
+     },
+     {
+      "trait_type": "Secondary color",
+      "value": "Emerald green"
+     },
+     {
+      "trait_type": "Eyes/Strips color",
+      "value": "Red"
+     },
+     {
+      "trait_type": "Eyes shape",
+      "value": "Plus sign"
+     },
+     {
+      "trait_type": "Accessory",
+      "value": "None"
+     },
+     {
+      "trait_type": "Background",
+      "value": "ErgoGames 2"
+     }
+    ],
+    "chain": "ERGO",
+    "emission": 1,
+    "imageUrl": "ipfs://bafkreigtlatzu7cggdu2inkcezbudmqqtsjnrlpdn7rw65hnbf4ddmmtjq",
+    "contentHash": "d358279a7c4630e9a43542264341b2109c92d8ade36fe36f74ed097831b1934c"
+   }
+  }
+ ]
+}

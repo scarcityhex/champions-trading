@@ -1,0 +1,25 @@
+node_modules/
+.next/
+out/
+.env*
+!.env.example
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+
+# Full-size collection artwork: ~2 GB. Not committed. Regenerate the folder by
+# running the downloader, or symlink it.
+/public/art/
+
+# The image tiers are NOT committed — 187 MB of artwork that is not ours to
+# redistribute. `vercel deploy` uploads the local folder directly, so they still
+# reach the CDN without ever entering git history. That is what keeps the
+# owner's permission revocable: a public git history cannot be un-published.
+#
+# See NOTICE. Regenerate either tier with `python3 scripts/gen_thumbs.py`;
+# burned tokens are skipped automatically.
+#
+# NOTE: .vercelignore must exist and must NOT list these. Without it the Vercel
+# CLI falls back to this file and would silently deploy a site with no images.
+/public/thumbs/
+/public/detail/

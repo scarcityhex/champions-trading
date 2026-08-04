@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* The two HUD faces: `font-pixel` (VT323) for dense data, where the tall
+     x-height keeps long token ids and prices legible at small sizes, and
+     `font-pixel-display` (Press Start 2P) for titles only — it is a chunky
+     face and unreadable in paragraphs. */
+  --font-pixel: var(--font-vt323);
+  --font-pixel-display: var(--font-press-start);
+}
+
+:root {
+  /* Palette lifted from the HUD chrome so the flat surfaces sit flush against
+     the 9-slice sprites instead of fighting them. */
+  --bg: #0a0705;
+  --face: #1f160c;
+  --well: #130d07;
+  --outline: #0d0905;
+}
+
+html, body {
+  background: var(--bg);
+  color: #e5e7eb;
+}
+
+/* Pixel art must never be resampled smoothly — a half-pixel scale turns clean
+   edges into mush. */
+img { image-rendering: pixelated; }

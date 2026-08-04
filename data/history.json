@@ -1,0 +1,28 @@
+{
+ "lastHeight": 1843587,
+ "updatedAt": "2026-08-04T02:53:02.197Z",
+ "trades": [
+  {
+   "txId": "5db97e5edfe2b8dded0ca86040d76cd683b599153b4c3f05bed4924161ae69c7",
+   "boxId": "9e6e0841fb8b7ba1896bc0377ce5271e2d89df96bf4b4628763f99a7fc85581a",
+   "tokenId": "675ca7468d76244c6cea5e94c982d6d3f5ddde36d0c17c1ef3b7f2222145802c",
+   "price": "1300000000",
+   "seller": "9hveS5VmStvpiybxya1adrvJipaz6Pi8bJMuttKuMvsijNiNxiw",
+   "buyer": "9iDdoGEbas2VYPW3h6r4spebXEBAhvnd1QicRAXk5o2up79NmWW",
+   "height": 1843587,
+   "timestamp": 1785811834913,
+   "kind": "sale"
+  },
+  {
+   "txId": "db4cd9cbde544d7bde44017f05023bbd16eb5b3d4e6fefec3217f4e698f1fb3f",
+   "boxId": "c92d72b2e3e4e389eb2be0fdfaf4868d6f844844b00c99cfd39aaeaf43fdf2ac",
+   "tokenId": "9354c19d525f7f2765cb33e2ec7bec18d86f7750058505d4c651fa3b34f6744f",
+   "price": "1000000000",
+   "seller": "9hveS5VmStvpiybxya1adrvJipaz6Pi8bJMuttKuMvsijNiNxiw",
+   "buyer": "9iDdoGEbas2VYPW3h6r4spebXEBAhvnd1QicRAXk5o2up79NmWW",
+   "height": 1843575,
+   "timestamp": 1785810447887,
+   "kind": "offerAccepted"
+  }
+ ]
+}
