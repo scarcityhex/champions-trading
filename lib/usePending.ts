@@ -87,6 +87,39 @@ export function isSettled(
   }
 }
 
+/**
+ * Does this token belong in the user's "Mine" view?
+ *
+ * Four ways to own something here, and missing any of them makes a piece
+ * vanish with no explanation:
+ *
+ *   - it is in the wallet
+ *   - it is in the sale contract, listed by this wallet
+ *   - this wallet has a funded bid on it — that is ERG already spent
+ *   - an action on it is signed and waiting for a block
+ *
+ * The last one is the whole reason usePending exists. Between signing a listing
+ * and the next block the wallet has already given the token up and the contract
+ * box is not visible yet, so without this the piece is in neither place and
+ * simply disappears for two minutes.
+ *
+ * Extracted and exported so it can be tested. It was inlined in the gallery
+ * once, and the pending clause was silently dropped by a bad edit that nothing
+ * caught — the filter still compiled and still looked right.
+ */
+export function isMine(
+  tokenId: string,
+  wallet: { owned: Set<string>; address: string | null },
+  data: Pick<MarketData, 'listings' | 'offers'>,
+  pending: Map<string, Pending>,
+): boolean {
+  if (wallet.owned.has(tokenId)) return true;
+  if (pending.has(tokenId)) return true;
+  if (!wallet.address) return false;
+  if (data.listings.get(tokenId)?.seller === wallet.address) return true;
+  return Boolean(data.offers.get(tokenId)?.some((o) => o.bidder === wallet.address));
+}
+
 export type PendingState = {
   /** tokenId -> the action awaiting confirmation. */
   byToken: Map<string, Pending>;

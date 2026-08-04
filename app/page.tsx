@@ -6,6 +6,7 @@ import PixelButton from '@/components/ui/PixelButton';
 import Header from '@/components/Header';
 import TokenCard, { actionFor, type CardAction } from '@/components/TokenCard';
 import AmountDialog from '@/components/AmountDialog';
+import { isMine } from '@/lib/usePending';
 import TraitFilters, {
   matchesTraits,
   activeCount,
@@ -34,64 +35,81 @@ export default function Home() {
   const [traits, setTraits] = useState<TraitSelection>({});
   const [search, setSearch] = useState('');
 
-  const collection = VISIBLE_COLLECTIONS[tab];
-  const rarity = useMemo(() => rarityPercentiles(collection), [collection]);
+  /** -1 is the combined view across every visible collection. */
+  const isAll = tab < 0;
+  const collection = isAll ? null : VISIBLE_COLLECTIONS[tab];
+  const shownCollections = isAll ? VISIBLE_COLLECTIONS : [VISIBLE_COLLECTIONS[tab]];
 
-  const tokens = useMemo(() => {
-    const base = (() => {
-      if (filter === 'forSale') {
-        return collection.live.filter((t) => data.listings.has(t.tokenId));
+  // A token alone is not enough to render a card: the image path and the rarity
+  // rank both depend on which collection it came from. Pairing them here means
+  // no lookup by tokenId further down.
+  const entries = useMemo(() => {
+    const perCollection = shownCollections.map((c) => {
+      // Ranked within its own collection, always. A percentile across three
+      // collections would compare traits that do not exist in each other.
+      const ranks = rarityPercentiles(c);
+      return c.live.map((nft) => ({ nft, collection: c, rarity: ranks.get(nft.tokenId) }));
+    });
+
+    if (perCollection.length === 1) return perCollection[0];
+
+    // Interleaved rather than concatenated. Ergo Champions alone is 493 pieces,
+    // so a grouped list would put Mage Champions eighty pages down and a view
+    // called "all collections" would look like one collection.
+    const merged = perCollection[0].slice(0, 0);
+    const longest = Math.max(...perCollection.map((l) => l.length));
+    for (let i = 0; i < longest; i++) {
+      for (const list of perCollection) {
+        if (i < list.length) merged.push(list[i]);
       }
+    }
+    return merged;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab]);
+
+  const visible = useMemo(() => {
+    const base = entries.filter(({ nft }) => {
+      if (filter === 'forSale') return data.listings.has(nft.tokenId);
       if (filter === 'mine') {
-        // "Mine" covers held, listed, or bid on. A token in the sale contract
-        // is still the seller's in every sense that matters, and a funded offer
-        // is ERG already out of the wallet — both are things a user needs to
-        // find again, and neither shows up in a plain balance.
-        return collection.live.filter(
-          (t) =>
-            wallet.owned.has(t.tokenId) ||
-            data.listings.get(t.tokenId)?.seller === wallet.address ||
-            data.offers.get(t.tokenId)?.some((o) => o.bidder === wallet.address),
-        );
+        // Held, listed, bid on, or signed and waiting for a block. The rule
+        // lives in isMine so it can be tested — the pending clause was once
+        // dropped here by a bad edit and nothing caught it.
+        return isMine(nft.tokenId, wallet, data, pending.byToken);
       }
-      return collection.live;
-    })();
+      return true;
+    });
 
-    const byTraits = base.filter((t) => matchesTraits(t.attributes, traits));
-
-    return byTraits.filter((t) => matchesEdition(t, search));
-  }, [
-    collection,
-    filter,
-    traits,
-    search,
-    data.listings,
-    data.offers,
-    wallet.owned,
-    wallet.address,
-    pending.byToken,
-  ]);
+    // Trait filters are hidden in the combined view, so `traits` is empty there
+    // and this is a no-op. Trait names are not shared between collections —
+    // "robes" exists in Mage Champions and nowhere else — so a cross-collection
+    // trait filter could only ever mean "match one collection, exclude the
+    // others", which is not what a filter appears to promise.
+    return base
+      .filter(({ nft }) => matchesTraits(nft.attributes, traits))
+      .filter(({ nft }) => matchesEdition(nft, search));
+  }, [entries, filter, traits, search, data.listings, data.offers, wallet, pending.byToken]);
 
   const stats = useMemo(() => {
-    const traits = new Set(
-      collection.live.flatMap((t) => (t.attributes ?? []).map((a) => a.trait_type)),
-    );
+    let live = 0;
+    let minted = 0;
     let listed = 0;
     let floor: bigint | null = null;
-    for (const t of collection.live) {
-      const l = data.listings.get(t.tokenId);
-      if (!l) continue;
-      listed++;
-      if (floor === null || l.price < floor) floor = l.price;
+    const traitTypes = new Set<string>();
+
+    for (const c of shownCollections) {
+      live += c.live.length;
+      minted += c.tokens.length;
+      for (const t of c.live) {
+        for (const a of t.attributes ?? []) traitTypes.add(a.trait_type);
+        const l = data.listings.get(t.tokenId);
+        if (!l) continue;
+        listed++;
+        if (floor === null || l.price < floor) floor = l.price;
+      }
     }
-    return {
-      tokens: collection.live.length,
-      burned: collection.tokens.length - collection.live.length,
-      traits: traits.size,
-      listed,
-      floor,
-    };
-  }, [collection, data.listings]);
+    return { tokens: live, burned: minted - live, traits: traitTypes.size, listed, floor };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab, data.listings]);
 
   const pick = (i: number) => {
     setTab(i);
@@ -120,6 +138,9 @@ export default function Home() {
 
         <PixelPanel className="p-4">
           <div className="mb-3 flex flex-wrap gap-2">
+            <PixelButton active={isAll} onClick={() => pick(-1)}>
+              All collections
+            </PixelButton>
             {VISIBLE_COLLECTIONS.map((c, i) => (
               <PixelButton key={c.key} active={i === tab} onClick={() => pick(i)}>
                 {c.name}
@@ -170,21 +191,27 @@ export default function Home() {
             </PixelPanel>
           </div>
 
-          <TraitFilters
-            collection={collection}
-            selection={traits}
-            onChange={(next) => {
-              setTraits(next);
-              setShown(PAGE);
-            }}
-          />
+          {/* Hidden in the combined view: trait names are not shared between
+              collections, so a dropdown built from one would silently exclude
+              the other two. The #number search stays, since an edition number
+              means the same thing everywhere. */}
+          {collection && (
+            <TraitFilters
+              collection={collection}
+              selection={traits}
+              onChange={(next) => {
+                setTraits(next);
+                setShown(PAGE);
+              }}
+            />
+          )}
 
           <PixelPanel variant="inset" className="mb-4 flex flex-wrap gap-x-6 gap-y-1 p-3">
             <Stat
               label={activeCount(traits) > 0 ? 'MATCHING' : 'TOKENS'}
               value={
                 activeCount(traits) > 0
-                  ? `${tokens.length} of ${stats.tokens}`
+                  ? `${visible.length} of ${stats.tokens}`
                   : String(stats.tokens)
               }
             />
@@ -194,7 +221,14 @@ export default function Home() {
             <Stat label="TRAITS" value={String(stats.traits)} />
             <Stat label="LISTED" value={data.loading ? '…' : String(stats.listed)} />
             <Stat label="FLOOR" value={stats.floor === null ? '—' : `${toErg(stats.floor)} ERG`} />
-            <Stat label="ISSUER" value={collection.issuer ? shortAddress(collection.issuer) : '—'} />
+            {collection ? (
+              <Stat
+                label="ISSUER"
+                value={collection.issuer ? shortAddress(collection.issuer) : '—'}
+              />
+            ) : (
+              <Stat label="COLLECTIONS" value={String(VISIBLE_COLLECTIONS.length)} />
+            )}
           </PixelPanel>
 
           {data.error && (
@@ -205,7 +239,7 @@ export default function Home() {
             </PixelPanel>
           )}
 
-          {tokens.length === 0 ? (
+          {visible.length === 0 ? (
             <p className="py-8 text-center font-pixel text-xl text-gray-500">
               {/* The trait message wins when traits are active: saying "nothing
                   listed" while listings exist that simply do not match the
@@ -224,31 +258,31 @@ export default function Home() {
             </p>
           ) : (
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-              {tokens.slice(0, shown).map((t) => {
-                const live = data.listings.get(t.tokenId);
+              {visible.slice(0, shown).map(({ nft, collection: c, rarity }) => {
+                const live = data.listings.get(nft.tokenId);
                 return (
                   <TokenCard
-                    key={t.tokenId}
-                    nft={t}
-                    dir={collection.dir}
-                    href={`/token/${t.tokenId}`}
+                    key={nft.tokenId}
+                    nft={nft}
+                    dir={c.dir}
+                    href={`/token/${nft.tokenId}`}
                     listing={live}
-                    topOffer={data.offers.get(t.tokenId)?.[0]?.amount}
-                    rarity={rarity.get(t.tokenId)}
-                    pending={pending.byToken.get(t.tokenId)}
-                    action={actionFor(live, wallet.owned.has(t.tokenId), wallet.address)}
-                    busy={actions.busy === t.tokenId}
-                    onAct={(a) => act(t, a)}
+                    topOffer={data.offers.get(nft.tokenId)?.[0]?.amount}
+                    rarity={rarity}
+                    pending={pending.byToken.get(nft.tokenId)}
+                    action={actionFor(live, wallet.owned.has(nft.tokenId), wallet.address)}
+                    busy={actions.busy === nft.tokenId}
+                    onAct={(a) => act(nft, a)}
                   />
                 );
               })}
             </div>
           )}
 
-          {shown < tokens.length && (
+          {shown < visible.length && (
             <div className="mt-4 flex justify-center">
               <PixelButton onClick={() => setShown((n) => n + PAGE)}>
-                Load more ({tokens.length - shown} left)
+                Load more ({visible.length - shown} left)
               </PixelButton>
             </div>
           )}

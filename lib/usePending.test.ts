@@ -9,7 +9,13 @@
 // rule would pass while the real one was broken, which is worse than no test.
 
 import { describe, expect, it } from 'vitest';
-import { isSettled, pendingLabel, type Pending, type PendingKind } from './usePending';
+import {
+  isSettled,
+  isMine,
+  pendingLabel,
+  type Pending,
+  type PendingKind,
+} from './usePending';
 import type { Listing, Offer } from './explorer';
 
 const TOKEN = '5836c62731c4f5f0d0e4a5f0b3f9a4d0c2e8b1a7f6d3c9e2b8a4f1d7c3e9b2a8';
@@ -107,5 +113,52 @@ describe('pendingLabel', () => {
       expect(label, k).toBeTruthy();
       expect(label.endsWith('…'), k).toBe(true);
     }
+  });
+});
+
+// ── The "Mine" rule ────────────────────────────────────────────────────────
+//
+// This is here because the pending clause was silently dropped from the gallery
+// filter by a bad edit: the code still compiled, still looked right, and the
+// only symptom was a token vanishing for two minutes after being listed. The
+// rule now lives in one tested function instead of inline in a component.
+describe('isMine', () => {
+  const other = '9gtuMt4YTz5e1cskqyUAzVCXcQMHNtrF7RyfbnhHvNiQ1UoR697';
+  const wallet = (owned: string[] = []) => ({ owned: new Set(owned), address: ME });
+  const none = { listings: new Map<string, Listing>(), offers: new Map<string, Offer[]>() };
+  const noPending = new Map<string, Pending>();
+
+  it('includes a token held in the wallet', () => {
+    expect(isMine(TOKEN, wallet([TOKEN]), none, noPending)).toBe(true);
+  });
+
+  it('includes a token this wallet has listed', () => {
+    const listings = new Map([[TOKEN, listing()]]);
+    expect(isMine(TOKEN, wallet(), { ...none, listings }, noPending)).toBe(true);
+  });
+
+  it('includes a token this wallet has bid on', () => {
+    const offers = new Map([[TOKEN, [offer()]]]);
+    expect(isMine(TOKEN, wallet(), { ...none, offers }, noPending)).toBe(true);
+  });
+
+  // The regression. The wallet has already given the token up and the contract
+  // box is not confirmed yet: without the pending clause it is in neither place.
+  it('includes a token whose listing is signed but not yet in a block', () => {
+    const p = new Map([[TOKEN, pending('list')]]);
+    expect(isMine(TOKEN, wallet(), none, noPending)).toBe(false); // the bug
+    expect(isMine(TOKEN, wallet(), none, p)).toBe(true); // the fix
+  });
+
+  it('excludes somebody else\'s listing and somebody else\'s bid', () => {
+    const listings = new Map([[TOKEN, { ...listing(), seller: other }]]);
+    const offers = new Map([[TOKEN, [{ ...offer(), bidder: other }]]]);
+    expect(isMine(TOKEN, wallet(), { listings, offers }, noPending)).toBe(false);
+  });
+
+  it('claims nothing when no wallet is connected', () => {
+    const disconnected = { owned: new Set<string>(), address: null };
+    const listings = new Map([[TOKEN, listing()]]);
+    expect(isMine(TOKEN, disconnected, { ...none, listings }, noPending)).toBe(false);
   });
 });
