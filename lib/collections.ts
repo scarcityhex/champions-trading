@@ -110,7 +110,7 @@ function build(key: string, dir: string, raw: unknown, visible = true): Collecti
 /** Every collection the app knows how to identify. */
 export const COLLECTIONS: Collection[] = [
   build('ERGOCHAMPIONS', 'ErgoChampions', ergoChampions),
-  build('ERGOMUMMY', 'ErgoMummy', ergoMummy, false),
+  build('ERGOMUMMY', 'ErgoMummy', ergoMummy),
   build('MAGECHAMPIONS', 'MageChampions', mageChampions),
 ];
 

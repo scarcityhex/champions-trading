@@ -133,8 +133,9 @@ you that you are performing a migration, not fixing a typo.
 
 Nothing here is specific to one operator: the contract addresses are derived
 from the scripts, so any instance reads and writes the same order book. That is
-the point — this marketplace exists because SkyHarbor closed and took its
-listings with it, and no single host should be able to do that again.
+the point. SkyHarbor closed and its listings went with it, because they lived in
+its database; here they live in boxes on chain, and this host going away would
+cost users nothing but a URL.
 
 Two things do not come with the code. The artwork is the collection owners' and
 needs their permission to serve; without it, point the image tiers at IPFS,

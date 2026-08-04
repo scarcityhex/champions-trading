@@ -82,16 +82,24 @@ describe('catalog', () => {
     }
   });
 
-  // Ergo Mummy is hidden from browsing for now. The point of the `visible` flag
-  // rather than deleting it: a listing for a Mummy token must still resolve to
-  // the right name and artwork, so hiding it cannot mean forgetting it.
-  it('hides Ergo Mummy from browsing but keeps it identifiable', () => {
-    expect(VISIBLE_COLLECTIONS.map((c) => c.key)).toEqual(['ERGOCHAMPIONS', 'MAGECHAMPIONS']);
+  // The `visible` flag exists so a collection can be pulled from browsing
+  // without being forgotten. Asserting the mechanism rather than which
+  // collections happen to be on today: the second changes with a product
+  // decision, the first must never break.
+  it('offers exactly the collections marked visible', () => {
+    expect(VISIBLE_COLLECTIONS).toEqual(COLLECTIONS.filter((c) => c.visible));
+    expect(VISIBLE_COLLECTIONS.length).toBeGreaterThan(0);
+  });
 
-    const mummy = COLLECTIONS.find((c) => c.key === 'ERGOMUMMY')!;
-    expect(mummy.visible).toBe(false);
-    for (const t of mummy.tokens) {
-      expect(BY_TOKEN_ID.get(t.tokenId)?.name).toBe(t.name);
+  it('keeps a hidden collection fully identifiable', () => {
+    // A listing for a hidden collection's token must still resolve to the right
+    // name and artwork — hiding is a browsing decision, not an erasure. Holds
+    // trivially when nothing is hidden, and catches the regression when
+    // something is.
+    for (const c of COLLECTIONS.filter((x) => !x.visible)) {
+      for (const t of c.tokens) {
+        expect(BY_TOKEN_ID.get(t.tokenId)?.name).toBe(t.name);
+      }
     }
   });
 

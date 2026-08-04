@@ -1,8 +1,14 @@
 # champions-trading
 
-A non-custodial marketplace on Ergo for three collections — **Ergo Champions**,
-**Ergo Mummy** and **Mage Champions** — built because SkyHarbor closed and left
-them with nowhere to trade.
+A small, non-custodial marketplace on Ergo for three collections — **Ergo
+Champions**, **Ergo Mummy** and **Mage Champions**.
+
+Ergo is not short of places to trade NFTs. Mew Finance and Auction House both
+work and are maintained, and anyone wanting a general marketplace should use
+them. I just never got on with either as a user, and what I wanted for these
+three collections was something smaller: one page that knows them, ranks their
+rarity against the supply that still exists rather than the one that was minted,
+and otherwise gets out of the way.
 
 ```bash
 npm install

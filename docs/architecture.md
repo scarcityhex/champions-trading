@@ -1,8 +1,12 @@
 # champions-trading — architecture
 
-A non-custodial marketplace for three Ergo NFT collections: **Ergo Champions**,
-**Ergo Mummy** and **Mage Champions**. It exists because SkyHarbor, the main Ergo
-NFT marketplace, shut down and left these collections with nowhere to trade.
+A small, non-custodial marketplace for three Ergo NFT collections: **Ergo
+Champions**, **Ergo Mummy** and **Mage Champions**.
+
+Ergo already has general marketplaces — Mew Finance and Auction House — and this
+is not an attempt to replace them. It is a narrower thing: a venue that knows
+these three collections specifically, and that keeps its order book on chain so
+no operator, including this one, can take it away.
 
 Deliberately **not** part of the game. The collections are not exclusive to it,
 and tying the two together would drag a trading venue into the game's codebase

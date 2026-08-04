@@ -8,11 +8,10 @@ checked independently.*
 
 ## Why we looked
 
-We are rebuilding a marketplace for these three collections, since SkyHarbor —
-which carried most of their volume — has closed. Building the catalogue meant
-resolving every token id on chain, and while wiring up the "who holds this NFT"
-lookup we found that a large share of Ergo Champions token ids resolve to **no
-unspent box at all**. On Ergo that means one thing: the token no longer exists.
+Building a marketplace for these three collections meant resolving every token
+id on chain. While wiring up the "who holds this NFT" lookup, a large share of
+Ergo Champions token ids turned out to resolve to **no unspent box at all**. On
+Ergo that means one thing: the token no longer exists.
 
 We then audited all 3,130 token ids across the three collections rather than
 guess at the scale of it.
