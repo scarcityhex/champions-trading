@@ -5,6 +5,7 @@ import Link from 'next/link';
 import PixelPanel from '@/components/ui/PixelPanel';
 import PixelButton from '@/components/ui/PixelButton';
 import Header from '@/components/Header';
+import { useMarketContext } from '@/components/MarketProvider';
 import { BY_TOKEN_ID, VISIBLE_COLLECTIONS } from '@/lib/collections';
 import { toErg } from '@/lib/explorer';
 import { shortAddress } from '@/lib/nautilus';
@@ -20,11 +21,22 @@ const VISIBLE_TOKENS = new Set(VISIBLE_COLLECTIONS.flatMap((c) => c.tokens.map((
 
 export default function ActivityPage() {
   const [shown, setShown] = useState(PAGE);
+  const { data } = useMarketContext();
 
-  const trades = useMemo(
-    () => (history.trades as Trade[]).filter((t) => VISIBLE_TOKENS.has(t.tokenId)),
-    [],
-  );
+
+
+  // Live reads first, then the indexed file, deduped by the box each trade
+  // settled. The live half makes a fresh trade appear on the next refresh
+  // instead of on the next scheduled run; the file still carries the deep
+  // history, which is too many pages to re-read on every request.
+  const trades = useMemo(() => {
+    const byBox = new Map<string, Trade>();
+    for (const t of history.trades as Trade[]) byBox.set(t.boxId, t);
+    for (const t of data.recent) byBox.set(t.boxId, t);
+    return [...byBox.values()]
+      .filter((t) => VISIBLE_TOKENS.has(t.tokenId))
+      .sort((a, b) => b.height - a.height || b.timestamp - a.timestamp);
+  }, [data.recent]);
 
   const stats = useMemo(() => {
     if (trades.length === 0) return null;
@@ -55,8 +67,8 @@ export default function ActivityPage() {
                   table: these contracts are new, so an empty history is the
                   honest state, not a loading failure. */}
               <p className="font-pixel text-lg text-gray-500">
-                This page is built from settled transactions on chain, refreshed periodically. It
-                fills in as trades happen.
+                This page is built from settled transactions on chain. It fills in as trades
+                happen.
               </p>
             </PixelPanel>
           ) : (
@@ -90,12 +102,11 @@ export default function ActivityPage() {
             </>
           )}
 
-          {history.updatedAt && (
-            <p className="mt-4 font-pixel text-base text-gray-600">
-              Indexed to height {history.lastHeight} ·{' '}
-              {new Date(history.updatedAt).toLocaleString()}
-            </p>
-          )}
+          <p className="mt-4 font-pixel text-base text-gray-600">
+            Read from the chain{data.fetchedAt ? ` at ${new Date(data.fetchedAt).toLocaleTimeString()}` : ''}
+            . Use ↻ in the header to re-read; a trade appears once its block is
+            mined, about every 2 minutes.
+          </p>
         </PixelPanel>
       </div>
     </main>

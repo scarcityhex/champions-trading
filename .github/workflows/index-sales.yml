@@ -1,8 +1,11 @@
-# Keeps data/history.json in step with the chain.
+# Persists settled trades to data/history.json.
 #
 # The whole "database" for this project: a cron, a script, and a commit. Each
 # run appends whatever settled since the height recorded in the file, so the
 # history is a series of diffs anyone can audit against the chain.
+#
+# Not on the critical path. The Activity page reads recent trades live, so a
+# fresh trade shows up immediately; this backfills the long tail.
 #
 # Safe to re-run and safe to run twice at once: trades merge by the box each one
 # settled, and a box can only be spent once.
@@ -11,7 +14,20 @@ name: index sales
 
 on:
   schedule:
-    - cron: '17 */6 * * *' # four times a day, off the hour to dodge the rush
+    # Every 15 minutes. Not on the critical path — the Activity page reads
+    # recent trades straight from the chain — but frequency still buys
+    # something: the live window covers the last 30 transactions per contract,
+    # so the tighter this runs, the more trades would have to land between runs
+    # before any could fall between the two sources.
+    #
+    # Costs nothing. Public repositories get unlimited Actions minutes, a run
+    # that finds nothing is four API calls, and the commit step is skipped
+    # unless the trades actually changed.
+    #
+    # No point going lower: GitHub will not schedule a cron more often than
+    # every five minutes, and warns that scheduled runs are delayed under load
+    # and can be dropped outright.
+    - cron: '7,22,37,52 * * * *'
   workflow_dispatch: # so a fresh trade can be pulled in on demand
 
 permissions:

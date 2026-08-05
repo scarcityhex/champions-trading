@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PixelPanel from '@/components/ui/PixelPanel';
 import PixelButton from '@/components/ui/PixelButton';
 import Header from '@/components/Header';
@@ -13,6 +13,8 @@ import TraitFilters, {
   type TraitSelection,
 } from '@/components/TraitFilters';
 import { useMarketContext } from '@/components/MarketProvider';
+import { bestOffer } from '@/lib/useMarketData';
+import { COLLECTION_ROOTS } from '@/lib/contract';
 import {
   VISIBLE_COLLECTIONS,
   rarityPercentiles,
@@ -26,14 +28,27 @@ const PAGE = 24;
 
 type Filter = 'all' | 'forSale' | 'mine';
 
+/** How the grid is ordered. */
+type Sort = 'numeric' | 'rarest' | 'cheapest';
+
+const SORT_LABELS: Record<Sort, string> = {
+  numeric: 'number',
+  rarest: 'rarest',
+  cheapest: 'cheapest',
+};
+
 export default function Home() {
-  const { wallet, data, actions, pending } = useMarketContext();
-  const [tab, setTab] = useState(0);
+  const { wallet, data, actions, pending, viewRequest, clearViewRequest } = useMarketContext();
+  // Opens on the combined view: the site covers three collections, and landing
+  // inside one of them presents a third of the inventory as if it were all.
+  const [tab, setTab] = useState(-1);
   const [filter, setFilter] = useState<Filter>('all');
   const [shown, setShown] = useState(PAGE);
   const [dialog, setDialog] = useState<{ mode: 'list' | 'offer'; nft: Nft } | null>(null);
+  const [bidOnCollection, setBidOnCollection] = useState(false);
   const [traits, setTraits] = useState<TraitSelection>({});
   const [search, setSearch] = useState('');
+  const [sort, setSort] = useState<Sort>('numeric');
 
   /** -1 is the combined view across every visible collection. */
   const isAll = tab < 0;
@@ -84,10 +99,37 @@ export default function Home() {
     // "robes" exists in Mage Champions and nowhere else — so a cross-collection
     // trait filter could only ever mean "match one collection, exclude the
     // others", which is not what a filter appears to promise.
-    return base
+    const filtered = base
       .filter(({ nft }) => matchesTraits(nft.attributes, traits))
       .filter(({ nft }) => matchesEdition(nft, search));
-  }, [entries, filter, traits, search, data.listings, data.offers, wallet, pending.byToken]);
+
+    if (sort === 'numeric') return filtered;
+
+    // Copied before sorting: `entries` is memoised per tab and sorting in place
+    // would permanently reorder it, so switching back to "number" would not
+    // restore the original order.
+    const sorted = [...filtered];
+
+    if (sort === 'rarest') {
+      // Undefined rank sorts last rather than first — a token with no rarity is
+      // not the rarest, and treating a missing value as 0 would put it on top.
+      sorted.sort((a, b) => (a.rarity ?? Infinity) - (b.rarity ?? Infinity));
+      return sorted;
+    }
+
+    // Cheapest listed first, then everything unlisted. An unlisted piece has no
+    // price, so it cannot be cheap — putting it above a real listing would be a
+    // lie about what is available.
+    sorted.sort((a, b) => {
+      const pa = data.listings.get(a.nft.tokenId)?.price;
+      const pb = data.listings.get(b.nft.tokenId)?.price;
+      if (pa === undefined && pb === undefined) return 0;
+      if (pa === undefined) return 1;
+      if (pb === undefined) return -1;
+      return pa === pb ? 0 : pa < pb ? -1 : 1;
+    });
+    return sorted;
+  }, [entries, filter, traits, search, sort, data.listings, data.offers, wallet, pending.byToken]);
 
   const stats = useMemo(() => {
     let live = 0;
@@ -123,6 +165,20 @@ export default function Home() {
     setFilter(f);
     setShown(PAGE);
   };
+
+  // Clicking the wallet address in the header means "show me everything I
+  // have", which is every collection crossed with the Mine filter. Filters and
+  // search are cleared too: leaving a trait filter on would answer a different
+  // question than the one the click asked.
+  useEffect(() => {
+    if (viewRequest !== 'wallet') return;
+    setTab(-1);
+    setFilter('mine');
+    setTraits({});
+    setSearch('');
+    setShown(PAGE);
+    clearViewRequest();
+  }, [viewRequest, clearViewRequest]);
 
   const act = (nft: Nft, action: Exclude<CardAction, null>) => {
     const live = data.listings.get(nft.tokenId);
@@ -189,6 +245,28 @@ export default function Home() {
                 </button>
               )}
             </PixelPanel>
+
+            <span className="ml-1 self-center font-pixel text-lg text-gray-500">sort</span>
+            {(Object.keys(SORT_LABELS) as Sort[]).map((s) => (
+              <PixelButton
+                key={s}
+                size="sm"
+                active={sort === s}
+                onClick={() => {
+                  setSort(s);
+                  setShown(PAGE);
+                }}
+                title={
+                  s === 'cheapest'
+                    ? 'Listed pieces first, cheapest to dearest; unlisted after'
+                    : s === 'rarest'
+                      ? 'Rarest first, ranked within each collection'
+                      : 'By edition number'
+                }
+              >
+                {SORT_LABELS[s]}
+              </PixelButton>
+            ))}
           </div>
 
           {/* Hidden in the combined view: trait names are not shared between
@@ -204,6 +282,52 @@ export default function Home() {
                 setShown(PAGE);
               }}
             />
+          )}
+
+          {/* A bid on any piece, not a particular one. Only inside a single
+              collection: the bid names one Merkle root, so "all collections"
+              has nothing to name. */}
+          {collection && (
+            <PixelPanel variant="inset" className="mb-4 flex flex-wrap items-center gap-3 p-3">
+              <span className="font-pixel text-lg text-gray-400">
+                Bids on any piece:{' '}
+                <span className="text-emerald-400">
+                  {(data.collectionOffers.get(collection.key) ?? []).length}
+                </span>
+                {(data.collectionOffers.get(collection.key) ?? []).length > 0 && (
+                  <>
+                    {' · best '}
+                    <span className="text-emerald-400">
+                      {toErg(data.collectionOffers.get(collection.key)![0].amount)} ERG
+                    </span>
+                  </>
+                )}
+              </span>
+              <PixelButton
+                size="sm"
+                disabled={!wallet.address}
+                onClick={() => setBidOnCollection(true)}
+                title={
+                  wallet.address
+                    ? 'Bid on any piece from this collection'
+                    : 'Connect a wallet'
+                }
+              >
+                Bid on any
+              </PixelButton>
+              {(data.collectionOffers.get(collection.key) ?? [])
+                .filter((o) => o.bidder === wallet.address)
+                .map((o) => (
+                  <PixelButton
+                    key={o.boxId}
+                    size="sm"
+                    onClick={() => actions.withdrawCollectionOffer(o)}
+                    title="Take your locked ERG back; the bid stops applying"
+                  >
+                    Withdraw your {toErg(o.amount)} ERG bid
+                  </PixelButton>
+                ))}
+            </PixelPanel>
           )}
 
           <PixelPanel variant="inset" className="mb-4 flex flex-wrap gap-x-6 gap-y-1 p-3">
@@ -264,10 +388,11 @@ export default function Home() {
                   <TokenCard
                     key={nft.tokenId}
                     nft={nft}
+                    collection={c}
                     dir={c.dir}
                     href={`/token/${nft.tokenId}`}
                     listing={live}
-                    topOffer={data.offers.get(nft.tokenId)?.[0]?.amount}
+                    topOffer={bestOffer(nft.tokenId, c.key, data, wallet.address) ?? undefined}
                     rarity={rarity}
                     pending={pending.byToken.get(nft.tokenId)}
                     action={actionFor(live, wallet.owned.has(nft.tokenId), wallet.address)}
@@ -288,6 +413,19 @@ export default function Home() {
           )}
         </PixelPanel>
       </div>
+
+      {bidOnCollection && collection && (
+        <AmountDialog
+          mode="offer"
+          nft={{ ...collection.live[0], name: `any ${collection.name}` }}
+          busy={actions.busy === `collection:${COLLECTION_ROOTS[collection.key]}`}
+          onClose={() => setBidOnCollection(false)}
+          onConfirm={(amount: bigint) => {
+            actions.collectionOffer(COLLECTION_ROOTS[collection.key], amount);
+            setBidOnCollection(false);
+          }}
+        />
+      )}
 
       {dialog && (
         <AmountDialog

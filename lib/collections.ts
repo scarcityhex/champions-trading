@@ -48,6 +48,14 @@ export type Nft = {
 export type Collection = {
   key: string;
   name: string;
+  /**
+   * Two letters for the card grid.
+   *
+   * "Mage Champions #1362" fills a 170px card on its own, leaving the listing
+   * price nowhere to go and forcing the number itself to truncate — which is
+   * the one part a collector actually reads.
+   */
+  short: string;
   issuer: string;
   /** Local art directory under /public/art. */
   dir: string;
@@ -80,6 +88,12 @@ type RawDoc = {
 /** tokenId -> burn record, from scripts/audit-supply.mjs. */
 const BURNED = (supply as { burned?: Record<string, { neverLeftIssuer?: boolean }> }).burned ?? {};
 
+const SHORT: Record<string, string> = {
+  ERGOCHAMPIONS: 'EC',
+  ERGOMUMMY: 'EM',
+  MAGECHAMPIONS: 'MG',
+};
+
 function build(key: string, dir: string, raw: unknown, visible = true): Collection {
   const doc = raw as RawDoc;
   const seen = new Map<string, number>();
@@ -100,6 +114,7 @@ function build(key: string, dir: string, raw: unknown, visible = true): Collecti
     key,
     dir,
     visible,
+    short: SHORT[key] ?? key.slice(0, 2),
     name: doc.collection?.name ?? key,
     issuer: doc.collection?.ownership?.issuerAddress ?? '',
     tokens,
@@ -250,6 +265,10 @@ export function rarityLabel(percentile: number | undefined): string | null {
   if (percentile === undefined) return null;
   return `top ${percentile < 10 ? percentile.toFixed(1) : Math.round(percentile)}%`;
 }
+
+/** `MG #1362` — the card label. The full name stays for the detail page. */
+export const shortLabel = (nft: Nft, collection: Collection): string =>
+  `${collection.short} #${nft.edition}`;
 
 /** Filename stem on disk, disambiguating repeated editions. */
 const fileStem = (nft: Nft): string => (nft.dupIndex > 1 ? `${nft.id}-${nft.dupIndex}` : nft.id);

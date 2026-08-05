@@ -24,17 +24,21 @@ import { fileURLToPath } from 'node:url';
 // second copy would drift and nobody would notice until the numbers disagreed.
 // Run through tsx (see the npm script) so these resolve.
 import { extractTrades, mergeTrades } from '../lib/history.ts';
-import { SALE_ADDRESS, OFFER_ADDRESS } from '../lib/contract.ts';
+import { SALE_ADDRESS, OFFER_ADDRESS, COLLECTION_OFFER_ADDRESS } from '../lib/contract.ts';
 // Shared with the app, so the mirror fallback and the outage-vs-answer rule
 // have one definition. A cron that quietly dies because one explorer is down
 // is the failure this avoids.
-import { api } from '../lib/explorer.ts';
+import { api, chainHeight } from '../lib/explorer.ts';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const HISTORY = join(HERE, '..', 'data', 'history.json');
 const PAGE = 50;
 
-const CONTRACTS = { sale: SALE_ADDRESS, offer: OFFER_ADDRESS };
+const CONTRACTS = {
+  sale: SALE_ADDRESS,
+  offer: OFFER_ADDRESS,
+  collectionOffer: COLLECTION_OFFER_ADDRESS,
+};
 
 function load() {
   try {
@@ -88,11 +92,22 @@ for (const [name, address] of Object.entries(CONTRACTS)) {
 const trades = mergeTrades(state.trades ?? [], fresh);
 const lastHeight = trades.reduce((max, t) => Math.max(max, t.height), since);
 
+// Recorded separately from lastHeight, which is the height of the newest TRADE.
+// The two drift apart the moment nobody trades for a while, and using the trade
+// height to describe the index's freshness told users the page was eight hours
+// behind when it had just run — it was the market that was quiet, not the
+// indexer that was late.
+const scannedHeight = (await chainHeight(true)) ?? lastHeight;
+
 mkdirSync(dirname(HISTORY), { recursive: true });
 writeFileSync(
   HISTORY,
-  JSON.stringify({ lastHeight, updatedAt: new Date().toISOString(), trades }, null, 1),
+  JSON.stringify(
+    { lastHeight, scannedHeight, updatedAt: new Date().toISOString(), trades },
+    null,
+    1,
+  ),
 );
 
-console.log(`${trades.length} trade(s) total, up to height ${lastHeight}`);
+console.log(`${trades.length} trade(s) total; newest at ${lastHeight}, scanned to ${scannedHeight}`);
 console.log(`-> ${HISTORY}`);

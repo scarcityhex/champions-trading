@@ -20,9 +20,11 @@
 
 import {
   ErgoAddress,
+  ErgoUnsignedInput,
   OutputBuilder,
   RECOMMENDED_MIN_FEE_VALUE,
   SAFE_MIN_BOX_VALUE,
+  SBool,
   SByte,
   SColl,
   SGroupElement,
@@ -31,8 +33,10 @@ import {
   TransactionBuilder,
   type Box,
 } from '@fleet-sdk/core';
+import { SPair } from '@fleet-sdk/serializer';
 import type { Amount, EIP12UnsignedTransaction } from '@fleet-sdk/common';
-import { OFFER_ADDRESS, SALE_ADDRESS } from './contract';
+import { COLLECTION_OFFER_ADDRESS, OFFER_ADDRESS, SALE_ADDRESS } from './contract';
+import { merkleProof } from './merkle';
 
 /** A box in the shape fleet wants: registers as raw hex, amounts as string or
  *  bigint (the wallet hands back strings, mock-chain hands back bigints). */
@@ -202,12 +206,25 @@ export function buildAcceptOfferTx(params: {
   /** The token holder, who receives the bid. */
   holderAddress: string;
   holderUtxos: FleetBox[];
+  /**
+   * The seller's own listing box, when the token being delivered is currently
+   * listed rather than sitting in their wallet.
+   *
+   * Both contracts allow this in one transaction: sale.es cancels on the
+   * seller's signature with no other condition, and offer.es only asks that the
+   * token reach the bidder. So a seller can take a bid on a piece they have
+   * listed without cancelling first and waiting a block — which is what they
+   * would otherwise have to do, and what the UI silently prevented by hiding
+   * the button.
+   */
+  listingBox?: FleetBox;
   height: number;
 }): EIP12UnsignedTransaction {
-  const { offerBox, tokenId, bidderAddress, holderAddress, holderUtxos, height } = params;
+  const { offerBox, tokenId, bidderAddress, holderAddress, holderUtxos, listingBox, height } =
+    params;
 
   return new TransactionBuilder(height)
-    .from([offerBox], { ensureInclusion: true })
+    .from(listingBox ? [offerBox, listingBox] : [offerBox], { ensureInclusion: true })
     .from(holderUtxos)
     .to(
       new OutputBuilder(SAFE_MIN_BOX_VALUE, bidderAddress)
@@ -238,6 +255,136 @@ export function buildCancelOfferTx(params: {
     .payFee(FEE)
     .build()
     .toEIP12Object();
+}
+
+// ── Collection offers ─────────────────────────────────────────────────────
+//
+// A bid on any piece from one collection. Ergo has no policy id, so membership
+// is proven with a Merkle path against a root in R5 — see lib/merkle.ts.
+
+/**
+ * Open a collection-wide bid.
+ *
+ * Independent boxes, so several bids coexist naturally: three at 1 ERG and one
+ * at 2 ERG are four boxes, each settled on its own, and a holder takes
+ * whichever they prefer.
+ */
+export function buildCollectionOfferTx(params: {
+  /** Merkle root of the collection, from COLLECTION_ROOTS. */
+  root: string;
+  amount: bigint;
+  bidderAddress: string;
+  utxos: FleetBox[];
+  height: number;
+}): EIP12UnsignedTransaction {
+  const { root, amount, bidderAddress, utxos, height } = params;
+  if (amount < SAFE_MIN_BOX_VALUE) throw new Error('An offer must be at least 0.001 ERG.');
+  if (!/^[0-9a-f]{64}$/.test(root)) throw new Error('A collection root must be 32 bytes of hex.');
+
+  const bidder = ErgoAddress.fromBase58(bidderAddress);
+  const pk = bidder.getPublicKeys()[0];
+  if (!pk) throw new Error('Offers require a P2PK address (a normal wallet address).');
+
+  return new TransactionBuilder(height)
+    .from(utxos)
+    .to(
+      new OutputBuilder(amount, COLLECTION_OFFER_ADDRESS).setAdditionalRegisters({
+        R4: SSigmaProp(SGroupElement(pk)).toHex(),
+        R5: SColl(SByte, root).toHex(),
+      }),
+    )
+    .sendChangeTo(bidder)
+    .payFee(FEE)
+    .build()
+    .toEIP12Object();
+}
+
+/**
+ * Accept a collection bid by delivering one qualifying token.
+ *
+ * The proof travels in the spending input's context extension, not in a
+ * register: it is evidence supplied by the spender, not part of the offer. Slot
+ * 0 is the token id, slot 1 the path — the order the script reads them in.
+ */
+export function buildAcceptCollectionOfferTx(params: {
+  offerBox: FleetBox;
+  tokenId: string;
+  /** Every token id in the collection, to derive the path from. */
+  collectionTokenIds: string[];
+  bidderAddress: string;
+  holderAddress: string;
+  holderUtxos: FleetBox[];
+  /** The seller's listing box, when the piece being delivered is listed. */
+  listingBox?: FleetBox;
+  height: number;
+}): EIP12UnsignedTransaction {
+  const {
+    offerBox,
+    tokenId,
+    collectionTokenIds,
+    bidderAddress,
+    holderAddress,
+    holderUtxos,
+    listingBox,
+    height,
+  } = params;
+
+  const path = merkleProof(collectionTokenIds, tokenId);
+  if (!path) {
+    // Refused here rather than signed and rejected: a token outside the tree
+    // has no path that lands on the root, so the node would throw the
+    // transaction out after the user had already approved it.
+    throw new Error('That token is not part of the collection this offer covers.');
+  }
+
+  // The proof rides in the spending input's context extension rather than in a
+  // register: it is evidence the spender supplies, not part of the offer. Slots
+  // 0 and 1 are the order collection-offer.es reads them in — getVar(0) is the
+  // token, getVar(1) the path — and a mismatch here fails every honest accept.
+  const input = new ErgoUnsignedInput(offerBox).setContextExtension({
+    0: SColl(SByte, tokenId).toHex(),
+    1: SColl(
+      SPair(SColl(SByte), SBool),
+      path.map((step) => [step.sibling, step.siblingIsLeft] as [Uint8Array, boolean]),
+    ).toHex(),
+  });
+
+  return new TransactionBuilder(height)
+    .from(listingBox ? [input, listingBox] : [input], { ensureInclusion: true })
+    .from(holderUtxos)
+    .to(
+      new OutputBuilder(SAFE_MIN_BOX_VALUE, bidderAddress)
+        .addTokens({ tokenId, amount: 1n })
+        .setAdditionalRegisters({ R4: SColl(SByte, offerBox.boxId).toHex() }),
+    )
+    .sendChangeTo(holderAddress)
+    .payFee(FEE)
+    .build()
+    .toEIP12Object();
+}
+
+/** Withdraw a collection bid. The bidder's signature alone. */
+export function buildCancelCollectionOfferTx(params: {
+  offerBox: FleetBox;
+  bidderAddress: string;
+  bidderUtxos: FleetBox[];
+  height: number;
+}): EIP12UnsignedTransaction {
+  const { offerBox, bidderAddress, bidderUtxos, height } = params;
+  return new TransactionBuilder(height)
+    .from([offerBox], { ensureInclusion: true })
+    .from(bidderUtxos)
+    .sendChangeTo(bidderAddress)
+    .payFee(FEE)
+    .build()
+    .toEIP12Object();
+}
+
+/** The Merkle root a collection bid names, from its R5. */
+export function collectionRootFrom(serializedR5: string): string | null {
+  if (!serializedR5?.startsWith('0e20')) return null;
+  const root = serializedR5.slice(4);
+  return /^[0-9a-f]{64}$/.test(root) ? root : null;
 }
 
 /** The token id an offer is for, from its R5 — a Coll[Byte], prefixed `0e20`. */

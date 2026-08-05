@@ -14,7 +14,13 @@
 // request re-reads the chain.
 
 import { NextResponse } from 'next/server';
-import { fetchListings, fetchOffers } from '@/lib/explorer';
+import {
+  chainHeight,
+  fetchCollectionOffers,
+  fetchListings,
+  fetchOffers,
+  recentTrades,
+} from '@/lib/explorer';
 
 /** Seconds. Roughly a couple of Ergo blocks: fresh enough that a bought
  *  listing disappears quickly, slow enough to absorb a burst of visitors. */
@@ -27,7 +33,13 @@ export async function GET(request: Request) {
   const fresh = new URL(request.url).searchParams.get('fresh') === '1';
   try {
     // Settled together: a partial read would be worse than a stale one.
-    const [listings, offers] = await Promise.all([fetchListings(fresh), fetchOffers(fresh)]);
+    const [listings, offers, collectionOffers, height, recent] = await Promise.all([
+      fetchListings(fresh),
+      fetchOffers(fresh),
+      fetchCollectionOffers(fresh),
+      chainHeight(fresh),
+      recentTrades(fresh),
+    ]);
     return NextResponse.json({
       // JSON has no bigint, so amounts cross as strings and the client rebuilds
       // them. Never as numbers: nanoERG passes Number.MAX_SAFE_INTEGER at ~9M
@@ -39,13 +51,23 @@ export async function GET(request: Request) {
         boxValue: l.boxValue.toString(),
       })),
       offers: offers.map((o) => ({ ...o, amount: o.amount.toString() })),
+      collectionOffers: collectionOffers.map((o) => ({ ...o, amount: o.amount.toString() })),
+      height,
+      recent,
       fetchedAt: Date.now(),
     });
   } catch (e) {
     // A failing explorer must not take the gallery down with it; the UI shows
     // the catalog without prices and says so.
     return NextResponse.json(
-      { listings: [], offers: [], error: e instanceof Error ? e.message : 'explorer unavailable' },
+      {
+        listings: [],
+        offers: [],
+        collectionOffers: [],
+        height: null,
+        recent: [],
+        error: e instanceof Error ? e.message : 'explorer unavailable',
+      },
       { status: 200 },
     );
   }

@@ -2,8 +2,20 @@
 // the chain. This file is the reason there is no database (docs/architecture.md
 // §1): the two questions a marketplace has to answer are two endpoints.
 
-import { offerTokenIdFrom, sellerAddressFrom, type FleetBox } from './transactions';
-import { EXPLORERS, NETWORK, OFFER_ADDRESS, SALE_ADDRESS } from './contract';
+import {
+  collectionRootFrom,
+  offerTokenIdFrom,
+  sellerAddressFrom,
+  type FleetBox,
+} from './transactions';
+import { extractTrades, type RawTx, type Trade } from './history';
+import {
+  COLLECTION_OFFER_ADDRESS,
+  EXPLORERS,
+  NETWORK,
+  OFFER_ADDRESS,
+  SALE_ADDRESS,
+} from './contract';
 
 /**
  * Explorer mirrors, in preference order.
@@ -236,6 +248,98 @@ export async function fetchOffers(fresh = false, contractAddress = OFFER_ADDRESS
     }
   }
   return offers;
+}
+
+export type CollectionOffer = {
+  boxId: string;
+  /** Merkle root naming the collection this bid covers. */
+  root: string;
+  amount: bigint;
+  bidder: string;
+  box: FleetBox;
+};
+
+/**
+ * Every live collection-wide bid.
+ *
+ * Unlike a specific offer, this one names a Merkle root rather than a token —
+ * it covers any piece whose id is in that tree. Which collection that is comes
+ * from matching the root against COLLECTION_ROOTS; a root we do not recognise
+ * is skipped, because we could not tell a user what it applies to.
+ */
+export async function fetchCollectionOffers(
+  fresh = false,
+  contractAddress = COLLECTION_OFFER_ADDRESS,
+): Promise<CollectionOffer[]> {
+  const boxes = await unspentAt(contractAddress, fresh);
+  const offers: CollectionOffer[] = [];
+  for (const box of boxes) {
+    const root = collectionRootFrom(box.additionalRegisters?.R5?.serializedValue ?? '');
+    const bidder = sellerAddressFrom(box.additionalRegisters?.R4?.serializedValue ?? '');
+    if (!root || !bidder) continue;
+    try {
+      offers.push({
+        boxId: box.boxId,
+        root,
+        amount: BigInt(box.value),
+        bidder,
+        box: toFleetBox(box),
+      });
+    } catch {
+      continue;
+    }
+  }
+  return offers;
+}
+
+/**
+ * Trades settled recently, read straight from the chain.
+ *
+ * The Activity page used to show only what a cron had written to a file, so a
+ * trade took up to a scheduled run to appear — and GitHub will not schedule
+ * more often than every five minutes, nor promise even that. But recent trades
+ * never needed an index: they are the first page of each contract's
+ * transactions, the same read the order book already does.
+ *
+ * The indexed file still earns its place for deep history, where walking
+ * hundreds of pages per request would not. This covers the shallow end, so the
+ * page is current without waiting for anything.
+ */
+export async function recentTrades(fresh = false, perContract = 30): Promise<Trade[]> {
+  const contracts = {
+    sale: SALE_ADDRESS,
+    offer: OFFER_ADDRESS,
+    collectionOffer: COLLECTION_OFFER_ADDRESS,
+  };
+
+  const pages = await Promise.all(
+    Object.values(contracts).map((address) =>
+      api<{ items: RawTx[] }>(
+        `/addresses/${address}/transactions?limit=${perContract}&offset=0`,
+        fresh,
+      ).catch(() => ({ items: [] as RawTx[] })),
+    ),
+  );
+
+  const trades = pages.flatMap((page) =>
+    (page.items ?? []).flatMap((tx) => extractTrades(tx, contracts)),
+  );
+
+  // One transaction can appear under two contracts — accepting a bid on a
+  // listed piece spends a box at each — so the same trade would be counted
+  // twice without this. Keyed by the box it settled, as everywhere else.
+  const byBox = new Map(trades.map((t) => [t.boxId, t]));
+  return [...byBox.values()].sort((a, b) => b.height - a.height);
+}
+
+/** Current chain height, for telling how far behind an index has fallen. */
+export async function chainHeight(fresh = false): Promise<number | null> {
+  try {
+    const info = await api<{ height: number }>('/info', fresh);
+    return typeof info.height === 'number' ? info.height : null;
+  } catch {
+    return null;
+  }
 }
 
 /**

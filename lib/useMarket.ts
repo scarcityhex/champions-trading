@@ -11,10 +11,13 @@
 // of a box that no longer exists.
 
 import { useCallback, useState } from 'react';
-import type { Listing, Offer } from './explorer';
+import type { CollectionOffer, Listing, Offer } from './explorer';
 import type { PendingKind } from './usePending';
 import {
+  buildAcceptCollectionOfferTx,
   buildAcceptOfferTx,
+  buildCancelCollectionOfferTx,
+  buildCollectionOfferTx,
   buildBuyTx,
   buildCancelOfferTx,
   buildCancelTx,
@@ -32,13 +35,24 @@ export type MarketState = {
   error: string | null;
   /** Transaction id of the last successful action. */
   lastTxId: string | null;
+  /** When it was submitted, for the waiting counter. */
+  lastTxAt: number | null;
   clear: () => void;
   list: (tokenId: string, price: bigint) => Promise<void>;
   buy: (listing: Listing) => Promise<void>;
   cancel: (listing: Listing) => Promise<void>;
   offer: (tokenId: string, amount: bigint) => Promise<void>;
-  acceptOffer: (offer: Offer) => Promise<void>;
+  acceptOffer: (offer: Offer, listing?: Listing) => Promise<void>;
   withdrawOffer: (offer: Offer) => Promise<void>;
+  /** A bid on any piece from one collection. */
+  collectionOffer: (root: string, amount: bigint) => Promise<void>;
+  acceptCollectionOffer: (
+    offer: CollectionOffer,
+    tokenId: string,
+    collectionTokenIds: string[],
+    listing?: Listing,
+  ) => Promise<void>;
+  withdrawCollectionOffer: (offer: CollectionOffer) => Promise<void>;
 };
 
 /** A wallet refusal is a choice, not a failure; it should not surface as red. */
@@ -55,6 +69,7 @@ export function useMarket(
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [lastTxId, setLastTxId] = useState<string | null>(null);
+  const [lastTxAt, setLastTxAt] = useState<number | null>(null);
 
   const run = useCallback(
     async (
@@ -86,6 +101,7 @@ export function useMarket(
         const height = await wallet.currentHeight();
         const txId = await wallet.signAndSubmit(build(height));
         setLastTxId(txId);
+        setLastTxAt(Date.now());
         // Recorded before the refresh, so the very first read after signing
         // already knows there is something in flight.
         onPending({ tokenId, kind, txId, boxId });
@@ -160,16 +176,23 @@ export function useMarket(
   );
 
   const acceptOffer = useCallback(
-    (o: Offer) =>
-      run(o.tokenId, 'accept', (height) =>
-        buildAcceptOfferTx({
-          offerBox: o.box,
-          tokenId: o.tokenId,
-          bidderAddress: o.bidder,
-          holderAddress: wallet.address!,
-          holderUtxos: wallet.utxos,
-          height,
-        }),
+    // `listing` is passed when the piece is currently listed by this wallet:
+    // the same transaction spends the listing and settles the bid, so a seller
+    // does not have to cancel and wait a block first.
+    (o: Offer, listing?: Listing) =>
+      run(
+        o.tokenId,
+        'accept',
+        (height) =>
+          buildAcceptOfferTx({
+            offerBox: o.box,
+            tokenId: o.tokenId,
+            bidderAddress: o.bidder,
+            holderAddress: wallet.address!,
+            holderUtxos: wallet.utxos,
+            listingBox: listing?.box,
+            height,
+          }),
         o.boxId,
       ),
     [run, wallet],
@@ -189,10 +212,81 @@ export function useMarket(
     [run, wallet],
   );
 
+  // Making or withdrawing a collection bid is not about any one token, so it
+  // carries no pending label — there is no card for it to appear on. The
+  // order-book refresh still runs, and the bid shows up when the block lands.
+  const collectionOffer = useCallback(
+    (root: string, amount: bigint) =>
+      run(`collection:${root}`, 'offer', (height) =>
+        buildCollectionOfferTx({
+          root,
+          amount,
+          bidderAddress: wallet.address!,
+          utxos: wallet.utxos,
+          height,
+        }),
+      ),
+    [run, wallet],
+  );
+
+  const acceptCollectionOffer = useCallback(
+    (o: CollectionOffer, tokenId: string, collectionTokenIds: string[], listing?: Listing) =>
+      run(
+        tokenId,
+        'acceptCollection',
+        (height) =>
+          buildAcceptCollectionOfferTx({
+            offerBox: o.box,
+            tokenId,
+            collectionTokenIds,
+            bidderAddress: o.bidder,
+            holderAddress: wallet.address!,
+            holderUtxos: wallet.utxos,
+            listingBox: listing?.box,
+            height,
+          }),
+        o.boxId,
+      ),
+    [run, wallet],
+  );
+
+  const withdrawCollectionOffer = useCallback(
+    (o: CollectionOffer) =>
+      run(
+        `collection:${o.boxId}`,
+        'withdraw',
+        (height) =>
+          buildCancelCollectionOfferTx({
+            offerBox: o.box,
+            bidderAddress: wallet.address!,
+            bidderUtxos: wallet.utxos,
+            height,
+          }),
+        o.boxId,
+      ),
+    [run, wallet],
+  );
+
   const clear = useCallback(() => {
     setError(null);
     setLastTxId(null);
+    setLastTxAt(null);
   }, []);
 
-  return { busy, error, lastTxId, clear, list, buy, cancel, offer, acceptOffer, withdrawOffer };
+  return {
+    busy,
+    error,
+    lastTxId,
+    lastTxAt,
+    clear,
+    list,
+    buy,
+    cancel,
+    offer,
+    acceptOffer,
+    withdrawOffer,
+    collectionOffer,
+    acceptCollectionOffer,
+    withdrawCollectionOffer,
+  };
 }

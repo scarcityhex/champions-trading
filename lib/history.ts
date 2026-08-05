@@ -36,8 +36,8 @@ export type Trade = {
   buyer: string;
   height: number;
   timestamp: number;
-  /** Which side initiated: a listing someone bought, or a bid someone took. */
-  kind: 'sale' | 'offerAccepted';
+  /** Which side initiated, and how. */
+  kind: 'sale' | 'offerAccepted' | 'collectionOfferAccepted';
 };
 
 type RawBox = {
@@ -72,14 +72,16 @@ const settlementTag = (boxId: string) => `0e20${boxId}`;
  */
 export function extractTrades(
   tx: RawTx,
-  contracts: { sale: string; offer: string },
+  contracts: { sale: string; offer: string; collectionOffer?: string },
 ): Trade[] {
   const trades: Trade[] = [];
 
   for (const input of tx.inputs) {
     const isSale = input.address === contracts.sale;
     const isOffer = input.address === contracts.offer;
-    if (!isSale && !isOffer) continue;
+    const isCollection =
+      Boolean(contracts.collectionOffer) && input.address === contracts.collectionOffer;
+    if (!isSale && !isOffer && !isCollection) continue;
 
     // The settling output identifies itself by tag. Its absence means this spend
     // was a cancellation (the only other branch either contract allows).
@@ -111,8 +113,13 @@ export function extractTrades(
         kind: 'sale',
       });
     } else {
-      const tokenId = offerTokenIdFrom(input.additionalRegisters?.R5?.serializedValue ?? '');
       const bidder = sellerAddressFrom(input.additionalRegisters?.R4?.serializedValue ?? '');
+      // A specific offer names its token in R5. A collection bid names a Merkle
+      // root instead, so the piece that settled it is only knowable from the
+      // delivery output — which is the settlement box we already found.
+      const tokenId = isCollection
+        ? (settlement.assets?.[0]?.tokenId ?? null)
+        : offerTokenIdFrom(input.additionalRegisters?.R5?.serializedValue ?? '');
       if (!tokenId || !bidder) continue;
 
       // On an accepted offer the bid IS the offer box's ERG, and the seller is
@@ -145,7 +152,7 @@ export function extractTrades(
         buyer: bidder,
         height: tx.inclusionHeight,
         timestamp: tx.timestamp,
-        kind: 'offerAccepted',
+        kind: isCollection ? 'collectionOfferAccepted' : 'offerAccepted',
       });
     }
   }

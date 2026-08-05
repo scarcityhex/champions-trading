@@ -1,7 +1,19 @@
 {
- "lastHeight": 1844024,
- "updatedAt": "2026-08-04T19:59:38.305Z",
+ "lastHeight": 1844050,
+ "scannedHeight": 1844281,
+ "updatedAt": "2026-08-05T01:42:04.796Z",
  "trades": [
+  {
+   "txId": "64e8ce47183b8197d9d922355e16c507ea777a86b686f9b4341144d441274030",
+   "boxId": "1fbed895bf6829587e6d284e66166f66c6e891c784e02747551db12743286636",
+   "tokenId": "675ca7468d76244c6cea5e94c982d6d3f5ddde36d0c17c1ef3b7f2222145802c",
+   "price": "2000000000",
+   "seller": "9iDdoGEbas2VYPW3h6r4spebXEBAhvnd1QicRAXk5o2up79NmWW",
+   "buyer": "9hveS5VmStvpiybxya1adrvJipaz6Pi8bJMuttKuMvsijNiNxiw",
+   "height": 1844050,
+   "timestamp": 1785864884215,
+   "kind": "collectionOfferAccepted"
+  },
   {
    "txId": "36c5f3cb1b135261d25212550a5ea83fd8748aed3cbe67f6071a3cc8ffd34750",
    "boxId": "025d1eb54c88d3aac361eafeccdc911d6c94e39ef8c874cf90c6c299a7af0732",

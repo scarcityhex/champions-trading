@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import PixelPanel from './ui/PixelPanel';
 import PixelButton from './ui/PixelButton';
-import { imageSources, rarityLabel, type Nft } from '@/lib/collections';
+import { imageSources, rarityLabel, shortLabel, type Collection, type Nft } from '@/lib/collections';
 import { toErg, type Listing } from '@/lib/explorer';
+import type { BestOffer } from '@/lib/useMarketData';
 import { pendingLabel, type Pending } from '@/lib/usePending';
 import { EXPLORER_UI } from '@/lib/contract';
 
@@ -35,6 +36,7 @@ export function actionFor(
 
 export default function TokenCard({
   nft,
+  collection,
   dir,
   href,
   listing,
@@ -46,11 +48,12 @@ export default function TokenCard({
   onAct,
 }: {
   nft: Nft;
+  collection: Collection;
   dir: string;
   href: string;
   listing?: Listing;
-  /** Highest live bid, shown when the token is not listed. */
-  topOffer?: bigint;
+  /** Highest live bid on this piece, across specific and collection-wide. */
+  topOffer?: BestOffer;
   /** Rarity percentile, 0.2 meaning the rarest piece in the collection. */
   rarity?: number;
   /** An action signed but not yet confirmed on chain. */
@@ -64,6 +67,7 @@ export default function TokenCard({
   const sources = useMemo(() => imageSources(nft, dir), [nft, dir]);
   const [level, setLevel] = useState(0);
   const src = sources[level];
+  const label = shortLabel(nft, collection);
 
   return (
     <PixelPanel variant="inset" className="flex flex-col p-2">
@@ -84,19 +88,44 @@ export default function TokenCard({
             </div>
           )}
         </div>
-        <p className="truncate font-pixel text-lg text-gray-200" title={nft.name}>
-          {nft.name}
-        </p>
+        {/* Name and price share a line, which is what the abbreviation bought.
+            Three fixed rows for every card regardless of state: a listed piece
+            used to grow a fourth line and stand taller than its neighbours. */}
+        <div className="flex items-baseline justify-between gap-2">
+          <p className="truncate font-pixel text-lg text-gray-200" title={nft.name}>
+            {label}
+          </p>
+          {listing && (
+            <span className="shrink-0 font-pixel text-lg text-amber-300">
+              {toErg(listing.price)}
+            </span>
+          )}
+        </div>
       </Link>
 
-      {/* Bottom row: what the piece costs and how rare it is on the left, the
-          action on the right. Price above rarity because price is the number
-          being decided on; rarity is the context for it. */}
-      <div className="mt-1 flex min-h-[28px] items-end justify-between gap-2">
+      <div className="mt-1 flex min-h-[28px] items-center justify-between gap-2">
         <div className="min-w-0">
-          {(listing || topOffer) && (
-            <p className="truncate font-pixel text-lg text-amber-300">
-              {listing ? `${toErg(listing.price)} ERG` : `bid ${toErg(topOffer!)}`}
+          {/* The bid a holder would act on, marked when it is collection-wide:
+              that money can be taken by any holder with any qualifying piece,
+              so it is not reserved for this one. */}
+          {topOffer && (
+            <p
+              // Muted when it is your own: it is not an offer to you, and
+              // colouring it like incoming demand would misread your own money.
+              className={`truncate font-pixel text-lg ${
+                topOffer.mine ? 'text-gray-500' : 'text-emerald-400'
+              }`}
+              title={
+                topOffer.mine
+                  ? 'Your own bid on this piece'
+                  : topOffer.kind === 'collection'
+                    ? 'A bid for any piece in this collection — another holder could take it first'
+                    : 'A bid on this specific piece'
+              }
+            >
+              {topOffer.mine ? 'your bid ' : 'bid '}
+              {toErg(topOffer.amount)}
+              {topOffer.kind === 'collection' && <span className="text-gray-500"> any</span>}
             </p>
           )}
           {rarityLabel(rarity) && (
@@ -108,40 +137,6 @@ export default function TokenCard({
             </p>
           )}
         </div>
-        {/* A signed action replaces the button entirely. Leaving the button
-            live would invite a second transaction spending a box the first one
-            already claimed. */}
-        {pending ? (
-          <a
-            href={`${EXPLORER_UI}/transactions/${pending.txId}`}
-            target="_blank"
-            rel="noreferrer"
-            title="Waiting for the next block — click to follow the transaction"
-            className="shrink-0 font-pixel text-base text-amber-300/70 underline"
-          >
-            {pendingLabel(pending)}
-          </a>
-        ) : (
-          action && (
-          <PixelButton
-            size="sm"
-            disabled={busy}
-            onClick={() => onAct(action)}
-            className="shrink-0"
-            title={action === 'cancel' ? 'Take this listing back' : undefined}
-          >
-            {busy
-              ? '…'
-              : action === 'buy'
-                ? 'Buy'
-                : action === 'cancel'
-                  ? 'Cancel'
-                  : action === 'list'
-                    ? 'List'
-                    : 'Offer'}
-          </PixelButton>
-          )
-        )}
       </div>
     </PixelPanel>
   );

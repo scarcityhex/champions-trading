@@ -22,10 +22,11 @@ import {
   type KeyedMockChainParty,
   type NonKeyedMockChainParty,
 } from '@fleet-sdk/mock-chain';
-import { ADDRESSES, NETWORK_PREFIX, OFFER_ERGO_TREE } from '../lib/contract';
+import { ADDRESSES, NETWORK_PREFIX, OFFER_ERGO_TREE, SALE_ERGO_TREE } from '../lib/contract';
 import {
   buildAcceptOfferTx,
   buildCancelOfferTx,
+  buildListTx,
   buildOfferTx,
   offerTokenIdFrom,
   type FleetBox,
@@ -232,5 +233,102 @@ describe('pinned offer constants', () => {
     expect(tree.toHex()).toBe(OFFER_ERGO_TREE);
     expect(tree.toAddress(NETWORK_PREFIX.mainnet).toString()).toBe(ADDRESSES.mainnet.offer);
     expect(tree.toAddress(NETWORK_PREFIX.testnet).toString()).toBe(ADDRESSES.testnet.offer);
+  });
+});
+
+// ── Taking a bid on a piece you have already listed ────────────────────────
+//
+// Reported from a real session: an offer arrived on an NFT that was already
+// listed, and the Accept button never appeared — the token had left the wallet
+// for the sale contract, so the UI concluded it was not the user's to give.
+//
+// It is theirs. sale.es cancels on the seller's signature with no other
+// condition, so one transaction can spend the listing and settle the offer at
+// the same time. These tests prove the two contracts agree on that, because
+// nothing else does: each was written without knowing about the other.
+describe('accepting an offer on a listed piece', () => {
+  let chain: MockChain;
+  let seller: KeyedMockChainParty;
+  let buyer: KeyedMockChainParty;
+  let sale: NonKeyedMockChainParty;
+  let offerContract: NonKeyedMockChainParty;
+
+  const utxosOf = (p: KeyedMockChainParty | NonKeyedMockChainParty) =>
+    p.utxos.toArray() as unknown as FleetBox[];
+
+  beforeEach(() => {
+    chain = new MockChain({ height: 1_000_000 });
+    seller = chain.newParty('seller');
+    buyer = chain.newParty('buyer');
+    sale = chain.addParty(SALE_ERGO_TREE, 'sale');
+    offerContract = chain.addParty(OFFER_ERGO_TREE, 'offers');
+    seller.addBalance({ nanoergs: 10n * ERG, tokens: [{ tokenId: NFT, amount: 1n }] });
+    buyer.addBalance({ nanoergs: 50n * ERG });
+  });
+
+  /** Lists the NFT, then bids on it from the other wallet. */
+  function listedWithABid() {
+    chain.execute(
+      buildListTx({
+        tokenId: NFT,
+        price: 9n * ERG,
+        sellerAddress: seller.address.toString(),
+        utxos: utxosOf(seller),
+        height: chain.height,
+      }),
+      { signers: [seller] },
+    );
+    chain.execute(
+      buildOfferTx({
+        tokenId: NFT,
+        amount: BID,
+        bidderAddress: buyer.address.toString(),
+        utxos: utxosOf(buyer),
+        height: chain.height,
+      }),
+      { signers: [buyer] },
+    );
+    return { listing: utxosOf(sale)[0], offer: utxosOf(offerContract)[0] };
+  }
+
+  it('settles the bid and the listing in one transaction', () => {
+    const { listing, offer } = listedWithABid();
+    const before = seller.balance.nanoergs;
+
+    const tx = buildAcceptOfferTx({
+      offerBox: offer,
+      tokenId: NFT,
+      bidderAddress: buyer.address.toString(),
+      holderAddress: seller.address.toString(),
+      holderUtxos: utxosOf(seller),
+      listingBox: listing,
+      height: chain.height,
+    });
+
+    expect(chain.execute(tx, { signers: [seller] })).toBe(true);
+    expect(buyer.balance.tokens).toContainEqual({ tokenId: NFT, amount: 1n });
+    // The bid, plus the ERG that was locked in the listing box, minus the
+    // delivery box and the fee.
+    expect(seller.balance.nanoergs).toBe(before + BID + 1_000_000n - 1_000_000n - 1_100_000n);
+    expect(sale.utxos.length).toBe(0);
+    expect(offerContract.utxos.length).toBe(0);
+  });
+
+  it('will not let anyone but the seller do it', () => {
+    // The listing is spent through sale.es's cancel branch, which is the
+    // seller's signature. A stranger holding no claim cannot take the token out.
+    const { listing, offer } = listedWithABid();
+
+    const tx = buildAcceptOfferTx({
+      offerBox: offer,
+      tokenId: NFT,
+      bidderAddress: buyer.address.toString(),
+      holderAddress: buyer.address.toString(),
+      holderUtxos: utxosOf(buyer),
+      listingBox: listing,
+      height: chain.height,
+    });
+
+    expect(chain.execute(tx, { signers: [buyer], throw: false })).toBe(false);
   });
 });

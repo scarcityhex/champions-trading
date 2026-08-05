@@ -1,14 +1,17 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import PixelButton from './ui/PixelButton';
 import PixelPanel from './ui/PixelPanel';
 import { shortAddress, isWrongNetwork } from '@/lib/nautilus';
 import { EXPLORER_UI, NETWORK } from '@/lib/contract';
+import { useEffect, useState } from 'react';
 import { useMarketContext } from './MarketProvider';
 
 export default function Header() {
-  const { wallet, data, actions } = useMarketContext();
+  const { wallet, data, actions, requestView } = useMarketContext();
+  const router = useRouter();
 
   return (
     <>
@@ -42,9 +45,19 @@ export default function Header() {
 
         {wallet.address ? (
           <div className="flex items-center gap-2">
-            <span className="font-pixel text-xl text-amber-300" title={wallet.address}>
+            {/* The address is the natural handle for "show me my things", and
+                a user who clicks it expects their wallet, not a profile page.
+                Routes to the gallery first so it also works from a token page. */}
+            <button
+              onClick={() => {
+                requestView('wallet');
+                router.push('/');
+              }}
+              title={`${wallet.address} — click to see everything in this wallet`}
+              className="font-pixel text-xl text-amber-300 underline decoration-dotted underline-offset-4 hover:brightness-125"
+            >
               {shortAddress(wallet.address)}
-            </span>
+            </button>
             <PixelButton size="sm" onClick={wallet.disconnect}>Disconnect</PixelButton>
           </div>
         ) : (
@@ -74,7 +87,13 @@ export default function Header() {
           tone="ok"
           // A transaction id is the only receipt that exists; nothing here
           // records the trade, so linking out to the explorer is the receipt.
-          text={`Submitted. It takes a couple of minutes to confirm.`}
+          //
+          // The average is stated because two minutes is a mean, not a
+          // deadline: block intervals are a Poisson process and eight minutes
+          // is unremarkable. Someone told only "a couple of minutes" concludes
+          // something is broken at minute three.
+          text="Submitted. Ergo blocks are mined about every 2 minutes on average, so it may take a few — sometimes longer."
+          elapsedSince={actions.lastTxAt}
           link={{
             href: `${EXPLORER_UI}/transactions/${actions.lastTxId}`,
             label: 'View on explorer',
@@ -86,15 +105,54 @@ export default function Header() {
   );
 }
 
+/**
+ * Seconds since a transaction was submitted, ticking.
+ *
+ * A number that visibly moves is the difference between "the site is working
+ * and I am waiting" and "the site is stuck". Nothing here can tell which of
+ * those is true — the explorer has no working mempool endpoint — so the honest
+ * thing to show is how long it has been, not a prediction.
+ */
+function Elapsed({ since }: { since: number }) {
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const seconds = Math.max(0, Math.floor((now - since) / 1000));
+  const label =
+    seconds < 60
+      ? `${seconds}s`
+      : `${Math.floor(seconds / 60)}m ${String(seconds % 60).padStart(2, '0')}s`;
+
+  return (
+    <span
+      // Amber past four minutes: still normal, but long enough that a user
+      // deserves a nudge to check the explorer rather than keep waiting.
+      className={`ml-2 shrink-0 font-pixel text-xl ${
+        seconds > 240 ? 'text-amber-300' : 'text-gray-500'
+      }`}
+      title="Time since the transaction was submitted"
+    >
+      {label}
+    </span>
+  );
+}
+
 function Notice({
   tone,
   text,
   link,
+  elapsedSince,
   onClose,
 }: {
   tone: 'error' | 'ok' | 'warn';
   text: string;
   link?: { href: string; label: string };
+  /** When set, a live counter renders beside the message. */
+  elapsedSince?: number | null;
   onClose?: () => void;
 }) {
   return (
@@ -112,7 +170,10 @@ function Notice({
           </a>
         )}
       </p>
-      {onClose && <PixelButton size="sm" onClick={onClose}>✕</PixelButton>}
+      <div className="flex shrink-0 items-center gap-2">
+        {typeof elapsedSince === 'number' && <Elapsed since={elapsedSince} />}
+        {onClose && <PixelButton size="sm" onClick={onClose}>✕</PixelButton>}
+      </div>
     </PixelPanel>
   );
 }

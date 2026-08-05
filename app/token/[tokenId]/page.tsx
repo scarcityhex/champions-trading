@@ -16,7 +16,7 @@ import {
   rarityPercentiles,
   rarityLabel,
 } from '@/lib/collections';
-import { toErg, type Offer } from '@/lib/explorer';
+import { toErg, type CollectionOffer, type Offer } from '@/lib/explorer';
 import { FEE, LISTING_BOX_VALUE } from '@/lib/transactions';
 import { shortAddress } from '@/lib/nautilus';
 import { EXPLORER_UI } from '@/lib/contract';
@@ -120,6 +120,7 @@ function TokenDetail({
 
   const listing = data.listings.get(tokenId);
   const offers = data.offers.get(tokenId) ?? [];
+  const collectionBids = data.collectionOffers.get(collection.key) ?? [];
   const action = actionFor(listing, wallet.owned.has(tokenId), wallet.address);
   const busy = actions.busy === tokenId;
   const inFlight = pending.byToken.get(tokenId);
@@ -162,11 +163,30 @@ function TokenDetail({
               />
               <Offers
                 offers={offers}
+                collectionBids={collectionBids}
                 me={wallet.address}
-                owned={wallet.owned.has(tokenId)}
+                // A piece you have listed is still yours to give: the token sits
+                // in the sale contract, whose cancel branch is your signature.
+                // Treating "not in my wallet" as "not mine" hid the Accept
+                // button on exactly the pieces most likely to attract a bid.
+                owned={wallet.owned.has(tokenId) || listing?.seller === wallet.address}
+                listed={listing?.seller === wallet.address ? listing : undefined}
                 busy={busy}
-                onAccept={actions.acceptOffer}
+                onAccept={(o) =>
+                  actions.acceptOffer(
+                    o,
+                    listing?.seller === wallet.address ? listing : undefined,
+                  )
+                }
                 onWithdraw={actions.withdrawOffer}
+                onAcceptCollection={(o) =>
+                  actions.acceptCollectionOffer(
+                    o,
+                    tokenId,
+                    collection.live.map((t) => t.tokenId),
+                    listing?.seller === wallet.address ? listing : undefined,
+                  )
+                }
                 onMake={() => setDialog('offer')}
               />
               <Provenance
@@ -290,7 +310,8 @@ function PriceBlock({
         <div>
           <p className="font-pixel text-xl text-amber-300/80">{pendingLabel(pending)}</p>
           <p className="font-pixel text-lg text-gray-500">
-            Waiting for the next block, about two minutes.{' '}
+            Waiting for the next block. Ergo mines one about every 2 minutes on
+            average, sometimes longer.{' '}
             <a
               href={`${EXPLORER_UI}/transactions/${pending.txId}`}
               target="_blank"
@@ -339,19 +360,26 @@ function PriceBlock({
  */
 function Offers({
   offers,
+  collectionBids,
   me,
   owned,
+  listed,
   busy,
   onAccept,
   onWithdraw,
+  onAcceptCollection,
   onMake,
 }: {
   offers: Offer[];
+  collectionBids: CollectionOffer[];
   me: string | null;
   owned: boolean;
+  /** Set when this wallet has the piece listed, which Accept must undo. */
+  listed?: { price: bigint };
   busy: boolean;
   onAccept: (offer: Offer) => void;
   onWithdraw: (offer: Offer) => void;
+  onAcceptCollection: (offer: CollectionOffer) => void;
   onMake: () => void;
 }) {
   return (
@@ -365,9 +393,43 @@ function Offers({
         )}
       </div>
 
+      {/* Collection-wide bids first, and marked. They can be settled with any
+          qualifying piece, so a holder reading this should know the money is
+          not reserved for them — another holder can take it first. */}
+      {collectionBids.length > 0 && (
+        <ul className="mb-2 flex flex-col gap-2">
+          {collectionBids.map((o) => (
+            <li key={o.boxId} className="flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <span className="font-pixel text-xl text-emerald-400">
+                  {toErg(o.amount)} ERG
+                </span>
+                <span className="ml-2 font-pixel text-base text-gray-500">
+                  for any piece {o.bidder === me ? '· yours' : ''}
+                </span>
+              </div>
+              {owned && o.bidder !== me && (
+                <PixelButton size="sm" disabled={busy} onClick={() => onAcceptCollection(o)}>
+                  Accept
+                </PixelButton>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {listed && (
+        <p className="mb-2 font-pixel text-base text-gray-500">
+          Accepting cancels your {toErg(listed.price)} ERG listing in the same
+          transaction.
+        </p>
+      )}
+
       {offers.length === 0 ? (
         <p className="font-pixel text-lg text-gray-500">
-          No offers yet. Anyone can bid on this token, listed or not.
+          {collectionBids.length > 0
+            ? 'No bid on this piece specifically.'
+            : 'No offers yet. Anyone can bid on this token, listed or not.'}
         </p>
       ) : (
         <ul className="flex flex-col gap-2">

@@ -17,7 +17,15 @@ import { useCallback, useEffect, useState } from 'react';
 import { NETWORK } from './contract';
 import type { MarketData } from './useMarketData';
 
-export type PendingKind = 'list' | 'buy' | 'cancel' | 'offer' | 'accept' | 'withdraw';
+export type PendingKind =
+  | 'list'
+  | 'buy'
+  | 'cancel'
+  | 'offer'
+  | 'accept'
+  | 'withdraw'
+  /** Settling a collection-wide bid by delivering one qualifying piece. */
+  | 'acceptCollection';
 
 export type Pending = {
   tokenId: string;
@@ -49,6 +57,7 @@ const LABELS: Record<PendingKind, string> = {
   offer: 'offering…',
   accept: 'accepting…',
   withdraw: 'withdrawing…',
+  acceptCollection: 'accepting…',
 };
 
 export const pendingLabel = (p: Pending): string => LABELS[p.kind];
@@ -84,6 +93,11 @@ export function isSettled(
     case 'accept':
     case 'withdraw':
       return !offers.some((o) => o.boxId === p.boxId);
+    case 'acceptCollection':
+      // The bid lives under a collection, not this token, so the offers map for
+      // the token says nothing. What settles it is the piece leaving the
+      // wallet: the delivery is the only thing this holder can observe.
+      return !owned.has(p.tokenId);
   }
 }
 
