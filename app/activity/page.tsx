@@ -7,7 +7,7 @@ import PixelButton from '@/components/ui/PixelButton';
 import Header from '@/components/Header';
 import { useMarketContext } from '@/components/MarketProvider';
 import { BY_TOKEN_ID, VISIBLE_COLLECTIONS } from '@/lib/collections';
-import { toErg } from '@/lib/explorer';
+import { toErg, toErgRounded } from '@/lib/explorer';
 import { shortAddress } from '@/lib/nautilus';
 import history from '@/data/history.json';
 import type { Trade } from '@/lib/history';
@@ -55,8 +55,11 @@ export default function ActivityPage() {
           {stats && (
             <PixelPanel variant="inset" className="mb-4 flex flex-wrap gap-x-6 gap-y-1 p-3">
               <Stat label="TRADES" value={String(stats.count)} />
-              <Stat label="VOLUME" value={`${toErg(stats.volume)} ERG`} />
-              <Stat label="AVERAGE" value={`${toErg(stats.average)} ERG`} />
+              {/* Rounded, unlike every price on the site: these are summary
+                  figures, and an average carries nine decimals of arithmetic
+                  that say nothing about what anyone actually paid. */}
+              <Stat label="VOLUME" value={`${toErgRounded(stats.volume)} ERG`} />
+              <Stat label="AVERAGE" value={`${toErgRounded(stats.average)} ERG`} />
             </PixelPanel>
           )}
 

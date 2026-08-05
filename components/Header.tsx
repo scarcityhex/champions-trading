@@ -104,7 +104,15 @@ export default function Header() {
           // deadline: block intervals are a Poisson process and eight minutes
           // is unremarkable. Someone told only "a couple of minutes" concludes
           // something is broken at minute three.
-          text="Submitted. Ergo blocks are mined about every 2 minutes on average, so it may take a few — sometimes longer."
+          // The explorer warning is not padding. Following this link in the
+          // first minutes shows "Transaction with this ID was not found, or it
+          // has not entered Mempool yet" — the explorer's own indexer lagging,
+          // not a verdict on the transaction. Read cold, that sentence says the
+          // trade vanished, and the natural response is to submit it again.
+          // Nothing here can pre-empt it: neither mirror exposes a working
+          // mempool endpoint, so the site cannot tell a queued transaction from
+          // an unseen one. Naming it in advance is the only honest fix.
+          text="Submitted. Ergo blocks are mined about every 2 minutes on average, so it may take a few — sometimes longer. The explorer may say it cannot find the transaction until then; that is the explorer catching up, not a failure. Do not send it again."
           elapsedSince={actions.lastTxAt}
           link={{
             href: `${EXPLORER_UI}/transactions/${actions.lastTxId}`,

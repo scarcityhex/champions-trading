@@ -309,9 +309,13 @@ function PriceBlock({
       {pending ? (
         <div>
           <p className="font-pixel text-xl text-amber-300/80">{pendingLabel(pending)}</p>
+          {/* Same caveat as the header receipt: the explorer will deny knowing
+              this transaction for the first minutes, and that sentence reads as
+              a failure to anyone who has not been warned. */}
           <p className="font-pixel text-lg text-gray-500">
             Waiting for the next block. Ergo mines one about every 2 minutes on
-            average, sometimes longer.{' '}
+            average, sometimes longer. The explorer may not find it until then —
+            that is the explorer catching up, not a failure.{' '}
             <a
               href={`${EXPLORER_UI}/transactions/${pending.txId}`}
               target="_blank"

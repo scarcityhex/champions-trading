@@ -10,7 +10,7 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SLong } from '@fleet-sdk/core';
-import { EXPLORER_MIRRORS, toErg, type ExplorerBox } from './explorer';
+import { EXPLORER_MIRRORS, toErg, toErgRounded, type ExplorerBox } from './explorer';
 import { SALE_ADDRESS, SALE_ERGO_TREE } from './contract';
 
 const [PRIMARY, SECONDARY] = EXPLORER_MIRRORS;
@@ -195,5 +195,43 @@ describe('explorer response validation', () => {
 describe('ERG formatting', () => {
   it('formats negative net proceeds without a negative fractional remainder', () => {
     expect(toErg(-1_100_000n)).toBe('-0.0011');
+  });
+});
+
+describe('rounded ERG, for summary readouts only', () => {
+  // The case that prompted it: 7.3 ERG over six trades.
+  it('cuts a repeating average down to something readable', () => {
+    expect(toErgRounded(1_216_666_666n)).toBe('1.22');
+  });
+
+  it('keeps exact values short instead of padding them out', () => {
+    expect(toErgRounded(7_300_000_000n)).toBe('7.3');
+    expect(toErgRounded(1_000_000_000n)).toBe('1');
+    expect(toErgRounded(0n)).toBe('0');
+  });
+
+  it('rounds half away from zero', () => {
+    expect(toErgRounded(1_005_000_000n)).toBe('1.01');
+    expect(toErgRounded(1_004_999_999n)).toBe('1');
+  });
+
+  // Anything under half a cent rounds to nothing; showing "-0" would read as a
+  // loss that is not there.
+  it('never prints a negative zero', () => {
+    expect(toErgRounded(-1_000_000n)).toBe('0');
+    expect(toErgRounded(-1_216_666_666n)).toBe('-1.22');
+  });
+
+  it('stays exact on values a double could not represent', () => {
+    expect(toErgRounded(9_007_199_254_740_993_000_000_000n)).toBe('9007199254740993');
+  });
+
+  it('honours a wider precision when asked', () => {
+    expect(toErgRounded(1_216_666_666n, 4)).toBe('1.2167');
+  });
+
+  // The whole reason it is a separate function: prices must not be rounded.
+  it('leaves toErg exact, so a price still matches to the nanoERG', () => {
+    expect(toErg(1_216_666_666n)).toBe('1.216666666');
   });
 });

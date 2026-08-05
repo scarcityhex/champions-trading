@@ -461,6 +461,35 @@ export const toErg = (nano: bigint): string => {
 };
 
 /**
+ * Same value, rounded for a summary readout.
+ *
+ * `toErg` is exact by design: a price is a number someone has to match to the
+ * nanoERG, and rounding one would advertise a listing nobody can buy at the
+ * figure shown. A derived statistic is the opposite case — an average of six
+ * trades is a quotient, and printing `1.216666666` claims a precision the
+ * number does not have while being harder to read than the fact it conveys.
+ *
+ * Rounds half away from zero in integer arithmetic. Going through Number would
+ * reintroduce exactly the binary-fraction error that `parseErg` exists to
+ * avoid, on values that can exceed what a double represents exactly.
+ */
+export const toErgRounded = (nano: bigint, decimals = 2): string => {
+  const negative = nano < 0n;
+  const absolute = negative ? -nano : nano;
+  const step = 10n ** BigInt(9 - decimals);
+  const units = (absolute + step / 2n) / step;
+  const whole = units / 10n ** BigInt(decimals);
+  const frac = (units % 10n ** BigInt(decimals))
+    .toString()
+    .padStart(decimals, '0')
+    .replace(/0+$/, '');
+  // A rounded-away value keeps its sign off: "-0" reads as a loss that is not
+  // there, and this only ever renders totals and averages.
+  const sign = negative && units > 0n ? '-' : '';
+  return `${sign}${frac ? `${whole}.${frac}` : whole}`;
+};
+
+/**
  * "1.5" -> 1500000000n.
  *
  * Parsed by splitting on the decimal point rather than via Number, because
