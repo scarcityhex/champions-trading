@@ -10,10 +10,17 @@ three collections was something smaller: one page that knows them, ranks their
 rarity against the supply that still exists rather than the one that was minted,
 and otherwise gets out of the way.
 
+Needs **Node 20.9 or newer** — Next 16 refuses to start below that, and the
+version shipped with most distributions is older.
+
 ```bash
+nvm install          # reads .nvmrc → Node 22, the version CI runs
 npm install
 npm run dev          # mainnet by default — every transaction is real
 ```
+
+Without nvm, install Node 22 from [nodejs.org](https://nodejs.org) and check
+with `node -v`.
 
 **Run testnet first.** The tests validate the contracts; they cannot validate
 Nautilus, or a real node, or the explorer's indexing. `docs/deploying.md` has the
