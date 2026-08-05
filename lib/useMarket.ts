@@ -13,6 +13,7 @@
 import { useCallback, useState } from 'react';
 import type { CollectionOffer, Listing, Offer } from './explorer';
 import type { PendingKind } from './usePending';
+import type { FleetBox } from './transactions';
 import {
   buildAcceptCollectionOfferTx,
   buildAcceptOfferTx,
@@ -75,7 +76,7 @@ export function useMarket(
     async (
       tokenId: string,
       kind: PendingKind,
-      build: (height: number) => ReturnType<typeof buildListTx>,
+      build: (height: number, utxos: FleetBox[]) => ReturnType<typeof buildListTx>,
       boxId?: string,
     ) => {
       if (!wallet.address) {
@@ -96,10 +97,23 @@ export function useMarket(
       setBusy(tokenId);
       setError(null);
       try {
-        // Fetched per action rather than held in state: a stale creation height
-        // makes a transaction the node will not accept.
+        // Both read per action rather than held in state.
+        //
+        // The height because a stale one makes a transaction the node will not
+        // accept. The boxes because the copy in state is as old as the last
+        // transaction — or as old as the page, if it has been left open — and
+        // anything spent elsewhere in the meantime produces a transaction that
+        // is signed, submitted, given an id, and then quietly dropped for
+        // spending inputs that no longer exist. From the outside that looks
+        // exactly like nothing happening.
+        const utxos = await wallet.refresh();
+        if (!utxos) {
+          setError('Could not read your wallet. Reconnect and try again.');
+          return;
+        }
+
         const height = await wallet.currentHeight();
-        const txId = await wallet.signAndSubmit(build(height));
+        const txId = await wallet.signAndSubmit(build(height, utxos));
         setLastTxId(txId);
         setLastTxAt(Date.now());
         // Recorded before the refresh, so the very first read after signing
@@ -119,12 +133,12 @@ export function useMarket(
 
   const list = useCallback(
     (tokenId: string, price: bigint) =>
-      run(tokenId, 'list', (height) =>
+      run(tokenId, 'list', (height, utxos) =>
         buildListTx({
           tokenId,
           price,
           sellerAddress: wallet.address!,
-          utxos: wallet.utxos,
+          utxos,
           height,
         }),
       ),
@@ -133,13 +147,13 @@ export function useMarket(
 
   const buy = useCallback(
     (listing: Listing) =>
-      run(listing.tokenId, 'buy', (height) =>
+      run(listing.tokenId, 'buy', (height, utxos) =>
         buildBuyTx({
           listingBox: listing.box,
           price: listing.price,
           sellerAddress: listing.seller,
           buyerAddress: wallet.address!,
-          buyerUtxos: wallet.utxos,
+          buyerUtxos: utxos,
           height,
         }),
         listing.boxId,
@@ -149,11 +163,11 @@ export function useMarket(
 
   const cancel = useCallback(
     (listing: Listing) =>
-      run(listing.tokenId, 'cancel', (height) =>
+      run(listing.tokenId, 'cancel', (height, utxos) =>
         buildCancelTx({
           listingBox: listing.box,
           sellerAddress: wallet.address!,
-          sellerUtxos: wallet.utxos,
+          sellerUtxos: utxos,
           height,
         }),
         listing.boxId,
@@ -163,12 +177,12 @@ export function useMarket(
 
   const offer = useCallback(
     (tokenId: string, amount: bigint) =>
-      run(tokenId, 'offer', (height) =>
+      run(tokenId, 'offer', (height, utxos) =>
         buildOfferTx({
           tokenId,
           amount,
           bidderAddress: wallet.address!,
-          utxos: wallet.utxos,
+          utxos,
           height,
         }),
       ),
@@ -183,13 +197,13 @@ export function useMarket(
       run(
         o.tokenId,
         'accept',
-        (height) =>
+        (height, utxos) =>
           buildAcceptOfferTx({
             offerBox: o.box,
             tokenId: o.tokenId,
             bidderAddress: o.bidder,
             holderAddress: wallet.address!,
-            holderUtxos: wallet.utxos,
+            holderUtxos: utxos,
             listingBox: listing?.box,
             height,
           }),
@@ -200,11 +214,11 @@ export function useMarket(
 
   const withdrawOffer = useCallback(
     (o: Offer) =>
-      run(o.tokenId, 'withdraw', (height) =>
+      run(o.tokenId, 'withdraw', (height, utxos) =>
         buildCancelOfferTx({
           offerBox: o.box,
           bidderAddress: wallet.address!,
-          bidderUtxos: wallet.utxos,
+          bidderUtxos: utxos,
           height,
         }),
         o.boxId,
@@ -217,12 +231,12 @@ export function useMarket(
   // order-book refresh still runs, and the bid shows up when the block lands.
   const collectionOffer = useCallback(
     (root: string, amount: bigint) =>
-      run(`collection:${root}`, 'offer', (height) =>
+      run(`collection:${root}`, 'offer', (height, utxos) =>
         buildCollectionOfferTx({
           root,
           amount,
           bidderAddress: wallet.address!,
-          utxos: wallet.utxos,
+          utxos,
           height,
         }),
       ),
@@ -234,14 +248,14 @@ export function useMarket(
       run(
         tokenId,
         'acceptCollection',
-        (height) =>
+        (height, utxos) =>
           buildAcceptCollectionOfferTx({
             offerBox: o.box,
             tokenId,
             collectionTokenIds,
             bidderAddress: o.bidder,
             holderAddress: wallet.address!,
-            holderUtxos: wallet.utxos,
+            holderUtxos: utxos,
             listingBox: listing?.box,
             height,
           }),
@@ -255,11 +269,11 @@ export function useMarket(
       run(
         `collection:${o.boxId}`,
         'withdraw',
-        (height) =>
+        (height, utxos) =>
           buildCancelCollectionOfferTx({
             offerBox: o.box,
             bidderAddress: wallet.address!,
-            bidderUtxos: wallet.utxos,
+            bidderUtxos: utxos,
             height,
           }),
         o.boxId,

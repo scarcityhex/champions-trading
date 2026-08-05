@@ -140,11 +140,21 @@ export function useNautilus() {
     };
   }, []);
 
-  /** Re-read balance and boxes. The wallet does not push updates, so this has
-   *  to run after anything that spends — otherwise the next transaction is
-   *  built from boxes that no longer exist and the node rejects it. */
-  const refresh = useCallback(async () => {
-    if (!window.ergo) return;
+  /**
+   * Re-read balance and boxes, and hand the fresh boxes back.
+   *
+   * The wallet does not push updates, so this has to run both after anything
+   * that spends AND immediately before anything is built. State alone is not
+   * enough for the second case: React has not re-rendered by the time the
+   * builder runs, so the caller needs the boxes returned directly.
+   *
+   * Building from stale boxes is the failure this exists to prevent, and it is
+   * a quiet one — the wallet signs whatever it is given, `submit_tx` hands back
+   * a transaction id, and the node then drops a transaction that spends inputs
+   * which no longer exist. From the outside it looks like nothing happened.
+   */
+  const refresh = useCallback(async (): Promise<FleetBox[] | null> => {
+    if (!window.ergo) return null;
     try {
       const utxos = await window.ergo.get_utxos();
       const owned = new Set<string>();
@@ -152,8 +162,10 @@ export function useNautilus() {
         for (const asset of box.assets ?? []) owned.add(asset.tokenId);
       }
       setState((s) => ({ ...s, utxos, owned }));
+      return utxos;
     } catch (e) {
       setState((s) => ({ ...s, error: e instanceof Error ? e.message : 'Could not read wallet.' }));
+      return null;
     }
   }, []);
 
