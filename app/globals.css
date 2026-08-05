@@ -18,6 +18,17 @@
   --outline: #0d0905;
 }
 
+html {
+  /* Reserve the scrollbar's width whether or not one is needed.
+
+     Without this, a long page (the gallery) has a scrollbar and a short one
+     (Activity) does not, so the viewport itself changes width between them and
+     every centred element jumps sideways on navigation. The gutter is always
+     there, so the usable width never depends on how tall the content happens
+     to be. */
+  scrollbar-gutter: stable;
+}
+
 html, body {
   background: var(--bg);
   color: #e5e7eb;

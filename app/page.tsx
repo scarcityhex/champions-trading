@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import PixelPanel from '@/components/ui/PixelPanel';
 import PixelButton from '@/components/ui/PixelButton';
 import Header from '@/components/Header';
+import { PAGE_WIDTH } from '@/components/ui/page';
 import TokenCard, { actionFor, type CardAction } from '@/components/TokenCard';
 import AmountDialog from '@/components/AmountDialog';
 import { isMine } from '@/lib/usePending';
@@ -192,7 +193,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen p-4 md:p-8">
-      <div className="mx-auto max-w-6xl">
+      <div className={PAGE_WIDTH}>
         <Header />
 
         <PixelPanel className="p-4">

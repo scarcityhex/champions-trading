@@ -9,6 +9,7 @@
 
 import Link from 'next/link';
 import PixelPanel from './ui/PixelPanel';
+import { PAGE_WIDTH } from './ui/page';
 import { EXPLORER_UI, SALE_ADDRESS, OFFER_ADDRESS, COLLECTION_OFFER_ADDRESS } from '@/lib/contract';
 
 const REPO = 'https://github.com/scarcityhex/champions-trading';
@@ -21,7 +22,7 @@ const CONTRACTS = [
 
 export default function Footer() {
   return (
-    <footer className="mx-auto mt-12 max-w-6xl px-4 pb-8 md:px-8">
+    <footer className={`${PAGE_WIDTH} mt-12 px-4 pb-8 md:px-8`}>
       <PixelPanel variant="inset" className="p-5">
         <div className="grid gap-6 md:grid-cols-3">
           <section>

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import PixelPanel from '@/components/ui/PixelPanel';
 import PixelButton from '@/components/ui/PixelButton';
 import Header from '@/components/Header';
+import { PAGE_WIDTH } from '@/components/ui/page';
 import { useMarketContext } from '@/components/MarketProvider';
 import { BY_TOKEN_ID, VISIBLE_COLLECTIONS } from '@/lib/collections';
 import { toErg, toErgRounded } from '@/lib/explorer';
@@ -46,7 +47,7 @@ export default function ActivityPage() {
 
   return (
     <main className="min-h-screen p-4 md:p-8">
-      <div className="mx-auto max-w-5xl">
+      <div className={PAGE_WIDTH}>
         <Header />
 
         <PixelPanel className="p-4">

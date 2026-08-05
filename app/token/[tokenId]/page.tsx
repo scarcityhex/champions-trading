@@ -5,6 +5,7 @@ import Link from 'next/link';
 import PixelPanel from '@/components/ui/PixelPanel';
 import PixelButton from '@/components/ui/PixelButton';
 import Header from '@/components/Header';
+import { PAGE_WIDTH } from '@/components/ui/page';
 import AmountDialog from '@/components/AmountDialog';
 import { actionFor } from '@/components/TokenCard';
 import { useMarketContext } from '@/components/MarketProvider';
@@ -38,7 +39,7 @@ export default function TokenPage({ params }: { params: Promise<{ tokenId: strin
   if (!nft || !collection) {
     return (
       <main className="min-h-screen p-4 md:p-8">
-        <div className="mx-auto max-w-4xl">
+        <div className={PAGE_WIDTH}>
           <Header />
           <PixelPanel className="p-6">
             <h1 className="mb-2 font-pixel-display text-sm text-red-400">UNKNOWN TOKEN</h1>
@@ -79,7 +80,7 @@ function BurnedToken({
 }) {
   return (
     <main className="min-h-screen p-4 md:p-8">
-      <div className="mx-auto max-w-4xl">
+      <div className={PAGE_WIDTH}>
         <Header />
         <PixelPanel className="p-6">
           <h1 className="mb-2 font-pixel-display text-sm text-gray-400">BURNED</h1>
@@ -130,7 +131,7 @@ function TokenDetail({
 
   return (
     <main className="min-h-screen p-4 md:p-8">
-      <div className="mx-auto max-w-5xl">
+      <div className={PAGE_WIDTH}>
         <Header />
 
         <PixelPanel className="p-4">
