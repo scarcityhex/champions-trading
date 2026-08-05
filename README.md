@@ -11,16 +11,30 @@ rarity against the supply that still exists rather than the one that was minted,
 and otherwise gets out of the way.
 
 Needs **Node 20.9 or newer** — Next 16 refuses to start below that, and the
-version shipped with most distributions is older.
+version shipped with most distributions is older. Check with `node -v` before
+anything else.
 
 ```bash
-nvm install          # reads .nvmrc → Node 22, the version CI runs
+nvm use              # macOS/Linux: reads .nvmrc → Node 22
 npm install
 npm run dev          # mainnet by default — every transaction is real
 ```
 
-Without nvm, install Node 22 from [nodejs.org](https://nodejs.org) and check
-with `node -v`.
+On **Windows**, `nvm-windows` is a different program that shares the name: it
+does not read `.nvmrc`, and its `install` needs an exact version.
+
+```bash
+nvm install 22.23.2
+nvm use 22.23.2
+```
+
+If that panics, the nvm-windows build is too old to parse today's release
+list — either update it, or skip it entirely and install Node 22 LTS from
+[nodejs.org](https://nodejs.org).
+
+**Changing Node version? Delete `node_modules` first** and install again. Some
+dependencies ship compiled binaries chosen at install time, and a tree built
+under the old version will fail in ways that do not mention the version at all.
 
 **Run testnet first.** The tests validate the contracts; they cannot validate
 Nautilus, or a real node, or the explorer's indexing. `docs/deploying.md` has the
