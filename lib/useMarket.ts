@@ -10,7 +10,7 @@
 // keeps showing a listing it just bought will happily build a second purchase
 // of a box that no longer exists.
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { CollectionOffer, Listing, Offer } from './explorer';
 import type { PendingKind } from './usePending';
 import type { FleetBox } from './transactions';
@@ -27,6 +27,10 @@ import {
 } from './transactions';
 import { isWrongNetwork, type useNautilus } from './nautilus';
 import { NETWORK } from './contract';
+
+/** Per network, so a testnet receipt cannot surface on a mainnet page. */
+const RECEIPT_KEY = `champions-trading:receipt:${NETWORK}`;
+const RECEIPT_TTL = 24 * 60 * 60_000;
 
 type Wallet = ReturnType<typeof useNautilus>;
 
@@ -72,6 +76,35 @@ export function useMarket(
   const [lastTxId, setLastTxId] = useState<string | null>(null);
   const [lastTxAt, setLastTxAt] = useState<number | null>(null);
 
+  // The receipt outlives the page.
+  //
+  // A transaction id is the only record of a trade that exists anywhere — this
+  // app stores nothing — so losing it to a refresh means losing the one thing
+  // that lets someone check what happened. Keeping the timestamp too means the
+  // waiting counter resumes at the real elapsed time rather than at zero.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(RECEIPT_KEY);
+      if (!raw) return;
+      const saved = JSON.parse(raw) as { txId: string; at: number };
+      // Dropped once it is far older than any block could reasonably be: a
+      // month-old receipt greeting someone on arrival is noise, not a record.
+      if (Date.now() - saved.at > RECEIPT_TTL) {
+        localStorage.removeItem(RECEIPT_KEY);
+        return;
+      }
+      // Deferred like usePending's restore: setting state synchronously inside
+      // an effect is what react-hooks/set-state-in-effect warns about, and the
+      // first paint has nothing to show anyway.
+      queueMicrotask(() => {
+        setLastTxId(saved.txId);
+        setLastTxAt(saved.at);
+      });
+    } catch {
+      /* unreadable store: the receipt simply does not survive */
+    }
+  }, []);
+
   const run = useCallback(
     async (
       tokenId: string,
@@ -114,8 +147,14 @@ export function useMarket(
 
         const height = await wallet.currentHeight();
         const txId = await wallet.signAndSubmit(build(height, utxos));
+        const at = Date.now();
         setLastTxId(txId);
-        setLastTxAt(Date.now());
+        setLastTxAt(at);
+        try {
+          localStorage.setItem(RECEIPT_KEY, JSON.stringify({ txId, at }));
+        } catch {
+          /* the notice still shows for this session */
+        }
         // Recorded before the refresh, so the very first read after signing
         // already knows there is something in flight.
         onPending({ tokenId, kind, txId, boxId });
@@ -285,6 +324,11 @@ export function useMarket(
     setError(null);
     setLastTxId(null);
     setLastTxAt(null);
+    try {
+      localStorage.removeItem(RECEIPT_KEY);
+    } catch {
+      /* nothing to clear */
+    }
   }, []);
 
   return {

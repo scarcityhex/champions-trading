@@ -72,6 +72,10 @@ export function networkOfAddress(address: string): ErgoNetwork | null {
   return null;
 }
 
+/** Remembers that this browser has approved the site, so a reload can restore
+ *  the session without asking again. Not a credential — just a hint. */
+const CONNECTED_KEY = 'champions-trading:wallet-connected';
+
 export function useNautilus() {
   const [state, setState] = useState<WalletState>({
     installed: false,
@@ -106,10 +110,24 @@ export function useNautilus() {
       setState((s) => ({ ...s, installed: true }));
 
       try {
-        // Only restore a session that already exists. Calling connect() blind
-        // would pop the approval dialog at every visitor on page load.
-        if (!(await nautilus.isConnected?.())) return;
-        await nautilus.connect({ createErgoObject: true });
+        // Restore only a session this browser has had before.
+        //
+        // The guard used to be `isConnected()`, and it failed twice over. On a
+        // build that does not expose the method, the optional call yields
+        // undefined and the negation sent us straight out — never reconnecting,
+        // which is the bug this fixes. And even where it exists it can report
+        // false right after a reload: the approval lives in the extension,
+        // while the `ergo` object does not survive the page.
+        //
+        // Our own flag is the reliable signal. connect() resolves without a
+        // prompt for an origin the user already approved, and a first-time
+        // visitor never reaches it because the flag was never set.
+        if (localStorage.getItem(CONNECTED_KEY) !== 'true') return;
+        if (!(await nautilus.connect({ createErgoObject: true }))) {
+          // Approval was revoked in the wallet; stop retrying on every load.
+          localStorage.removeItem(CONNECTED_KEY);
+          return;
+        }
         if (cancelled || !window.ergo) return;
         const address = await window.ergo.get_change_address();
         const utxos = await window.ergo.get_utxos();
@@ -185,6 +203,13 @@ export function useNautilus() {
       for (const box of utxos) {
         for (const asset of box.assets ?? []) owned.add(asset.tokenId);
       }
+      try {
+        // Recorded only after a connection actually succeeded, so the reload
+        // path never tries to restore something that was never granted.
+        localStorage.setItem(CONNECTED_KEY, 'true');
+      } catch {
+        /* private mode: the session simply will not survive a reload */
+      }
       setState({
         installed: true,
         address,
@@ -204,6 +229,11 @@ export function useNautilus() {
   }, []);
 
   const disconnect = useCallback(async () => {
+    try {
+      localStorage.removeItem(CONNECTED_KEY);
+    } catch {
+      /* nothing to clear */
+    }
     await window.ergoConnector?.nautilus?.disconnect?.();
     setState((s) => ({ ...s, address: null, owned: new Set(), utxos: [], walletNetwork: null }));
   }, []);
