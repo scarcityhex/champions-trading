@@ -67,7 +67,11 @@ export async function GET(request: Request) {
       height,
       recent,
       fetchedAt: Date.now(),
-    }, { headers: { 'Cache-Control': 'public, s-maxage=15, stale-while-revalidate=30' } });
+      // Short on purpose. The explorer read behind this is cached for 30s and
+      // is what actually protects the upstream API, so a long edge cache buys
+      // little and adds directly to how long someone stares at a pending label
+      // after their own block has already landed.
+    }, { headers: { 'Cache-Control': 'public, s-maxage=5, stale-while-revalidate=10' } });
   } catch (e) {
     // A failing explorer must not take the gallery down with it; the UI shows
     // the catalog without prices and says so.

@@ -7,7 +7,14 @@
 // thing. It also means one fetch of the order book per session instead of one
 // per page.
 
-import { createContext, useCallback, useContext, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from 'react';
 import { useNautilus } from '@/lib/nautilus';
 import { useMarketData, type MarketData } from '@/lib/useMarketData';
 import { useMarket, type MarketState } from '@/lib/useMarket';
@@ -46,6 +53,29 @@ export function MarketProvider({ children }: { children: ReactNode }) {
   // Every settled transaction re-reads the order book; the wallet re-reads
   // itself inside signAndSubmit.
   const actions = useMarket(wallet, data.refresh, pending.add);
+
+  // While something is signed but unconfirmed, re-read the order book on a
+  // timer instead of waiting for the user to click refresh.
+  //
+  // This replaces the `?fresh=1` cache bypass that used to serve the same
+  // purpose. That was an unauthenticated way for anyone to force uncached
+  // explorer reads; polling costs the same request the user would have made by
+  // hand, and stops on its own the moment the chain agrees.
+  //
+  // Ten seconds against a five-second edge cache: fast enough that a confirmed
+  // block shows up within a few seconds of landing, slow enough to stay far
+  // under the route's own rate limit even with several actions outstanding.
+  //
+  // `refresh` is pulled out rather than depending on `data`: the object changes
+  // identity every time a read lands, which would restart the timer on every
+  // poll. The callback itself is stable.
+  const { refresh } = data;
+  const outstanding = pending.byToken.size;
+  useEffect(() => {
+    if (outstanding === 0) return;
+    const id = setInterval(refresh, 10_000);
+    return () => clearInterval(id);
+  }, [outstanding, refresh]);
 
   const [viewRequest, setViewRequest] = useState<'wallet' | null>(null);
   const requestView = useCallback((v: 'wallet') => setViewRequest(v), []);
