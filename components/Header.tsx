@@ -62,6 +62,18 @@ export default function Header() {
           </div>
         ) : (
           <PixelButton onClick={wallet.connect} disabled={wallet.connecting}>
+            {/* The mark stays put while connecting. PixelButton's rule is that
+                geometry never changes with state, and dropping the icon for the
+                busy label would shift the button under the cursor mid-click. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/ui/nautilus.png"
+              alt=""
+              aria-hidden="true"
+              width={18}
+              height={18}
+              className="h-[18px] w-[18px] shrink-0"
+            />
             {wallet.connecting ? 'Connecting…' : 'Connect Nautilus'}
           </PixelButton>
         )}
