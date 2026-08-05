@@ -13,11 +13,17 @@ step() { printf '\n\033[1m== %s\033[0m\n' "$1"; }
 step "types"
 npx tsc --noEmit
 
+step "lint"
+npx eslint . --max-warnings=0
+
 step "tests"
 npx vitest run
 
 step "build"
 npx next build
+
+step "production dependency audit"
+npm audit --omit=dev --audit-level=high
 
 step "catalogue is real (sample)"
 # Full sweep is ~3,100 tokens; a spaced sample catches a poisoned or edited

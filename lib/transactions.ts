@@ -35,7 +35,13 @@ import {
 } from '@fleet-sdk/core';
 import { SPair } from '@fleet-sdk/serializer';
 import type { Amount, EIP12UnsignedTransaction } from '@fleet-sdk/common';
-import { COLLECTION_OFFER_ADDRESS, OFFER_ADDRESS, SALE_ADDRESS } from './contract';
+import {
+  COLLECTION_OFFER_ADDRESS,
+  NETWORK,
+  NETWORK_PREFIX,
+  OFFER_ADDRESS,
+  SALE_ADDRESS,
+} from './contract';
 import { merkleProof } from './merkle';
 
 /** A box in the shape fleet wants: registers as raw hex, amounts as string or
@@ -44,6 +50,22 @@ export type FleetBox = Box<Amount>;
 
 export const FEE = RECOMMENDED_MIN_FEE_VALUE;
 export const LISTING_BOX_VALUE = SAFE_MIN_BOX_VALUE;
+/** What the holder funds when accepting a bid: delivery box plus miner fee. */
+export const OFFER_SETTLEMENT_COST = SAFE_MIN_BOX_VALUE + FEE;
+/** Smallest bid whose acceptance leaves the holder with a positive net. */
+export const MIN_OFFER_VALUE = OFFER_SETTLEMENT_COST + 1n;
+
+export const offerNet = (amount: bigint): bigint => amount - OFFER_SETTLEMENT_COST;
+
+function assertPositiveOfferNet(offerBox: FleetBox): void {
+  let amount: bigint;
+  try {
+    amount = BigInt(offerBox.value);
+  } catch {
+    throw new Error('The offer box has an invalid value.');
+  }
+  if (amount < MIN_OFFER_VALUE) throw new Error('This offer would leave the holder with no proceeds.');
+}
 
 /**
  * Open a listing: move the NFT into a box guarded by the sale script, carrying
@@ -170,8 +192,8 @@ export function buildOfferTx(params: {
   height: number;
 }): EIP12UnsignedTransaction {
   const { tokenId, amount, bidderAddress, utxos, height } = params;
-  if (amount < SAFE_MIN_BOX_VALUE) {
-    throw new Error('An offer must be at least 0.001 ERG.');
+  if (amount < MIN_OFFER_VALUE) {
+    throw new Error('An offer must cover the holder\'s settlement costs and leave positive proceeds.');
   }
 
   const bidder = ErgoAddress.fromBase58(bidderAddress);
@@ -222,6 +244,7 @@ export function buildAcceptOfferTx(params: {
 }): EIP12UnsignedTransaction {
   const { offerBox, tokenId, bidderAddress, holderAddress, holderUtxos, listingBox, height } =
     params;
+  assertPositiveOfferNet(offerBox);
 
   return new TransactionBuilder(height)
     .from(listingBox ? [offerBox, listingBox] : [offerBox], { ensureInclusion: true })
@@ -278,7 +301,9 @@ export function buildCollectionOfferTx(params: {
   height: number;
 }): EIP12UnsignedTransaction {
   const { root, amount, bidderAddress, utxos, height } = params;
-  if (amount < SAFE_MIN_BOX_VALUE) throw new Error('An offer must be at least 0.001 ERG.');
+  if (amount < MIN_OFFER_VALUE) {
+    throw new Error('An offer must cover the holder\'s settlement costs and leave positive proceeds.');
+  }
   if (!/^[0-9a-f]{64}$/.test(root)) throw new Error('A collection root must be 32 bytes of hex.');
 
   const bidder = ErgoAddress.fromBase58(bidderAddress);
@@ -328,6 +353,7 @@ export function buildAcceptCollectionOfferTx(params: {
     listingBox,
     height,
   } = params;
+  assertPositiveOfferNet(offerBox);
 
   const path = merkleProof(collectionTokenIds, tokenId);
   if (!path) {
@@ -407,7 +433,7 @@ export function sellerAddressFrom(serializedR4: string): string | null {
   const pk = serializedR4.slice(4);
   if (pk.length !== 66) return null;
   try {
-    return ErgoAddress.fromPublicKey(pk).toString();
+    return ErgoAddress.fromPublicKey(pk).toString(NETWORK_PREFIX[NETWORK]);
   } catch {
     return null;
   }

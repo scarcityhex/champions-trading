@@ -129,7 +129,7 @@ export default function Home() {
       return pa === pb ? 0 : pa < pb ? -1 : 1;
     });
     return sorted;
-  }, [entries, filter, traits, search, sort, data.listings, data.offers, wallet, pending.byToken]);
+  }, [entries, filter, traits, search, sort, data, wallet, pending.byToken]);
 
   const stats = useMemo(() => {
     let live = 0;
@@ -172,6 +172,9 @@ export default function Home() {
   // question than the one the click asked.
   useEffect(() => {
     if (viewRequest !== 'wallet') return;
+    // This effect consumes an external navigation request from the Header
+    // context; the state reset is the synchronization it exists to perform.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTab(-1);
     setFilter('mine');
     setTraits({});

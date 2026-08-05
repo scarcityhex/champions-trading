@@ -35,6 +35,7 @@ import {
   buildCancelCollectionOfferTx,
   buildCollectionOfferTx,
   collectionRootFrom,
+  MIN_OFFER_VALUE,
   type FleetBox,
 } from '../lib/transactions';
 import { merkleProof, merkleRootHex } from '../lib/merkle';
@@ -160,6 +161,18 @@ describe('collection-offer.es', () => {
 
     expect(chain.execute(tx, { signers: [bidder] })).toBe(true);
     expect(bidder.balance.nanoergs).toBe(before + BID - RECOMMENDED_MIN_FEE_VALUE);
+  });
+
+  it('refuses a collection offer that cannot pay positive holder proceeds', () => {
+    expect(() =>
+      buildCollectionOfferTx({
+        root: ROOT,
+        amount: MIN_OFFER_VALUE - 1n,
+        bidderAddress: bidder.address.toString(),
+        utxos: utxosOf(bidder),
+        height: chain.height,
+      }),
+    ).toThrow(/settlement costs/);
   });
 
   // ── Attacks ──────────────────────────────────────────────────────────────

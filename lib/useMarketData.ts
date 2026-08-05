@@ -6,11 +6,10 @@
 // shares one cached read. Re-fetched on demand after a transaction is
 // submitted, since the chain will not tell us.
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { CollectionOffer, Listing, Offer } from './explorer';
 import type { Trade } from './history';
 import { COLLECTION_ROOTS } from './contract';
-import { COLLECTIONS } from './collections';
 
 type WireListing = Omit<Listing, 'price' | 'boxValue'> & { price: string; boxValue: string };
 type WireOffer = Omit<Offer, 'amount'> & { amount: string };
@@ -28,8 +27,8 @@ export type MarketData = {
   collectionOffers: Map<string, CollectionOffer[]>;
   loading: boolean;
   error: string | null;
-  /** Re-read the chain, skipping the server cache. Call after a transaction,
-   *  or when the user asks. */
+  /** Re-read the shared market snapshot. Pending state covers the short server
+   *  cache window after a transaction without exposing a public cache bypass. */
   refresh: () => void;
   /** When the currently displayed data was fetched. */
   fetchedAt: number | null;
@@ -52,11 +51,8 @@ export function useMarketData(): MarketData {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-
-    // The first load may use the shared 30s cache; every later one is forced
-    // fresh, because it follows either a transaction or an explicit request.
-    fetch(nonce === 0 ? '/api/market' : '/api/market?fresh=1', { cache: 'no-store' })
+    // Browser caching is disabled; the server still coalesces explorer reads.
+    fetch('/api/market', { cache: 'no-store' })
       .then((r) => r.json())
       .then(
         (data: {
@@ -130,7 +126,10 @@ export function useMarketData(): MarketData {
     };
   }, [nonce]);
 
-  const refresh = useCallback(() => setNonce((n) => n + 1), []);
+  const refresh = useCallback(() => {
+    setLoading(true);
+    setNonce((n) => n + 1);
+  }, []);
 
   // Someone who tabs away, trades elsewhere and comes back expects to see it.
   // Only on focus, and only if the data is already a minute old: polling a
@@ -143,17 +142,24 @@ export function useMarketData(): MarketData {
     return () => window.removeEventListener('focus', onFocus);
   }, [fetchedAt, refresh]);
 
-  return {
-    listings,
-    offers,
-    collectionOffers,
-    loading,
-    error,
-    refresh,
-    fetchedAt,
-    height,
-    recent,
-  };
+  // Memoised because consumers depend on the whole object: `isMine` takes it,
+  // so exhaustive-deps asks for `data` rather than its fields. A fresh literal
+  // every render made the gallery re-filter all 2,061 tokens on renders where
+  // nothing it reads had changed.
+  return useMemo(
+    () => ({
+      listings,
+      offers,
+      collectionOffers,
+      loading,
+      error,
+      refresh,
+      fetchedAt,
+      height,
+      recent,
+    }),
+    [listings, offers, collectionOffers, loading, error, refresh, fetchedAt, height, recent],
+  );
 }
 
 export type BestOffer = {

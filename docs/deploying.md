@@ -8,7 +8,7 @@ the step below.
 
 ## What the tests do and do not prove
 
-The 70 tests compile the real ErgoScript and run it against a mock chain that
+The test suite compiles the real ErgoScript and runs it against a mock chain that
 enforces consensus rules. They prove:
 
 - the contracts do not let anyone take value that is not theirs
@@ -57,7 +57,7 @@ said it did.
 ## 2. Mainnet, with a real but expendable piece
 
 ```bash
-rm .env.local          # mainnet is the default
+echo 'NEXT_PUBLIC_ERGO_NETWORK=mainnet' > .env.local
 npm run preflight
 ```
 
@@ -86,7 +86,7 @@ because there is none in the design.
 
 | Variable | Value |
 |---|---|
-| `NEXT_PUBLIC_ERGO_NETWORK` | `mainnet` (or unset) |
+| `NEXT_PUBLIC_ERGO_NETWORK` | `mainnet` (default) or `testnet` |
 | `NEXT_PUBLIC_HOST_ORIGINALS` | `false`, unless you also upload `public/art` |
 
 What ships in the repo:

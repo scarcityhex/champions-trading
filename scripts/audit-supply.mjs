@@ -110,7 +110,6 @@ for (const key of keys) {
   console.log(`\n=== ${doc.collection?.name ?? key} — ${ids.length} token ids`);
 
   // Phase 1 — alive or burned.
-  const unknown = ids.filter((id) => !(id in state.burned) && !state.collections[key]?.alive?.includes?.(id));
   const seen = new Set(state.collections[key]?.checked ?? []);
   const todo = full ? ids : ids.filter((id) => !seen.has(id));
   console.log(`  checking ${todo.length}`);

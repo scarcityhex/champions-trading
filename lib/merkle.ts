@@ -12,7 +12,7 @@
 // is not in the list, and the list itself never goes on chain.
 //
 // The hashing here must match contracts/collection-offer.es exactly. It is
-// verified by a round trip in lib/merkle.test.ts — a proof built here is
+// verified by a round trip in contracts/collection-offer.test.ts — a proof built here is
 // checked by the real compiled script against a mock chain, so a mismatch
 // cannot pass unnoticed.
 

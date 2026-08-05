@@ -12,7 +12,12 @@ import { useState } from 'react';
 import PixelPanel from './ui/PixelPanel';
 import PixelButton from './ui/PixelButton';
 import { parseErg, toErg, NANO } from '@/lib/explorer';
-import { LISTING_BOX_VALUE, FEE } from '@/lib/transactions';
+import {
+  LISTING_BOX_VALUE,
+  FEE,
+  MIN_OFFER_VALUE,
+  offerNet,
+} from '@/lib/transactions';
 import type { Nft } from '@/lib/collections';
 
 export default function AmountDialog({
@@ -31,7 +36,9 @@ export default function AmountDialog({
   const listing = mode === 'list';
   const [text, setText] = useState('');
   const price = parseErg(text);
-  const valid = price !== null && price > 0n;
+  const positive = price !== null && price > 0n;
+  const offerTooSmall = !listing && positive && price < MIN_OFFER_VALUE;
+  const valid = positive && !offerTooSmall;
 
   return (
     <div
@@ -90,7 +97,7 @@ export default function AmountDialog({
                 <Row label="Locked until accepted" value={`${toErg(price)} ERG`} />
                 <Row
                   label="Holder receives"
-                  value={`${toErg(price - LISTING_BOX_VALUE - FEE)} ERG (net of their costs)`}
+                  value={`${toErg(offerNet(price))} ERG (net of their costs)`}
                 />
                 <Row label="Network fee" value={`${toErg(FEE)} ERG`} />
                 <Row label="Withdrawable" value="any time, until accepted" />
@@ -98,7 +105,11 @@ export default function AmountDialog({
             )
           ) : (
             <p className="font-pixel text-lg text-gray-500">
-              {text === '' ? 'Enter a price.' : 'Not a valid amount (max 9 decimals).'}
+              {text === ''
+                ? 'Enter a price.'
+                : offerTooSmall
+                  ? `Minimum safe offer: ${toErg(MIN_OFFER_VALUE)} ERG.`
+                  : 'Not a valid amount (max 9 decimals).'}
             </p>
           )}
         </PixelPanel>
@@ -113,11 +124,6 @@ export default function AmountDialog({
         {valid && price < NANO / 100n && (
           <p className="mt-2 font-pixel text-lg text-red-400">
             That is under 0.01 ERG — check the decimal point.
-          </p>
-        )}
-        {valid && !listing && price <= LISTING_BOX_VALUE + FEE && (
-          <p className="mt-2 font-pixel text-lg text-red-400">
-            Too small to be worth accepting: the holder&apos;s costs would eat all of it.
           </p>
         )}
       </PixelPanel>

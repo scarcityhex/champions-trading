@@ -21,24 +21,36 @@ import {
   fetchOffers,
   recentTrades,
 } from '@/lib/explorer';
+import { checkRateLimit } from '@/lib/rateLimit';
 
-/** Seconds. Roughly a couple of Ergo blocks: fresh enough that a bought
- *  listing disappears quickly, slow enough to absorb a burst of visitors. */
-export const revalidate = 30;
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
-  // `?fresh=1` skips the cache. Used by the refresh that follows a signed
-  // transaction — the client cannot be shown a snapshot older than its own
-  // action, which is how a just-accepted offer kept appearing as a live bid.
-  const fresh = new URL(request.url).searchParams.get('fresh') === '1';
+  const rate = checkRateLimit(request, 'market', 30, 60_000);
+  if (!rate.allowed) {
+    return NextResponse.json(
+      { error: 'too many market refreshes' },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': String(rate.retryAfter),
+          'Cache-Control': 'private, no-store',
+        },
+      },
+    );
+  }
+
   try {
-    // Settled together: a partial read would be worse than a stale one.
+    // Settled together: a partial read would be worse than a stale one. These
+    // reads always use the shared 30-second explorer cache. Pending transaction
+    // state keeps the UI honest during that small window without exposing an
+    // unauthenticated cache-bypass endpoint.
     const [listings, offers, collectionOffers, height, recent] = await Promise.all([
-      fetchListings(fresh),
-      fetchOffers(fresh),
-      fetchCollectionOffers(fresh),
-      chainHeight(fresh),
-      recentTrades(fresh),
+      fetchListings(),
+      fetchOffers(),
+      fetchCollectionOffers(),
+      chainHeight(),
+      recentTrades(),
     ]);
     return NextResponse.json({
       // JSON has no bigint, so amounts cross as strings and the client rebuilds
@@ -55,10 +67,11 @@ export async function GET(request: Request) {
       height,
       recent,
       fetchedAt: Date.now(),
-    });
+    }, { headers: { 'Cache-Control': 'public, s-maxage=15, stale-while-revalidate=30' } });
   } catch (e) {
     // A failing explorer must not take the gallery down with it; the UI shows
     // the catalog without prices and says so.
+    console.error('market explorer read failed', e);
     return NextResponse.json(
       {
         listings: [],
@@ -66,9 +79,9 @@ export async function GET(request: Request) {
         collectionOffers: [],
         height: null,
         recent: [],
-        error: e instanceof Error ? e.message : 'explorer unavailable',
+        error: 'explorer unavailable',
       },
-      { status: 200 },
+      { status: 200, headers: { 'Cache-Control': 'private, no-store' } },
     );
   }
 }

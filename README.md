@@ -12,7 +12,7 @@ and otherwise gets out of the way.
 
 ```bash
 npm install
-npm run dev          # mainnet — every transaction is real
+npm run dev          # mainnet by default — every transaction is real
 ```
 
 **Run testnet first.** The tests validate the contracts; they cannot validate

@@ -3,12 +3,10 @@
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import PixelPanel from './ui/PixelPanel';
-import PixelButton from './ui/PixelButton';
 import { imageSources, rarityLabel, shortLabel, type Collection, type Nft } from '@/lib/collections';
 import { toErg, type Listing } from '@/lib/explorer';
 import type { BestOffer } from '@/lib/useMarketData';
-import { pendingLabel, type Pending } from '@/lib/usePending';
-import { EXPLORER_UI } from '@/lib/contract';
+import type { Pending } from '@/lib/usePending';
 
 export type CardAction = 'buy' | 'cancel' | 'list' | 'offer' | null;
 
@@ -42,10 +40,6 @@ export default function TokenCard({
   listing,
   topOffer,
   rarity,
-  pending,
-  action,
-  busy,
-  onAct,
 }: {
   nft: Nft;
   collection: Collection;

@@ -2,6 +2,9 @@
 // the chain. This file is the reason there is no database (docs/architecture.md
 // §1): the two questions a marketplace has to answer are two endpoints.
 
+import { ErgoAddress } from '@fleet-sdk/core';
+import { SConstant } from '@fleet-sdk/serializer';
+
 import {
   collectionRootFrom,
   offerTokenIdFrom,
@@ -11,10 +14,14 @@ import {
 import { extractTrades, type RawTx, type Trade } from './history';
 import {
   COLLECTION_OFFER_ADDRESS,
+  COLLECTION_OFFER_ERGO_TREE,
   EXPLORERS,
   NETWORK,
+  NETWORK_PREFIX,
   OFFER_ADDRESS,
+  OFFER_ERGO_TREE,
   SALE_ADDRESS,
+  SALE_ERGO_TREE,
 } from './contract';
 
 /**
@@ -47,6 +54,9 @@ export const EXPLORER_MIRRORS: readonly string[] = EXPLORERS[NETWORK];
 let preferred = 0;
 let demotedAt = 0;
 const RETRY_PRIMARY_AFTER = 60_000;
+const EXPLORER_TIMEOUT_MS = 8_000;
+const PAGE_SIZE = 100;
+const MAX_UNSPENT_PAGES = 50;
 
 /** Nine decimals: 1 ERG = 1e9 nanoERG. */
 export const NANO = 1_000_000_000n;
@@ -110,12 +120,14 @@ export async function api<T>(pathname: string, fresh = false): Promise<T> {
       const index = (preferred + i) % EXPLORER_MIRRORS.length;
       try {
         // Cached by default so a busy gallery is one explorer read per 30s for
-        // everyone. `fresh` bypasses it for the read that follows a
-        // transaction: the user has just changed the chain and must not be
-        // shown a snapshot taken before their own action.
+        // everyone. `fresh` is reserved for trusted background work such as
+        // the sales indexer checking its scan height; it is deliberately not
+        // exposed as a public API query parameter.
         const res = await fetch(
           `${EXPLORER_MIRRORS[index]}${pathname}`,
-          fresh ? { cache: 'no-store' } : { next: { revalidate: 30 } },
+          fresh
+            ? { cache: 'no-store', signal: AbortSignal.timeout(EXPLORER_TIMEOUT_MS) }
+            : { next: { revalidate: 30 }, signal: AbortSignal.timeout(EXPLORER_TIMEOUT_MS) },
         );
 
         if (isOutage(res.status)) throw new Error(`HTTP ${res.status}`);
@@ -150,14 +162,75 @@ export async function api<T>(pathname: string, fresh = false): Promise<T> {
 /** Unspent boxes at an address, following pagination to the end. */
 export async function unspentAt(address: string, fresh = false): Promise<ExplorerBox[]> {
   const out: ExplorerBox[] = [];
-  const limit = 100;
-  for (let offset = 0; ; offset += limit) {
+  for (let pageNumber = 0; pageNumber < MAX_UNSPENT_PAGES; pageNumber++) {
+    const offset = pageNumber * PAGE_SIZE;
     const page = await api<{ items: ExplorerBox[]; total: number }>(
-      `/boxes/unspent/byAddress/${address}?limit=${limit}&offset=${offset}`,
+      `/boxes/unspent/byAddress/${address}?limit=${PAGE_SIZE}&offset=${offset}`,
       fresh,
     );
+
+    if (!Array.isArray(page.items) || !Number.isSafeInteger(page.total) || page.total < 0) {
+      throw new Error('explorer returned an invalid unspent-box page');
+    }
+
     out.push(...page.items);
     if (out.length >= page.total || page.items.length === 0) return out;
+  }
+
+  throw new Error(`explorer pagination exceeded ${MAX_UNSPENT_PAGES} pages`);
+}
+
+const HEX_64 = /^[0-9a-f]{64}$/;
+
+/** Validate fields shared by contract boxes and holder lookup responses. */
+function hasValidBoxShape(box: ExplorerBox): boolean {
+  if (
+    typeof box.address !== 'string' ||
+    typeof box.ergoTree !== 'string' ||
+    !Array.isArray(box.assets) ||
+    !box.additionalRegisters ||
+    typeof box.additionalRegisters !== 'object'
+  ) {
+    return false;
+  }
+  if (!HEX_64.test(box.boxId) || !HEX_64.test(box.transactionId)) return false;
+  if (!Number.isSafeInteger(box.index) || box.index < 0) return false;
+  if (!Number.isSafeInteger(box.creationHeight) || box.creationHeight < 0) return false;
+  try {
+    const parsedAddress = ErgoAddress.fromBase58(box.address);
+    return (
+      BigInt(box.value) > 0n &&
+      parsedAddress.network === NETWORK_PREFIX[NETWORK] &&
+      parsedAddress.ergoTree.toLowerCase() === box.ergoTree.toLowerCase()
+    );
+  } catch {
+    return false;
+  }
+}
+
+/** Reject boxes that merely claim to belong to one of our contracts. */
+function isExpectedContractBox(
+  box: ExplorerBox,
+  address: string,
+  ergoTree: string,
+): boolean {
+  return (
+    hasValidBoxShape(box) &&
+    box.address === address &&
+    box.ergoTree.toLowerCase() === ergoTree
+  );
+}
+
+/** Decode the authenticated register bytes; renderedValue is explorer UI data. */
+function longRegister(serialized: string | undefined): bigint | null {
+  if (!serialized) return null;
+  try {
+    const constant = SConstant.from<bigint>(serialized);
+    return constant.type.code === 0x05 && typeof constant.data === 'bigint'
+      ? constant.data
+      : null;
+  } catch {
+    return null;
   }
 }
 
@@ -190,17 +263,20 @@ export async function fetchListings(fresh = false, contractAddress = SALE_ADDRES
   const boxes = await unspentAt(contractAddress, fresh);
   const listings: Listing[] = [];
   for (const box of boxes) {
-    const price = box.additionalRegisters?.R5?.renderedValue;
+    if (!isExpectedContractBox(box, contractAddress, SALE_ERGO_TREE)) continue;
+
+    const price = longRegister(box.additionalRegisters?.R5?.serializedValue);
     const asset = box.assets?.[0];
     const seller = sellerAddressFrom(box.additionalRegisters?.R4?.serializedValue ?? '');
     // A listing missing any of these cannot be bought or cancelled by anyone,
     // so showing it would only offer the user a button that always fails.
-    if (!price || !asset || !seller) continue;
+    if (price === null || price <= 0n || box.assets.length !== 1 || !asset || !seller) continue;
     try {
+      if (!HEX_64.test(asset.tokenId) || BigInt(asset.amount) !== 1n) continue;
       listings.push({
         boxId: box.boxId,
         tokenId: asset.tokenId,
-        price: BigInt(price),
+        price,
         boxValue: BigInt(box.value),
         seller,
         box: toFleetBox(box),
@@ -232,10 +308,13 @@ export async function fetchOffers(fresh = false, contractAddress = OFFER_ADDRESS
   const boxes = await unspentAt(contractAddress, fresh);
   const offers: Offer[] = [];
   for (const box of boxes) {
+    if (!isExpectedContractBox(box, contractAddress, OFFER_ERGO_TREE)) continue;
+
     const tokenId = offerTokenIdFrom(box.additionalRegisters?.R5?.serializedValue ?? '');
     const bidder = sellerAddressFrom(box.additionalRegisters?.R4?.serializedValue ?? '');
-    if (!tokenId || !bidder) continue;
+    if (!tokenId || !HEX_64.test(tokenId) || !bidder || box.assets.length !== 0) continue;
     try {
+      if (BigInt(box.value) <= 0n) continue;
       offers.push({
         boxId: box.boxId,
         tokenId,
@@ -274,10 +353,13 @@ export async function fetchCollectionOffers(
   const boxes = await unspentAt(contractAddress, fresh);
   const offers: CollectionOffer[] = [];
   for (const box of boxes) {
+    if (!isExpectedContractBox(box, contractAddress, COLLECTION_OFFER_ERGO_TREE)) continue;
+
     const root = collectionRootFrom(box.additionalRegisters?.R5?.serializedValue ?? '');
     const bidder = sellerAddressFrom(box.additionalRegisters?.R4?.serializedValue ?? '');
-    if (!root || !bidder) continue;
+    if (!root || !HEX_64.test(root) || !bidder || box.assets.length !== 0) continue;
     try {
+      if (BigInt(box.value) <= 0n) continue;
       offers.push({
         boxId: box.boxId,
         root,
@@ -349,13 +431,33 @@ export async function chainHeight(fresh = false): Promise<number | null> {
  */
 export async function holderOf(tokenId: string): Promise<string | null> {
   const page = await api<{ items: ExplorerBox[] }>(`/boxes/unspent/byTokenId/${tokenId}?limit=1`);
-  return page.items[0]?.address ?? null;
+  if (!Array.isArray(page.items)) throw new Error('explorer returned an invalid holder page');
+  const box = page.items[0];
+  if (!box) return null;
+  if (!hasValidBoxShape(box)) throw new Error('explorer returned an invalid holder box');
+
+  const asset = box.assets.find((candidate) => candidate?.tokenId === tokenId);
+  if (!asset) throw new Error('explorer holder box does not contain the requested NFT');
+
+  let amount: bigint;
+  try {
+    amount = BigInt(asset.amount);
+  } catch {
+    throw new Error('explorer holder box has an invalid token amount');
+  }
+  if (amount !== 1n) {
+    throw new Error('explorer holder box does not contain a one-of-one NFT');
+  }
+
+  return box.address;
 }
 
 export const toErg = (nano: bigint): string => {
-  const whole = nano / NANO;
-  const frac = (nano % NANO).toString().padStart(9, '0').replace(/0+$/, '');
-  return frac ? `${whole}.${frac}` : `${whole}`;
+  const negative = nano < 0n;
+  const absolute = negative ? -nano : nano;
+  const whole = absolute / NANO;
+  const frac = (absolute % NANO).toString().padStart(9, '0').replace(/0+$/, '');
+  return `${negative ? '-' : ''}${frac ? `${whole}.${frac}` : whole}`;
 };
 
 /**

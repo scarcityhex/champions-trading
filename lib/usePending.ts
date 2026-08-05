@@ -147,7 +147,10 @@ export function usePending(data: MarketData, owned: Set<string>): PendingState {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setItems(JSON.parse(raw) as Pending[]);
+      if (raw) {
+        const saved = JSON.parse(raw) as Pending[];
+        queueMicrotask(() => setItems(saved));
+      }
     } catch {
       // A malformed or unavailable store is not worth failing over; the worst
       // case is the original behaviour.
@@ -172,7 +175,9 @@ export function usePending(data: MarketData, owned: Set<string>): PendingState {
     const kept = items.filter(
       (p) => now - p.signedAt < EXPIRES_AFTER && !isSettled(p, data, owned),
     );
-    if (kept.length !== items.length) persist(kept);
+    if (kept.length === items.length) return;
+    const timer = window.setTimeout(() => persist(kept), 0);
+    return () => window.clearTimeout(timer);
   }, [items, data, owned, persist]);
 
   const add = useCallback(

@@ -28,8 +28,17 @@ export type ErgoNetwork = 'mainnet' | 'testnet';
  * Read once, at module load. A network that could change at runtime would mean
  * an address and a balance that disagree about which chain they are on.
  */
-export const NETWORK: ErgoNetwork =
-  process.env.NEXT_PUBLIC_ERGO_NETWORK === 'testnet' ? 'testnet' : 'mainnet';
+const configuredNetwork = process.env.NEXT_PUBLIC_ERGO_NETWORK ?? 'mainnet';
+if (configuredNetwork !== 'mainnet' && configuredNetwork !== 'testnet') {
+  throw new Error(
+    'NEXT_PUBLIC_ERGO_NETWORK must be explicitly set to "mainnet" or "testnet"; ' +
+      `received ${JSON.stringify(configuredNetwork)}.`,
+  );
+}
+
+// Preserve the original local behavior: mainnet when unset. Typos still fail
+// instead of silently selecting a different network.
+export const NETWORK: ErgoNetwork = configuredNetwork;
 
 /** Address-byte prefix per network, as Ergo encodes it. */
 export const NETWORK_PREFIX = { mainnet: 0, testnet: 16 } as const;

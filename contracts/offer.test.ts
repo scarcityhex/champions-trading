@@ -28,6 +28,7 @@ import {
   buildCancelOfferTx,
   buildListTx,
   buildOfferTx,
+  MIN_OFFER_VALUE,
   offerTokenIdFrom,
   type FleetBox,
 } from '../lib/transactions';
@@ -208,16 +209,37 @@ describe('offer.es', () => {
     expect(bidder.balance.tokens).toHaveLength(2);
   });
 
-  it('refuses a dust offer instead of building an unspendable box', () => {
+  it('refuses an offer that would leave the holder with no proceeds', () => {
     expect(() =>
       buildOfferTx({
         tokenId: NFT,
-        amount: 1n,
+        amount: MIN_OFFER_VALUE - 1n,
         bidderAddress: bidder.address.toString(),
         utxos: utxosOf(bidder),
         height: chain.height,
       }),
-    ).toThrow(/at least/);
+    ).toThrow(/settlement costs/);
+  });
+
+  it('allows the exact minimum offer that still has a positive net', () => {
+    const box = offer(NFT, MIN_OFFER_VALUE);
+    expect(BigInt(box.value)).toBe(MIN_OFFER_VALUE);
+  });
+
+  it('refuses to accept a legacy on-chain offer with a non-positive net', () => {
+    const funded = offer();
+    const unsafe = { ...funded, value: String(MIN_OFFER_VALUE - 1n) };
+
+    expect(() =>
+      buildAcceptOfferTx({
+        offerBox: unsafe,
+        tokenId: NFT,
+        bidderAddress: bidder.address.toString(),
+        holderAddress: holder.address.toString(),
+        holderUtxos: utxosOf(holder),
+        height: chain.height,
+      }),
+    ).toThrow(/no proceeds/);
   });
 
   it('rejects malformed R5 rather than inventing a token id', () => {

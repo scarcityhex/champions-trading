@@ -9,7 +9,9 @@
 // miss, and not rotating on a 503 makes the fallback decorative.
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { EXPLORER_MIRRORS } from './explorer';
+import { SLong } from '@fleet-sdk/core';
+import { EXPLORER_MIRRORS, toErg, type ExplorerBox } from './explorer';
+import { SALE_ADDRESS, SALE_ERGO_TREE } from './contract';
 
 const [PRIMARY, SECONDARY] = EXPLORER_MIRRORS;
 
@@ -42,6 +44,7 @@ describe('explorer mirror fallback', () => {
     await expect(api('/tokens/x')).resolves.toEqual({ total: 1 });
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock.mock.calls[0][0]).toBe(`${PRIMARY}/tokens/x`);
+    expect(fetchMock.mock.calls[0][1]?.signal).toBeInstanceOf(AbortSignal);
   });
 
   it('falls through to the secondary when the primary is down', async () => {
@@ -106,5 +109,91 @@ describe('explorer mirror fallback', () => {
     await expect(api('/tokens/x')).rejects.toThrow(/all explorer mirrors failed/);
     // Two rounds over both mirrors: a blip on one is often not a blip on both.
     expect(fetchMock).toHaveBeenCalledTimes(EXPLORER_MIRRORS.length * 2);
+  });
+});
+
+const SELLER_PK = '02b55510f92d1f6ebe1572e6a7f745dd63c2aa3ae26c4f921f20df2f5f4215de84';
+const NFT = '5836c62731c4f5f0d0e4a5f0b3f9a4d0c2e8b1a7f6d3c9e2b8a4f1d7c3e9b2a8';
+
+function listingBox(overrides: Partial<ExplorerBox> = {}): ExplorerBox {
+  return {
+    boxId: 'aa'.repeat(32),
+    transactionId: 'bb'.repeat(32),
+    index: 0,
+    value: '1000000',
+    address: SALE_ADDRESS,
+    ergoTree: SALE_ERGO_TREE,
+    creationHeight: 1_500_000,
+    assets: [{ tokenId: NFT, amount: '1' }],
+    additionalRegisters: {
+      R4: { serializedValue: `08cd${SELLER_PK}` },
+      // Deliberately lie in renderedValue: only serialized bytes are trusted.
+      R5: { serializedValue: SLong(5n).toHex(), renderedValue: '999999999999' },
+    },
+    ...overrides,
+  };
+}
+
+describe('explorer response validation', () => {
+  let fetchMock: ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('decodes listing price from serialized register bytes, never rendered text', async () => {
+    fetchMock.mockResolvedValue(ok({ items: [listingBox()], total: 1 }));
+    vi.resetModules();
+    const { fetchListings } = await import('./explorer');
+
+    const listings = await fetchListings();
+
+    expect(listings).toHaveLength(1);
+    expect(listings[0].price).toBe(5n);
+  });
+
+  it('ignores a box whose address response carries the wrong ErgoTree', async () => {
+    fetchMock.mockResolvedValue(ok({ items: [listingBox({ ergoTree: '00' })], total: 1 }));
+    vi.resetModules();
+    const { fetchListings } = await import('./explorer');
+
+    await expect(fetchListings()).resolves.toEqual([]);
+  });
+
+  it('rejects malformed pagination metadata instead of looping on it', async () => {
+    fetchMock.mockResolvedValue(ok({ items: [listingBox()], total: 'many' }));
+    vi.resetModules();
+    const { unspentAt } = await import('./explorer');
+
+    await expect(unspentAt(SALE_ADDRESS)).rejects.toThrow(/invalid unspent-box page/);
+  });
+
+  it('returns a holder only from a coherent box that contains the requested NFT', async () => {
+    fetchMock.mockResolvedValue(ok({ items: [listingBox()] }));
+    vi.resetModules();
+    const { holderOf } = await import('./explorer');
+
+    await expect(holderOf(NFT)).resolves.toBe(SALE_ADDRESS);
+  });
+
+  it('rejects a holder box that does not contain a one-of-one NFT', async () => {
+    fetchMock.mockResolvedValue(
+      ok({ items: [listingBox({ assets: [{ tokenId: NFT, amount: '2' }] })] }),
+    );
+    vi.resetModules();
+    const { holderOf } = await import('./explorer');
+
+    await expect(holderOf(NFT)).rejects.toThrow(/one-of-one/);
+  });
+});
+
+describe('ERG formatting', () => {
+  it('formats negative net proceeds without a negative fractional remainder', () => {
+    expect(toErg(-1_100_000n)).toBe('-0.0011');
   });
 });

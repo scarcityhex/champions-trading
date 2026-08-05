@@ -17,7 +17,7 @@ import {
   rarityLabel,
 } from '@/lib/collections';
 import { toErg, type CollectionOffer, type Offer } from '@/lib/explorer';
-import { FEE, LISTING_BOX_VALUE } from '@/lib/transactions';
+import { offerNet } from '@/lib/transactions';
 import { shortAddress } from '@/lib/nautilus';
 import { EXPLORER_UI } from '@/lib/contract';
 import { pendingLabel, type Pending } from '@/lib/usePending';
@@ -398,23 +398,32 @@ function Offers({
           not reserved for them — another holder can take it first. */}
       {collectionBids.length > 0 && (
         <ul className="mb-2 flex flex-col gap-2">
-          {collectionBids.map((o) => (
-            <li key={o.boxId} className="flex items-center justify-between gap-2">
-              <div className="min-w-0">
-                <span className="font-pixel text-xl text-emerald-400">
-                  {toErg(o.amount)} ERG
-                </span>
-                <span className="ml-2 font-pixel text-base text-gray-500">
-                  for any piece {o.bidder === me ? '· yours' : ''}
-                </span>
-              </div>
-              {owned && o.bidder !== me && (
-                <PixelButton size="sm" disabled={busy} onClick={() => onAcceptCollection(o)}>
-                  Accept
-                </PixelButton>
-              )}
-            </li>
-          ))}
+          {collectionBids.map((o) => {
+            const net = offerNet(o.amount);
+            const safe = net > 0n;
+            return (
+              <li key={o.boxId} className="flex items-center justify-between gap-2">
+                <div className="min-w-0">
+                  <span className="font-pixel text-xl text-emerald-400">
+                    {toErg(o.amount)} ERG
+                  </span>
+                  <span className="ml-2 font-pixel text-base text-gray-500">
+                    for any piece {o.bidder === me ? '· yours' : ''}
+                  </span>
+                  {owned && o.bidder !== me && (
+                    <p className={`font-pixel text-base ${safe ? 'text-gray-500' : 'text-red-400'}`}>
+                      {safe ? `you would receive ${toErg(net)} ERG` : 'cannot accept: costs exceed bid'}
+                    </p>
+                  )}
+                </div>
+                {owned && o.bidder !== me && (
+                  <PixelButton size="sm" disabled={busy || !safe} onClick={() => onAcceptCollection(o)}>
+                    Accept
+                  </PixelButton>
+                )}
+              </li>
+            );
+          })}
         </ul>
       )}
 
@@ -435,7 +444,8 @@ function Offers({
         <ul className="flex flex-col gap-2">
           {offers.map((o) => {
             const mine = o.bidder === me;
-            const net = o.amount - LISTING_BOX_VALUE - FEE;
+            const net = offerNet(o.amount);
+            const safe = net > 0n;
             return (
               <li key={o.boxId} className="flex items-center justify-between gap-2">
                 <div className="min-w-0">
@@ -444,8 +454,10 @@ function Offers({
                     {mine ? 'you' : shortAddress(o.bidder)}
                   </span>
                   {owned && !mine && (
-                    <p className="font-pixel text-base text-gray-500">
-                      you would receive {toErg(net)} ERG
+                    <p className={`font-pixel text-base ${safe ? 'text-gray-500' : 'text-red-400'}`}>
+                      {safe
+                        ? `you would receive ${toErg(net)} ERG`
+                        : 'cannot accept: costs exceed bid'}
                     </p>
                   )}
                 </div>
@@ -454,7 +466,7 @@ function Offers({
                     Withdraw
                   </PixelButton>
                 ) : owned ? (
-                  <PixelButton size="sm" disabled={busy} onClick={() => onAccept(o)}>
+                  <PixelButton size="sm" disabled={busy || !safe} onClick={() => onAccept(o)}>
                     Accept
                   </PixelButton>
                 ) : null}
@@ -487,7 +499,6 @@ function Provenance({
     // again would spend a round trip to be told something we can prove from the
     // data in hand, on the page most likely to be opened repeatedly.
     if (listing) {
-      setHolder(null);
       return;
     }
 
