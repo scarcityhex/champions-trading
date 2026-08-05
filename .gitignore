@@ -7,6 +7,11 @@ out/
 next-env.d.ts
 .DS_Store
 
+# Written by `vercel deploy` on first run: the project and org ids that link
+# this folder to a Vercel project. Not secret, but account-specific — someone
+# who clones this repo should get their own, not inherit mine.
+.vercel/
+
 # Full-size collection artwork: ~2 GB. Not committed. Regenerate the folder by
 # running the downloader, or symlink it.
 /public/art/
