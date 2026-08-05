@@ -112,7 +112,7 @@ export default function Header() {
           // Nothing here can pre-empt it: neither mirror exposes a working
           // mempool endpoint, so the site cannot tell a queued transaction from
           // an unseen one. Naming it in advance is the only honest fix.
-          text="Submitted. Ergo blocks are mined about every 2 minutes on average, so it may take a few — sometimes longer. The explorer may say it cannot find the transaction until then; that is the explorer catching up, not a failure. Do not send it again."
+          text="Submitted. Ergo blocks are mined about every 2 minutes on average, so it may take a few — sometimes much longer. The explorer may say it cannot find the transaction until then; that is the explorer catching up, not a failure. Do not send it again."
           elapsedSince={actions.lastTxAt}
           link={{
             href: `${EXPLORER_UI}/transactions/${actions.lastTxId}`,
