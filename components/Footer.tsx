@@ -24,7 +24,7 @@ export default function Footer() {
   return (
     <footer className={`${PAGE_WIDTH} mt-12 px-4 pb-8 md:px-8`}>
       <PixelPanel variant="inset" className="p-5">
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2">
           <section>
             <h2 className="font-pixel-display text-[10px] text-amber-300">NON-CUSTODIAL</h2>
             <p className="mt-2 font-pixel text-lg leading-snug text-gray-400">
@@ -50,6 +50,17 @@ export default function Footer() {
             >
               github.com/scarcityhex/champions-trading ↗
             </a>
+          </section>
+
+          <section>
+            <h2 className="font-pixel-display text-[10px] text-amber-300">CREATOR ROYALTY</h2>
+            <p className="mt-2 font-pixel text-lg leading-snug text-gray-400">
+              Every trade pays the collection&rsquo;s creator 5%, taken out of the price rather than
+              added to it: a 10 ERG sale is 10 ERG to the buyer, 0.5 to the creator, 9.5 to the
+              seller. The rate is not ours to set — it is read from each token&rsquo;s EIP-24 issuer
+              box, where the collection published it at mint time, and the contracts require the
+              split rather than trusting this site to add it. This venue takes nothing on top.
+            </p>
           </section>
 
           <section>
