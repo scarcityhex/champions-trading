@@ -8,11 +8,14 @@
 
 import { describe, expect, it } from 'vitest';
 import { ErgoAddress } from '@fleet-sdk/core';
+import { COLLECTION_ROOTS } from './contract';
+import { COLLECTIONS } from './collections';
 import { extractTrades, mergeTrades, type RawTx, type Trade } from './history';
 
 const SALE = 'BhRyuhANCEte3LK3mjjSgKBjcsLhC9Ms5Ka2TUW43kJk5JhfdjPHVoPRG6hFuxBpMz2cM7ZegPYTQefYQxkj';
 const OFFER = 'DpKxDXj2Aa6hewpAWktyiWKDBk7Dg4ttNLN4rdYvx9UdkRmcMhL1YKKXtwbpFUFNXWipaLmLME4Pf6oRHA1xdHP5Wm7aP21oW1NjpXud5LMrL12CjM';
-const CONTRACTS = { sale: SALE, offer: OFFER };
+const COLLECTION_OFFER = 'collection-offer-address';
+const CONTRACTS = { sale: SALE, offer: OFFER, collectionOffer: COLLECTION_OFFER };
 
 const SELLER_PK = '02b55510f92d1f6ebe1572e6a7f745dd63c2aa3ae26c4f921f20df2f5f4215de84';
 const SELLER = '9hveS5VmStvpiybxya1adrvJipaz6Pi8bJMuttKuMvsijNiNxiv';
@@ -100,6 +103,16 @@ describe('extractTrades', () => {
               R4: reg(`08cd${SELLER_PK}`), // the bidder
               R5: reg(`0e20${NFT}`),
             },
+          },
+          // The holder's own box, carrying the piece. A real transaction always
+          // has it, and the seller is now read from here rather than from
+          // whoever received the most ERG — a figure an extra output could forge.
+          {
+            boxId: 'holder-in',
+            address: BUYER,
+            value: '1000000',
+            assets: [{ tokenId: NFT, amount: '1' }],
+            additionalRegisters: {},
           },
         ],
         outputs: [
@@ -211,6 +224,16 @@ describe('accepted offer, from a real transaction', () => {
           R5: reg(`0e20${TOKEN}`),
         },
       },
+      // The holder's own box, carrying the piece. A real transaction always
+      // has it, and the seller is now read from here rather than from
+      // whoever received the most ERG — a figure an extra output could forge.
+      {
+        boxId: 'holder-in',
+        address: SELLER,
+        value: '1000000',
+        assets: [{ tokenId: TOKEN, amount: '1' }],
+        additionalRegisters: {},
+      },
     ],
     outputs: [
       // 1. delivery to the bidder, tagged
@@ -241,5 +264,228 @@ describe('accepted offer, from a real transaction', () => {
     // Output ordering is not guaranteed, so the fix cannot depend on position.
     const shuffled = { ...realTx, outputs: [realTx.outputs[0], realTx.outputs[2], realTx.outputs[1]] };
     expect(extractTrades(shuffled, CONTRACTS)[0].seller).toBe(SELLER);
+  });
+});
+
+// ── Since royalties, a settlement has more than one tagged output ────────────
+//
+// Both cases below were reproduced in review against the previous version,
+// which took the first tagged output — and, after the first fix, the first
+// tagged output carrying any token at all.
+describe('a settlement with a royalty alongside it', () => {
+  const CREATOR = '9fWcVXLphZyFfGFgJ4SXjowYE7WJj4kYPBr5PQshWYj9mCiQTQc';
+
+  it('records the sale, not the creator’s 5%, when the royalty comes first', () => {
+    const trades = extractTrades(
+      tx({
+        inputs: [saleInput()],
+        outputs: [
+          // The royalty, tagged exactly like the settlement and placed first.
+          { boxId: 'o0', address: CREATOR, value: '250000000', additionalRegisters: { R4: reg(`0e20${BOX}`) } },
+          { boxId: 'o1', address: SELLER, value: '4750000000', additionalRegisters: { R4: reg(`0e20${BOX}`) } },
+          { boxId: 'o2', address: BUYER, value: '1000000', assets: [{ tokenId: NFT, amount: '1' }] },
+        ],
+      }),
+      CONTRACTS,
+    );
+
+    expect(trades).toHaveLength(1);
+    // The advertised price, which is what the buyer paid — not the seller's
+    // 95% and certainly not the creator's 5%. It comes from the listing's R5
+    // rather than from any output, so output order cannot change it.
+    expect(trades[0].price).toBe('5000000000');
+    expect(trades[0].tokenId).toBe(NFT);
+    // The creator's box must not be mistaken for the buyer, which is what
+    // taking the first tagged output produced.
+    expect(trades[0].buyer).not.toBe(CREATOR);
+  });
+
+  it('ignores a foreign token planted ahead of the real delivery', () => {
+    const FOREIGN = 'ff'.repeat(32);
+    const trades = extractTrades(
+      tx({
+        inputs: [
+          {
+            boxId: BOX,
+            address: OFFER,
+            value: '3000000000',
+            additionalRegisters: {
+              R4: reg(`08cd${SELLER_PK}`),
+              R5: reg(`0e20${NFT}`),
+            },
+          },
+          // The holder's own box, carrying the piece. A real transaction always
+          // has it, and the seller is now read from here rather than from
+          // whoever received the most ERG — a figure an extra output could forge.
+          {
+            boxId: 'holder-in',
+            address: BUYER,
+            value: '1000000',
+            assets: [{ tokenId: NFT, amount: '1' }],
+            additionalRegisters: {},
+          },
+        ],
+        outputs: [
+          // Tagged, carrying a token — but not the one the bid asked for. The
+          // contracts allow extra outputs, so this is buildable by hand.
+          { boxId: 'o0', address: BUYER, value: '1000000', assets: [{ tokenId: FOREIGN, amount: '1' }], additionalRegisters: { R4: reg(`0e20${BOX}`) } },
+          { boxId: 'o1', address: BUYER, value: '1000000', assets: [{ tokenId: NFT, amount: '1' }], additionalRegisters: { R4: reg(`0e20${BOX}`) } },
+        ],
+      }),
+      CONTRACTS,
+    );
+
+    expect(trades).toHaveLength(1);
+    // R5 names the token; the delivery is the output carrying THAT one.
+    expect(trades[0].tokenId).toBe(NFT);
+  });
+});
+
+// ── A collection bid names a root, not a token ───────────────────────────────
+//
+// So the piece that settled it is only knowable by resolving the root back to a
+// collection. Reproduced in review: a delivery output holding a Mage Champions
+// ahead of the real Ergo Mummy was recorded as the trade.
+describe('a collection bid settled with more than one token', () => {
+  const BID_BOX = 'cc'.repeat(32);
+  const MUMMY_ROOT = COLLECTION_ROOTS.ERGOMUMMY;
+  const mummy = COLLECTIONS.find((c) => c.key === 'ERGOMUMMY')!.live[0].tokenId;
+  const mage = COLLECTIONS.find((c) => c.key === 'MAGECHAMPIONS')!.live[0].tokenId;
+
+  const bid = (outputs: RawTx['outputs']) =>
+    extractTrades(
+      tx({
+        inputs: [
+          {
+            boxId: BID_BOX,
+            address: COLLECTION_OFFER,
+            value: '4000000000',
+            additionalRegisters: {
+              R4: reg(`08cd${SELLER_PK}`),
+              R5: reg(`0e20${MUMMY_ROOT}`),
+            },
+          },
+          { boxId: 'holder-in', address: BUYER, value: '1000000', assets: [{ tokenId: mummy, amount: '1' }], additionalRegisters: {} },
+        ],
+        outputs,
+      }),
+      CONTRACTS,
+    );
+
+  it('records the piece from the bid’s own collection, whatever the order', () => {
+    const trades = bid([
+      {
+        boxId: 'o1',
+        address: SELLER,
+        value: '1000000',
+        // A Mage Champions first, the real Ergo Mummy second.
+        assets: [
+          { tokenId: mage, amount: '1' },
+          { tokenId: mummy, amount: '1' },
+        ],
+        additionalRegisters: { R4: reg(`0e20${BID_BOX}`) },
+      },
+    ]);
+
+    expect(trades).toHaveLength(1);
+    expect(trades[0].tokenId).toBe(mummy);
+  });
+
+  // Ambiguity is dropped rather than guessed: a missing row can be rebuilt from
+  // the chain, a wrong one is quietly false forever.
+  it('records nothing when two pieces of that collection arrive together', () => {
+    const second = COLLECTIONS.find((c) => c.key === 'ERGOMUMMY')!.live[1].tokenId;
+    const trades = bid([
+      {
+        boxId: 'o1',
+        address: SELLER,
+        value: '1000000',
+        assets: [
+          { tokenId: mummy, amount: '1' },
+          { tokenId: second, amount: '1' },
+        ],
+        additionalRegisters: { R4: reg(`0e20${BID_BOX}`) },
+      },
+    ]);
+
+    expect(trades).toHaveLength(0);
+  });
+
+  // The variation the previous fix missed: the ambiguity is spread across two
+  // tagged outputs rather than sitting inside one. Searching output by output
+  // recorded whichever the builder listed first.
+  it('records nothing when two tagged outputs each deliver a member', () => {
+    const second = COLLECTIONS.find((c) => c.key === 'ERGOMUMMY')!.live[1].tokenId;
+    const trades = bid([
+      {
+        boxId: 'o1',
+        address: SELLER,
+        value: '1000000',
+        assets: [{ tokenId: second, amount: '1' }],
+        additionalRegisters: { R4: reg(`0e20${BID_BOX}`) },
+      },
+      {
+        boxId: 'o2',
+        address: SELLER,
+        value: '1000000',
+        assets: [{ tokenId: mummy, amount: '1' }],
+        additionalRegisters: { R4: reg(`0e20${BID_BOX}`) },
+      },
+    ]);
+
+    expect(trades).toHaveLength(0);
+  });
+
+  // And the honest case still works when only one tagged output qualifies.
+  it('records the trade when a decoy output carries nothing eligible', () => {
+    const trades = bid([
+      {
+        boxId: 'o1',
+        address: SELLER,
+        value: '1000000',
+        assets: [{ tokenId: mage, amount: '1' }],
+        additionalRegisters: { R4: reg(`0e20${BID_BOX}`) },
+      },
+      {
+        boxId: 'o2',
+        address: SELLER,
+        value: '1000000',
+        assets: [{ tokenId: mummy, amount: '1' }],
+        additionalRegisters: { R4: reg(`0e20${BID_BOX}`) },
+      },
+    ]);
+
+    expect(trades).toHaveLength(1);
+    expect(trades[0].tokenId).toBe(mummy);
+  });
+
+  it('records nothing for a root this venue does not recognise', () => {
+    const trades = extractTrades(
+      tx({
+        inputs: [
+          {
+            boxId: BID_BOX,
+            address: COLLECTION_OFFER,
+            value: '4000000000',
+            additionalRegisters: {
+              R4: reg(`08cd${SELLER_PK}`),
+              R5: reg(`0e20${'ab'.repeat(32)}`),
+            },
+          },
+        ],
+        outputs: [
+          {
+            boxId: 'o1',
+            address: SELLER,
+            value: '1000000',
+            assets: [{ tokenId: mummy, amount: '1' }],
+            additionalRegisters: { R4: reg(`0e20${BID_BOX}`) },
+          },
+        ],
+      }),
+      CONTRACTS,
+    );
+
+    expect(trades).toHaveLength(0);
   });
 });

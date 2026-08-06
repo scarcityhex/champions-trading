@@ -34,3 +34,8 @@ next-env.d.ts
 # about this project, and committing it would dirty the tree on every start.
 /AGENTS.md
 /CLAUDE.md
+.vercel
+.env*.local
+
+# Python bytecode from scripts/
+__pycache__/

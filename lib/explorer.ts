@@ -3,7 +3,8 @@
 // §1): the two questions a marketplace has to answer are two endpoints.
 
 import { ErgoAddress } from '@fleet-sdk/core';
-import { SConstant } from '@fleet-sdk/serializer';
+import { SConstant, serializeBox } from '@fleet-sdk/serializer';
+import { blake2b256, hex } from '@fleet-sdk/crypto';
 
 import {
   collectionRootFrom,
@@ -99,6 +100,66 @@ export function toFleetBox(box: ExplorerBox): FleetBox {
     assets: (box.assets ?? []).map((a) => ({ tokenId: a.tokenId, amount: String(a.amount) })),
     additionalRegisters: registers,
   };
+}
+
+/**
+ * A token's issuer box — the box whose id IS the token id.
+ *
+ * On Ergo a token's id is the id of the first input of its minting
+ * transaction, so `/boxes/{tokenId}` returns that box rather than the one the
+ * token ended up in. The distinction is easy to miss and expensive to get
+ * wrong: `/tokens/{id}.boxId` points at the minting OUTPUT, which carries the
+ * EIP-004 name and image and no royalty at all. Reading that one and concluding
+ * "no royalty declared" is a mistake this project has already made once.
+ *
+ * Cached for the session. An issuer box is immutable and already spent — it can
+ * never change, so re-fetching it per listing is pure latency.
+ */
+const issuerBoxes = new Map<string, FleetBox | null>();
+
+export async function issuerBoxOf(tokenId: string): Promise<FleetBox | null> {
+  const cached = issuerBoxes.get(tokenId);
+  if (cached !== undefined) return cached;
+  try {
+    // In a browser this must go through our own origin. The site's CSP sets
+    // `connect-src 'self'`, so a direct call to the explorer is blocked — which
+    // would break listing and buying while every test still passed.
+    //
+    // Both paths yield the RAW explorer shape, so the conversion below happens
+    // exactly once. Converting twice drops every register.
+    const box =
+      typeof window === 'undefined'
+        ? ((await api(`/boxes/${tokenId}`)) as ExplorerBox)
+        : await viaOwnOrigin(tokenId);
+
+    // Recomputed, not taken on trust.
+    //
+    // Comparing the declared `boxId` only checks that the explorer answered the
+    // question we asked. The contract checks something stronger: that the box's
+    // CONTENT hashes to the token id. A malformed or tampered response could
+    // carry the right id beside different bytes, and the listing built from it
+    // would lock an NFT nobody could ever buy. Hashing here costs microseconds
+    // and closes the gap between what we verified and what the script will.
+    const converted = box ? toFleetBox(box) : null;
+    const value =
+      converted &&
+      hex.encode(blake2b256(serializeBox(converted as never).toBytes())) === tokenId
+        ? converted
+        : null;
+    issuerBoxes.set(tokenId, value);
+    return value;
+  } catch {
+    return null; // not cached: a transient failure should be retried
+  }
+}
+
+async function viaOwnOrigin(tokenId: string): Promise<ExplorerBox | null> {
+  const res = await fetch(`/api/issuer/${tokenId}`, {
+    signal: AbortSignal.timeout(EXPLORER_TIMEOUT_MS),
+  });
+  if (!res.ok) return null;
+  const body = (await res.json()) as { box?: ExplorerBox };
+  return body.box ?? null;
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));

@@ -8,7 +8,7 @@
 // locked away far above what the bidder meant. Both are visible on chain the
 // moment they land, so the guard has to be here, before signing.
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PixelPanel from './ui/PixelPanel';
 import PixelButton from './ui/PixelButton';
 import { parseErg, toErg, NANO } from '@/lib/explorer';
@@ -16,8 +16,12 @@ import {
   LISTING_BOX_VALUE,
   FEE,
   MIN_OFFER_VALUE,
+  MIN_ROYALTY_BID,
   offerNet,
 } from '@/lib/transactions';
+import { royaltyForDisplay, royaltyOn, sellerReceives, type Royalty } from '@/lib/royalties';
+import { issuerBoxOf } from '@/lib/explorer';
+
 import type { Nft } from '@/lib/collections';
 
 export default function AmountDialog({
@@ -34,11 +38,38 @@ export default function AmountDialog({
   onClose: () => void;
 }) {
   const listing = mode === 'list';
+  // Loaded, not configured: the rate is whatever this token's issuer box says.
+  // Starts unknown, and unknown is treated as "there is one".
+  //
+  // Starting at null showed the pre-royalty floor for the moment the lookup
+  // took, so a bid typed quickly was announced as valid and then refused by the
+  // builder. Every collection here charges 5%, so assuming a royalty until the
+  // box says otherwise is both truer and the safer direction to be wrong in.
+  const [royalty, setRoyalty] = useState<Royalty | null>(null);
+  const [rateKnown, setRateKnown] = useState(false);
+  useEffect(() => {
+    let live = true;
+    issuerBoxOf(nft.tokenId).then((box) => {
+      if (!live) return;
+      setRoyalty(royaltyForDisplay(box ?? undefined));
+      setRateKnown(true);
+    });
+    return () => {
+      live = false;
+    };
+  }, [nft.tokenId]);
   const [text, setText] = useState('');
   const price = parseErg(text);
   const positive = price !== null && price > 0n;
-  const offerTooSmall = !listing && positive && price < MIN_OFFER_VALUE;
-  const valid = positive && !offerTooSmall;
+  // The floor the builder will enforce, so the button and the error agree.
+  // Quoting MIN_OFFER_VALUE here let someone place a bid the builder then
+  // refused — or worse, one the contract could never settle.
+  const bidFloor = royalty || !rateKnown ? MIN_ROYALTY_BID : MIN_OFFER_VALUE;
+  const offerTooSmall = !listing && positive && price < bidFloor;
+  // A listing has the same floor for the same reason: below it the royalty
+  // cannot fund its own output and nobody could ever buy the piece.
+  const listingTooSmall = listing && positive && (royalty || !rateKnown) && price < MIN_ROYALTY_BID;
+  const valid = positive && !offerTooSmall && !listingTooSmall;
 
   return (
     <div
@@ -79,10 +110,24 @@ export default function AmountDialog({
             listing ? (
               <>
                 <Row label="Buyer pays" value={`${toErg(price)} ERG`} />
+                {/* One "You receive", stated once and after the deduction.
+                    An earlier version printed it twice — the full price here
+                    and the net further down — which is worse than printing the
+                    wrong number, because the seller has no way to tell which
+                    one the contract will honour. */}
+                {royalty && royaltyOn(price, royalty) > 0n && (
+                  <Row
+                    label={`Creator royalty (${royalty.percent}%)`}
+                    value={`− ${toErg(royaltyOn(price, royalty))} ERG`}
+                  />
+                )}
+                <Row
+                  label="You receive"
+                  value={`${toErg(sellerReceives(price, royalty))} ERG`}
+                />
                 {/* The listing box's own ERG is the seller's and comes back on
                     cancel, so it is not a cost — but it does have to be on hand,
                     and saying so beats an opaque "insufficient funds". */}
-                <Row label="You receive" value={`${toErg(price)} ERG`} />
                 <Row
                   label="Locked in the listing"
                   value={`${toErg(LISTING_BOX_VALUE)} ERG (returned on cancel)`}
@@ -97,7 +142,7 @@ export default function AmountDialog({
                 <Row label="Locked until accepted" value={`${toErg(price)} ERG`} />
                 <Row
                   label="Holder receives"
-                  value={`${toErg(offerNet(price))} ERG (net of their costs)`}
+                  value={`${toErg(offerNet(price, royalty))} ERG (net of costs and royalty)`}
                 />
                 <Row label="Network fee" value={`${toErg(FEE)} ERG`} />
                 <Row label="Withdrawable" value="any time, until accepted" />
@@ -108,7 +153,9 @@ export default function AmountDialog({
               {text === ''
                 ? 'Enter a price.'
                 : offerTooSmall
-                  ? `Minimum safe offer: ${toErg(MIN_OFFER_VALUE)} ERG.`
+                  ? `Minimum safe offer: ${toErg(bidFloor)} ERG.`
+                  : listingTooSmall
+                    ? `Minimum workable price: ${toErg(MIN_ROYALTY_BID)} ERG.`
                   : 'Not a valid amount (max 9 decimals).'}
             </p>
           )}

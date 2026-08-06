@@ -70,12 +70,23 @@ spends the listing box and, in the same transaction, creates an output paying
 the seller. Either both happen or the transaction is invalid. There is no state
 where anyone has to trust us.
 
-**Royalties.** These three collections are EIP-004. That standard has no royalty
-field — R4 is the name, R5 the description, R6 decimals, R7 the asset type, R8
-the content hash, R9 the URL. Royalties only exist from EIP-24 onward, and even
-there Ergo does not enforce them at the protocol level: a marketplace contract
-chooses to honour them. So any payment to the original artists is a term we
-build into the sale contract by agreement, never something read off chain.
+**Royalties.** All three collections declare 5% on chain, and `sale.es` enforces
+it. The rate is read from each token's EIP-24 **issuer box** — the box whose id
+IS the token id, because a token's id is the id of the first input of its
+minting transaction. That identity is what makes the rate provable rather than
+asserted: the box travels in the listing's R6, and `issuer.id == SELF.tokens(0)._1`
+shows it is the right one.
+
+This paragraph used to say the opposite — that these collections had no royalty
+because they are EIP-004, so any payment to artists would be a term we invented.
+The EIP-004 registers (R4 name, R5 description, R6 decimals, R7 type, R8 hash,
+R9 URL) are real, but they sit in the minting **output**, a different box from
+the issuer box. Reading the wrong one is exactly how this project concluded
+there was nothing to honour. `docs/royalties.md` has both queries side by side.
+
+Ergo still does not enforce royalties at the protocol level — a marketplace
+contract chooses to honour them. What changed is that this one does, and the
+rate it honours is not ours to set.
 
 ---
 

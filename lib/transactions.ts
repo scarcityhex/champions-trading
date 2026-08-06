@@ -33,7 +33,7 @@ import {
   TransactionBuilder,
   type Box,
 } from '@fleet-sdk/core';
-import { SPair } from '@fleet-sdk/serializer';
+import { SBox, SPair } from '@fleet-sdk/serializer';
 import type { Amount, EIP12UnsignedTransaction } from '@fleet-sdk/common';
 import {
   COLLECTION_OFFER_ADDRESS,
@@ -43,6 +43,7 @@ import {
   SALE_ADDRESS,
 } from './contract';
 import { merkleProof } from './merkle';
+import { minimumPrice, royaltyOf, royaltyOn, sellerReceives, type Royalty } from './royalties';
 
 /** A box in the shape fleet wants: registers as raw hex, amounts as string or
  *  bigint (the wallet hands back strings, mock-chain hands back bigints). */
@@ -55,16 +56,56 @@ export const OFFER_SETTLEMENT_COST = SAFE_MIN_BOX_VALUE + FEE;
 /** Smallest bid whose acceptance leaves the holder with a positive net. */
 export const MIN_OFFER_VALUE = OFFER_SETTLEMENT_COST + 1n;
 
-export const offerNet = (amount: bigint): bigint => amount - OFFER_SETTLEMENT_COST;
+/**
+ * The floor every bid must clear, royalty included.
+ *
+ * All three collections charge 5%, so a bid below 0.02 ERG produces a creator's
+ * share too small to fund its own output — and the contracts require that
+ * output. Such a bid can be funded and locked and then accepted by nobody.
+ *
+ * Applied uniformly rather than per token: a collection bid does not know which
+ * piece will settle it, so it cannot look the rate up, and a floor that differs
+ * between the two kinds of bid is a floor someone will route around.
+ */
+export const MIN_ROYALTY_BID = 20_000_000n;
 
-function assertPositiveOfferNet(offerBox: FleetBox): void {
+/**
+ * What the holder actually walks away with from a bid.
+ *
+ * Three things come off the headline figure: the delivery box's minimum value,
+ * the miner fee, and the creator's share — which the offer contracts now
+ * require, on the same terms a sale does. Quoting the bid itself overstates the
+ * proceeds every time.
+ *
+ * The royalty output is a box of its own, but it costs nothing extra: its value
+ * IS the creator's share, which already clears the minimum a box must hold. An
+ * earlier version subtracted a second minimum on top and understated the
+ * holder's proceeds by exactly that — caught by asserting the quote against
+ * what the chain actually paid, rather than against the formula itself.
+ */
+export const offerNet = (amount: bigint, royalty: Royalty | null = null): bigint =>
+  amount - OFFER_SETTLEMENT_COST - royaltyOn(amount, royalty);
+
+function assertPositiveOfferNet(offerBox: FleetBox, royalty: Royalty | null = null): void {
   let amount: bigint;
   try {
     amount = BigInt(offerBox.value);
   } catch {
     throw new Error('The offer box has an invalid value.');
   }
-  if (amount < MIN_OFFER_VALUE) throw new Error('This offer would leave the holder with no proceeds.');
+  // Checked against the true net rather than MIN_OFFER_VALUE: with a fee in
+  // play a bid can clear the settlement cost and still leave the holder with
+  // nothing, and that transaction must not reach the wallet.
+  if (offerNet(amount, royalty) <= 0n) {
+    throw new Error('This offer would leave the holder with no proceeds.');
+  }
+  // Checked again at acceptance, because a bid built outside this app is not
+  // bound by the floor above — and a royalty too small to fund a box makes the
+  // contract's check unsatisfiable no matter who assembles the transaction.
+  const share = royaltyOn(amount, royalty);
+  if (royalty && share < SAFE_MIN_BOX_VALUE) {
+    throw new Error('This offer is too small for its royalty to be paid, so it cannot be accepted.');
+  }
 }
 
 /**
@@ -82,9 +123,34 @@ export function buildListTx(params: {
   /** The seller's spendable boxes, from ergo.get_utxos(). */
   utxos: FleetBox[];
   height: number;
+  /**
+   * The token's issuer box — the box whose id IS the token id.
+   *
+   * Required, because the contract reads the royalty out of it and can prove
+   * it is genuine by that identity. A listing without it cannot be bought by
+   * anyone: the purchase branch needs R6 and refuses when it is absent.
+   */
+  issuerBox: FleetBox;
 }): EIP12UnsignedTransaction {
-  const { tokenId, price, sellerAddress, utxos, height } = params;
+  const { tokenId, price, sellerAddress, utxos, height, issuerBox } = params;
   if (price <= 0n) throw new Error('Price must be greater than zero.');
+
+  if (issuerBox.boxId !== tokenId) {
+    // The contract checks this too, but failing here costs nothing while
+    // failing there costs a signature and a rejected transaction.
+    throw new Error('That issuer box does not belong to this token.');
+  }
+
+  const royalty = royaltyOf(issuerBox);
+  const floor = minimumPrice(royalty);
+  if (price < floor) {
+    // Below this the royalty rounds to less than a box can hold, so the
+    // contract's royalty check can never be satisfied and the listing would be
+    // created unbuyable.
+    throw new Error(
+      `At a ${royalty?.percent}% royalty the lowest workable price is ${floor} nanoERG.`,
+    );
+  }
 
   const seller = ErgoAddress.fromBase58(sellerAddress);
   const pk = seller.getPublicKeys()[0];
@@ -102,6 +168,7 @@ export function buildListTx(params: {
         .setAdditionalRegisters({
           R4: SSigmaProp(SGroupElement(pk)).toHex(),
           R5: SLong(price).toHex(),
+          R6: SBox(issuerBox as Parameters<typeof SBox>[0]).toHex(),
         }),
     )
     .sendChangeTo(seller)
@@ -129,21 +196,48 @@ export function buildBuyTx(params: {
   buyerAddress: string;
   buyerUtxos: FleetBox[];
   height: number;
+  /** The token's issuer box, whose R4 sets the creator's share. */
+  issuerBox: FleetBox;
 }): EIP12UnsignedTransaction {
-  const { listingBox, price, sellerAddress, buyerAddress, buyerUtxos, height } = params;
+  const { listingBox, price, sellerAddress, buyerAddress, buyerUtxos, height, issuerBox } = params;
 
-  return new TransactionBuilder(height)
+  // Split out of the price, not added to it.
+  //
+  // The buyer pays exactly what the listing advertises; the contract requires
+  // the seller to receive the remainder and the creator their share, both
+  // tagged with this listing's id so one payment cannot settle two listings.
+  //
+  // Rounding must match the contract's integer division exactly. Pay a nanoERG
+  // less and the script rejects the transaction; pay more and it comes out of
+  // the seller.
+  const royalty = royaltyOf(issuerBox);
+
+  // A seller who is also the creator is paid once, in full.
+  //
+  // Splitting into two outputs to the same script would build a transaction the
+  // contract rejects: it requires a SINGLE output carrying the whole price in
+  // that case, precisely so neither half can be counted twice.
+  const samePayee =
+    royalty !== null &&
+    ErgoAddress.fromBase58(sellerAddress).ergoTree === royalty.propositionBytes;
+
+  const creatorGets = samePayee ? 0n : royaltyOn(price, royalty);
+  const sellerGets = samePayee ? price : sellerReceives(price, royalty);
+
+  const tag = SColl(SByte, listingBox.boxId).toHex();
+  const builder = new TransactionBuilder(height)
     .from([listingBox], { ensureInclusion: true })
     .from(buyerUtxos)
-    .to(
-      new OutputBuilder(price, sellerAddress).setAdditionalRegisters({
-        R4: SColl(SByte, listingBox.boxId).toHex(),
-      }),
-    )
-    .sendChangeTo(buyerAddress)
-    .payFee(FEE)
-    .build()
-    .toEIP12Object();
+    .to(new OutputBuilder(sellerGets, sellerAddress).setAdditionalRegisters({ R4: tag }));
+
+  if (creatorGets > 0n && royalty) {
+    builder.to(
+      new OutputBuilder(creatorGets, ErgoAddress.fromErgoTree(royalty.propositionBytes))
+        .setAdditionalRegisters({ R4: tag }),
+    );
+  }
+
+  return builder.sendChangeTo(buyerAddress).payFee(FEE).build().toEIP12Object();
 }
 
 /**
@@ -190,8 +284,20 @@ export function buildOfferTx(params: {
   bidderAddress: string;
   utxos: FleetBox[];
   height: number;
+  /** The token's issuer box; the contract reads the creator's share from it. */
+  issuerBox: FleetBox;
 }): EIP12UnsignedTransaction {
-  const { tokenId, amount, bidderAddress, utxos, height } = params;
+  const { tokenId, amount, bidderAddress, utxos, height, issuerBox } = params;
+  if (issuerBox.boxId !== tokenId) {
+    throw new Error('That issuer box does not belong to this token.');
+  }
+  // The same floor a listing has, for the same reason: below it the creator's
+  // share cannot fund its own output, so the contract's royalty check can never
+  // be satisfied and the bid would be funded, locked, and impossible to accept.
+  const bidFloor = royaltyOf(issuerBox) ? MIN_ROYALTY_BID : MIN_OFFER_VALUE;
+  if (amount < bidFloor) {
+    throw new Error(`The lowest workable bid on this token is ${bidFloor} nanoERG.`);
+  }
   if (amount < MIN_OFFER_VALUE) {
     throw new Error('An offer must cover the holder\'s settlement costs and leave positive proceeds.');
   }
@@ -206,6 +312,7 @@ export function buildOfferTx(params: {
       new OutputBuilder(amount, OFFER_ADDRESS).setAdditionalRegisters({
         R4: SSigmaProp(SGroupElement(pk)).toHex(),
         R5: SColl(SByte, tokenId).toHex(),
+          R6: SBox(issuerBox as Parameters<typeof SBox>[0]).toHex(),
       }),
     )
     .sendChangeTo(bidder)
@@ -241,25 +348,44 @@ export function buildAcceptOfferTx(params: {
    */
   listingBox?: FleetBox;
   height: number;
+  /** The delivered token's issuer box. */
+  issuerBox: FleetBox;
 }): EIP12UnsignedTransaction {
-  const { offerBox, tokenId, bidderAddress, holderAddress, holderUtxos, listingBox, height } =
-    params;
-  assertPositiveOfferNet(offerBox);
+  const {
+    offerBox,
+    tokenId,
+    bidderAddress,
+    holderAddress,
+    holderUtxos,
+    listingBox,
+    height,
+    issuerBox,
+  } = params;
+  const royalty = royaltyOf(issuerBox);
+  assertPositiveOfferNet(offerBox, royalty);
 
-  return new TransactionBuilder(height)
+  const tag = SColl(SByte, offerBox.boxId).toHex();
+  const creatorGets = royaltyOn(BigInt(offerBox.value), royalty);
+
+  const builder = new TransactionBuilder(height)
     .from(listingBox ? [offerBox, listingBox] : [offerBox], { ensureInclusion: true })
     .from(holderUtxos)
     .to(
       new OutputBuilder(SAFE_MIN_BOX_VALUE, bidderAddress)
         .addTokens({ tokenId, amount: 1n })
-        .setAdditionalRegisters({
-          R4: SColl(SByte, offerBox.boxId).toHex(),
-        }),
-    )
-    .sendChangeTo(holderAddress)
-    .payFee(FEE)
-    .build()
-    .toEIP12Object();
+        .setAdditionalRegisters({ R4: tag }),
+    );
+
+  // A separate box, carrying no token — which is exactly how the contract tells
+  // it apart from the delivery and refuses to count one output twice.
+  if (creatorGets > 0n && royalty) {
+    builder.to(
+      new OutputBuilder(creatorGets, ErgoAddress.fromErgoTree(royalty.propositionBytes))
+        .setAdditionalRegisters({ R4: tag }),
+    );
+  }
+
+  return builder.sendChangeTo(holderAddress).payFee(FEE).build().toEIP12Object();
 }
 
 /** Withdraw an offer. The bidder's signature alone, same as cancelling a listing. */
@@ -301,6 +427,12 @@ export function buildCollectionOfferTx(params: {
   height: number;
 }): EIP12UnsignedTransaction {
   const { root, amount, bidderAddress, utxos, height } = params;
+  // The same floor a specific bid has. A collection bid cannot look up the
+  // rate — it does not know which piece will settle it — so it takes the floor
+  // every supported collection implies.
+  if (amount < MIN_ROYALTY_BID) {
+    throw new Error(`The lowest workable collection bid is ${MIN_ROYALTY_BID} nanoERG.`);
+  }
   if (amount < MIN_OFFER_VALUE) {
     throw new Error('An offer must cover the holder\'s settlement costs and leave positive proceeds.');
   }
@@ -342,6 +474,8 @@ export function buildAcceptCollectionOfferTx(params: {
   /** The seller's listing box, when the piece being delivered is listed. */
   listingBox?: FleetBox;
   height: number;
+  /** The delivered token's issuer box, proved by id inside the script. */
+  issuerBox: FleetBox;
 }): EIP12UnsignedTransaction {
   const {
     offerBox,
@@ -352,8 +486,10 @@ export function buildAcceptCollectionOfferTx(params: {
     holderUtxos,
     listingBox,
     height,
+    issuerBox,
   } = params;
-  assertPositiveOfferNet(offerBox);
+  const royalty = royaltyOf(issuerBox);
+  assertPositiveOfferNet(offerBox, royalty);
 
   const path = merkleProof(collectionTokenIds, tokenId);
   if (!path) {
@@ -373,20 +509,32 @@ export function buildAcceptCollectionOfferTx(params: {
       SPair(SColl(SByte), SBool),
       path.map((step) => [step.sibling, step.siblingIsLeft] as [Uint8Array, boolean]),
     ).toHex(),
+    // Slot 2 is the issuer box. Which piece is delivered is not known when the
+    // bid is made, so neither is which issuer box carries its royalty — the
+    // acceptor supplies it, and the script proves it by id.
+    2: SBox(issuerBox as Parameters<typeof SBox>[0]).toHex(),
   });
 
-  return new TransactionBuilder(height)
+  const tag = SColl(SByte, offerBox.boxId).toHex();
+  const creatorGets = royaltyOn(BigInt(offerBox.value), royalty);
+
+  const builder = new TransactionBuilder(height)
     .from(listingBox ? [input, listingBox] : [input], { ensureInclusion: true })
     .from(holderUtxos)
     .to(
       new OutputBuilder(SAFE_MIN_BOX_VALUE, bidderAddress)
         .addTokens({ tokenId, amount: 1n })
-        .setAdditionalRegisters({ R4: SColl(SByte, offerBox.boxId).toHex() }),
-    )
-    .sendChangeTo(holderAddress)
-    .payFee(FEE)
-    .build()
-    .toEIP12Object();
+        .setAdditionalRegisters({ R4: tag }),
+    );
+
+  if (creatorGets > 0n && royalty) {
+    builder.to(
+      new OutputBuilder(creatorGets, ErgoAddress.fromErgoTree(royalty.propositionBytes))
+        .setAdditionalRegisters({ R4: tag }),
+    );
+  }
+
+  return builder.sendChangeTo(holderAddress).payFee(FEE).build().toEIP12Object();
 }
 
 /** Withdraw a collection bid. The bidder's signature alone. */

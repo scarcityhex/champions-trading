@@ -27,6 +27,7 @@ import {
 } from './transactions';
 import { isWrongNetwork, type useNautilus } from './nautilus';
 import { NETWORK } from './contract';
+import { issuerBoxOf } from './explorer';
 
 /** Per network, so a testnet receipt cannot surface on a mainnet page. */
 const RECEIPT_KEY = `champions-trading:receipt:${NETWORK}`;
@@ -170,34 +171,62 @@ export function useMarket(
     [wallet, onSettled, onPending],
   );
 
+  // Listing and buying both need the token's issuer box: the contract reads the
+  // creator's share out of it and proves it genuine by `issuer.id == tokenId`.
+  // Fetched here rather than held in state — it is immutable and cached by the
+  // explorer module, so this costs one request per token per session.
+  const withIssuer = useCallback(
+    async (tokenId: string, use: (issuerBox: FleetBox) => Promise<void>) => {
+      const issuerBox = await issuerBoxOf(tokenId);
+      if (!issuerBox) {
+        setError(
+          'Could not read this token’s issuer box, which sets the creator’s royalty. ' +
+            'Nothing was signed. Try again in a moment.',
+        );
+        return;
+      }
+      await use(issuerBox);
+    },
+    [],
+  );
+
   const list = useCallback(
     (tokenId: string, price: bigint) =>
-      run(tokenId, 'list', (height, utxos) =>
-        buildListTx({
-          tokenId,
-          price,
-          sellerAddress: wallet.address!,
-          utxos,
-          height,
-        }),
+      withIssuer(tokenId, (issuerBox) =>
+        run(tokenId, 'list', (height, utxos) =>
+          buildListTx({
+            tokenId,
+            price,
+            sellerAddress: wallet.address!,
+            utxos,
+            height,
+            issuerBox,
+          }),
+        ),
       ),
-    [run, wallet],
+    [run, wallet, withIssuer],
   );
 
   const buy = useCallback(
     (listing: Listing) =>
-      run(listing.tokenId, 'buy', (height, utxos) =>
-        buildBuyTx({
-          listingBox: listing.box,
-          price: listing.price,
-          sellerAddress: listing.seller,
-          buyerAddress: wallet.address!,
-          buyerUtxos: utxos,
-          height,
-        }),
-        listing.boxId,
+      withIssuer(listing.tokenId, (issuerBox) =>
+        run(
+          listing.tokenId,
+          'buy',
+          (height, utxos) =>
+            buildBuyTx({
+              listingBox: listing.box,
+              price: listing.price,
+              sellerAddress: listing.seller,
+              buyerAddress: wallet.address!,
+              buyerUtxos: utxos,
+              height,
+              issuerBox,
+            }),
+          listing.boxId,
+        ),
       ),
-    [run, wallet],
+    [run, wallet, withIssuer],
   );
 
   const cancel = useCallback(
@@ -216,16 +245,19 @@ export function useMarket(
 
   const offer = useCallback(
     (tokenId: string, amount: bigint) =>
-      run(tokenId, 'offer', (height, utxos) =>
-        buildOfferTx({
-          tokenId,
-          amount,
-          bidderAddress: wallet.address!,
-          utxos,
-          height,
-        }),
+      withIssuer(tokenId, (issuerBox) =>
+        run(tokenId, 'offer', (height, utxos) =>
+          buildOfferTx({
+            tokenId,
+            amount,
+            bidderAddress: wallet.address!,
+            utxos,
+            height,
+            issuerBox,
+          }),
+        ),
       ),
-    [run, wallet],
+    [run, wallet, withIssuer],
   );
 
   const acceptOffer = useCallback(
@@ -233,11 +265,13 @@ export function useMarket(
     // the same transaction spends the listing and settles the bid, so a seller
     // does not have to cancel and wait a block first.
     (o: Offer, listing?: Listing) =>
+      withIssuer(o.tokenId, (issuerBox) =>
       run(
         o.tokenId,
         'accept',
         (height, utxos) =>
           buildAcceptOfferTx({
+            issuerBox,
             offerBox: o.box,
             tokenId: o.tokenId,
             bidderAddress: o.bidder,
@@ -247,8 +281,8 @@ export function useMarket(
             height,
           }),
         o.boxId,
-      ),
-    [run, wallet],
+      )),
+    [run, wallet, withIssuer],
   );
 
   const withdrawOffer = useCallback(
@@ -284,11 +318,13 @@ export function useMarket(
 
   const acceptCollectionOffer = useCallback(
     (o: CollectionOffer, tokenId: string, collectionTokenIds: string[], listing?: Listing) =>
+      withIssuer(tokenId, (issuerBox) =>
       run(
         tokenId,
         'acceptCollection',
         (height, utxos) =>
           buildAcceptCollectionOfferTx({
+            issuerBox,
             offerBox: o.box,
             tokenId,
             collectionTokenIds,
@@ -299,8 +335,8 @@ export function useMarket(
             height,
           }),
         o.boxId,
-      ),
-    [run, wallet],
+      )),
+    [run, wallet, withIssuer],
   );
 
   const withdrawCollectionOffer = useCallback(

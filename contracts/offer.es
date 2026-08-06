@@ -13,6 +13,7 @@
 // Registers:
 //   R4: SigmaProp   — the bidder
 //   R5: Coll[Byte]  — the token id being bid on
+//   R6: Box         — that token's ISSUER box, carrying the creator's royalty
 //
 // Two ways out:
 //   CANCEL  the bidder signs and takes their ERG back
@@ -38,7 +39,45 @@
     out.R4[Coll[Byte]].get == SELF.id
   }
 
-  bidderPk || sigmaProp(delivered)
+  // The creator's share, on the same terms as a sale.
+  //
+  // Guarded so the cancel branch never touches R6: a bid made by an older
+  // client has no issuer box, and calling .get on the absent option would abort
+  // the script and strand the bidder's ERG.
+  val settled =
+    if (SELF.R6[Box].isDefined) {
+      val issuer = SELF.R6[Box].get
+
+      // Same proof as sale.es: a box whose id is the token id can only be that
+      // token's issuer box.
+      val authentic = issuer.id == tokenId
+
+      val rate = if (issuer.R4[Int].isDefined) issuer.R4[Int].get else 0
+      val sane = rate >= 0 && rate < 1000
+
+      // The bid IS the box's ERG, so that is what the share is taken from. The
+      // holder nets less; the bidder pays exactly what they bid, which is the
+      // arrangement a sale makes too.
+      val royalty = if (sane) SELF.value * rate / 1000 else 0L
+
+      val paidCreator = royalty <= 0L || OUTPUTS.exists { (out: Box) =>
+        out.value >= royalty &&
+        out.propositionBytes == issuer.propositionBytes &&
+        // No tokens, so this can never be the delivery box counted twice. In
+        // sale.es the same collision is handled by comparing payees; here the
+        // delivery is the only output that must carry a token, which makes
+        // "carries none" the cheaper and stricter separator.
+        out.tokens.size == 0 &&
+        out.R4[Coll[Byte]].isDefined &&
+        out.R4[Coll[Byte]].get == SELF.id
+      }
+
+      authentic && sane && delivered && paidCreator
+    } else {
+      false
+    }
+
+  bidderPk || sigmaProp(settled)
 }
 
 // ── Notes for anyone reviewing this ────────────────────────────────────────

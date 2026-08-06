@@ -18,6 +18,7 @@
 // Context variables, supplied by whoever accepts:
 //   0: Coll[Byte]                     — the token id being delivered
 //   1: Coll[(Coll[Byte], Boolean)]    — sibling hashes, and which side each sits
+//   2: Box                            — the delivered token's ISSUER box
 //
 // Two ways out, as with the other two contracts:
 //   CANCEL  the bidder signs and takes their ERG back
@@ -29,6 +30,9 @@
 
   val tokenIdOpt = getVar[Coll[Byte]](0)
   val pathOpt = getVar[Coll[(Coll[Byte], Boolean)]](1)
+  // Supplied by the acceptor, because which piece is delivered is not known
+  // when the bid is made — so neither is which issuer box carries its royalty.
+  val issuerOpt = getVar[Box](2)
 
   // Guarded rather than unwrapped directly. On the cancel branch the bidder
   // supplies no context variables at all, and calling .get on the absent option
@@ -36,7 +40,7 @@
   // stranding the bidder's ERG. `if` is lazy here; the option access only
   // happens once both are known to be present.
   val delivered =
-    if (tokenIdOpt.isDefined && pathOpt.isDefined) {
+    if (tokenIdOpt.isDefined && pathOpt.isDefined && issuerOpt.isDefined) {
       val tokenId = tokenIdOpt.get
       val path = pathOpt.get
 
@@ -60,7 +64,29 @@
         out.R4[Coll[Byte]].get == SELF.id
       }
 
-      isMember && paid
+      // The creator's share, on the same terms as a sale and a specific offer.
+      //
+      // The issuer box is authenticated by the identity that makes any of this
+      // possible: its id IS the token id being delivered. A bidder cannot pick
+      // the rate, and neither can the acceptor — a substituted box would have
+      // to hash to the token they are handing over.
+      val issuer = issuerOpt.get
+      val authentic = issuer.id == tokenId
+
+      val rate = if (issuer.R4[Int].isDefined) issuer.R4[Int].get else 0
+      val sane = rate >= 0 && rate < 1000
+      val royalty = if (sane) SELF.value * rate / 1000 else 0L
+
+      val paidCreator = royalty <= 0L || OUTPUTS.exists { (out: Box) =>
+        out.value >= royalty &&
+        out.propositionBytes == issuer.propositionBytes &&
+        // Carries no token, so it can never be the delivery box counted twice.
+        out.tokens.size == 0 &&
+        out.R4[Coll[Byte]].isDefined &&
+        out.R4[Coll[Byte]].get == SELF.id
+      }
+
+      isMember && paid && authentic && sane && paidCreator
     } else {
       false
     }

@@ -14,6 +14,9 @@ import { describe, expect, it, beforeEach } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { compile } from '@fleet-sdk/compiler';
+import { serializeBox } from '@fleet-sdk/serializer';
+import { blake2b256, hex } from '@fleet-sdk/crypto';
+import { SInt } from '@fleet-sdk/core';
 import {
   MockChain,
   type KeyedMockChainParty,
@@ -29,7 +32,30 @@ import {
   type FleetBox,
 } from './transactions';
 
-const NFT = '5836c62731c4f5f0d0e4a5f0b3f9a4d0c2e8b1a7f6d3c9e2b8a4f1d7c3e9b2a8';
+/**
+ * An issuer box whose id is genuinely the hash of its own serialization —
+ * which is what makes it a valid token id, and what the sale contract checks.
+ * A hand-written id would pass the builder's guard and fail the script.
+ */
+function issuerFor(rate: number | null, ergoTree: string): { box: FleetBox; tokenId: string } {
+  const box = {
+    value: 2_000_000n,
+    ergoTree,
+    creationHeight: 725_325,
+    assets: [],
+    additionalRegisters: rate === null ? {} : { R4: SInt(rate).toHex() },
+    transactionId: '00'.repeat(32),
+    index: 0,
+  };
+  const tokenId = hex.encode(blake2b256(serializeBox(box as never).toBytes()));
+  return { box: { ...box, boxId: tokenId } as unknown as FleetBox, tokenId };
+}
+
+// Derived, not invented. The sale contract requires the issuer box handed to
+// it to hash to the token id, so a literal token id cannot be listed at all.
+// Built with no royalty so the figures these tests assert stay whole-price;
+// the split itself is covered in lib/royaltyTransactions.test.ts.
+const { box: ISSUER, tokenId: NFT } = issuerFor(null, '0008cd02b55510f92d1f6ebe1572e6a7f745dd63c2aa3ae26c4f921f20df2f5f4215de84');
 const ERG = 1_000_000_000n;
 const PRICE = 7n * ERG;
 
@@ -59,6 +85,7 @@ describe('transaction builders', () => {
       sellerAddress: seller.address.toString(),
       utxos: utxosOf(seller),
       height: chain.height,
+      issuerBox: ISSUER,
     });
     expect(chain.execute(tx, { signers: [seller] })).toBe(true);
     return utxosOf(sale)[0];
@@ -87,6 +114,7 @@ describe('transaction builders', () => {
       buyerAddress: buyer.address.toString(),
       buyerUtxos: utxosOf(buyer),
       height: chain.height,
+      issuerBox: ISSUER,
     });
 
     expect(chain.execute(tx, { signers: [buyer] })).toBe(true);
@@ -122,6 +150,7 @@ describe('transaction builders', () => {
       buyerAddress: buyer.address.toString(),
       buyerUtxos: utxosOf(buyer),
       height: chain.height,
+      issuerBox: ISSUER,
     });
     expect(chain.execute(tx, { signers: [buyer], throw: false })).toBe(false);
   });
@@ -147,6 +176,7 @@ describe('transaction builders', () => {
         sellerAddress: seller.address.toString(),
         utxos: utxosOf(seller),
         height: chain.height,
+      issuerBox: ISSUER,
       }),
     ).toThrow(/greater than zero/);
   });

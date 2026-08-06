@@ -9,6 +9,9 @@ import { describe, expect, it, beforeEach } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { compile } from '@fleet-sdk/compiler';
+import { serializeBox } from '@fleet-sdk/serializer';
+import { blake2b256, hex } from '@fleet-sdk/crypto';
+import { SInt } from '@fleet-sdk/core';
 import {
   OutputBuilder,
   RECOMMENDED_MIN_FEE_VALUE,
@@ -33,8 +36,35 @@ import {
   type FleetBox,
 } from '../lib/transactions';
 
-const NFT = '5836c62731c4f5f0d0e4a5f0b3f9a4d0c2e8b1a7f6d3c9e2b8a4f1d7c3e9b2a8';
-const OTHER = '9494a174c9b3f1e8d2a7b5c0f3e6d9a2b8c4f7e1d5a9b3c6f0e4d8a2b7c1f5e9';
+/**
+ * An issuer box whose id is genuinely the hash of its own serialization —
+ * which is what makes it a valid token id, and what the sale contract checks.
+ * A hand-written id would pass the builder's guard and fail the script.
+ */
+function issuerFor(rate: number | null, ergoTree: string): { box: FleetBox; tokenId: string } {
+  const box = {
+    value: 2_000_000n,
+    ergoTree,
+    creationHeight: 725_325,
+    assets: [],
+    additionalRegisters: rate === null ? {} : { R4: SInt(rate).toHex() },
+    transactionId: '00'.repeat(32),
+    index: 0,
+  };
+  const tokenId = hex.encode(blake2b256(serializeBox(box as never).toBytes()));
+  return { box: { ...box, boxId: tokenId } as unknown as FleetBox, tokenId };
+}
+
+// Derived, not invented. The sale contract requires the issuer box handed to
+// it to hash to the token id, so a literal token id cannot be listed at all.
+// Built with no royalty so the figures these tests assert stay whole-price;
+// the split itself is covered in lib/royaltyTransactions.test.ts.
+const { box: ISSUER, tokenId: NFT } = issuerFor(null, '0008cd02b55510f92d1f6ebe1572e6a7f745dd63c2aa3ae26c4f921f20df2f5f4215de84');
+const { box: ISSUER_OTHER, tokenId: OTHER_DERIVED } = issuerFor(
+  null,
+  '0008cd0338fccd45a1f737d81cb90d0fc9876a278049615c2a75b803a4da2c6d7f5f1764',
+);
+const OTHER = OTHER_DERIVED;
 const ERG = 1_000_000_000n;
 const BID = 4n * ERG;
 
@@ -66,6 +96,7 @@ describe('offer.es', () => {
       bidderAddress: bidder.address.toString(),
       utxos: utxosOf(bidder),
       height: chain.height,
+      issuerBox: tokenId === OTHER ? ISSUER_OTHER : ISSUER,
     });
     expect(chain.execute(tx, { signers: [bidder] })).toBe(true);
     return utxosOf(offers)[offers.utxos.length - 1];
@@ -88,6 +119,7 @@ describe('offer.es', () => {
       holderAddress: holder.address.toString(),
       holderUtxos: utxosOf(holder),
       height: chain.height,
+      issuerBox: ISSUER,
     });
 
     expect(chain.execute(tx, { signers: [holder] })).toBe(true);
@@ -135,6 +167,7 @@ describe('offer.es', () => {
       holderAddress: stranger.address.toString(),
       holderUtxos: utxosOf(stranger),
       height: chain.height,
+      issuerBox: ISSUER,
     });
     expect(chain.execute(tx, { signers: [stranger], throw: false })).toBe(false);
   });
@@ -149,6 +182,7 @@ describe('offer.es', () => {
       holderAddress: holder.address.toString(),
       holderUtxos: utxosOf(holder),
       height: chain.height,
+      issuerBox: ISSUER,
     });
     expect(chain.execute(tx, { signers: [holder], throw: false })).toBe(false);
   });
@@ -217,8 +251,9 @@ describe('offer.es', () => {
         bidderAddress: bidder.address.toString(),
         utxos: utxosOf(bidder),
         height: chain.height,
+      issuerBox: ISSUER,
       }),
-    ).toThrow(/settlement costs/);
+    ).toThrow(/lowest workable bid/);
   });
 
   it('allows the exact minimum offer that still has a positive net', () => {
@@ -238,6 +273,7 @@ describe('offer.es', () => {
         holderAddress: holder.address.toString(),
         holderUtxos: utxosOf(holder),
         height: chain.height,
+      issuerBox: ISSUER,
       }),
     ).toThrow(/no proceeds/);
   });
@@ -297,6 +333,7 @@ describe('accepting an offer on a listed piece', () => {
         sellerAddress: seller.address.toString(),
         utxos: utxosOf(seller),
         height: chain.height,
+      issuerBox: ISSUER,
       }),
       { signers: [seller] },
     );
@@ -307,6 +344,7 @@ describe('accepting an offer on a listed piece', () => {
         bidderAddress: buyer.address.toString(),
         utxos: utxosOf(buyer),
         height: chain.height,
+      issuerBox: ISSUER,
       }),
       { signers: [buyer] },
     );
@@ -325,6 +363,7 @@ describe('accepting an offer on a listed piece', () => {
       holderUtxos: utxosOf(seller),
       listingBox: listing,
       height: chain.height,
+      issuerBox: ISSUER,
     });
 
     expect(chain.execute(tx, { signers: [seller] })).toBe(true);
@@ -349,6 +388,7 @@ describe('accepting an offer on a listed piece', () => {
       holderUtxos: utxosOf(buyer),
       listingBox: listing,
       height: chain.height,
+      issuerBox: ISSUER,
     });
 
     expect(chain.execute(tx, { signers: [buyer], throw: false })).toBe(false);

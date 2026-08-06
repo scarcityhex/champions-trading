@@ -120,6 +120,13 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("collections", nargs="*", default=None)
     ap.add_argument("--src", type=Path, default=DEFAULT_SRC)
+    ap.add_argument(
+        "--out",
+        type=Path,
+        default=None,
+        help="where the tiers are written (default: this repo's public/). "
+        "Point it elsewhere to build the same derivatives for another project.",
+    )
     ap.add_argument("--tier", choices=[*TIERS, "all"], default="all")
     ap.add_argument(
         "--prune",
@@ -139,7 +146,7 @@ def main() -> None:
 
     for tier in tiers:
         cfg = TIERS[tier]
-        out_root = ROOT / "public" / tier
+        out_root = (args.out or ROOT / "public") / tier
         total_bytes = 0
         print(f"\n### {tier} ({cfg['size']}px)")
         for name in picked:

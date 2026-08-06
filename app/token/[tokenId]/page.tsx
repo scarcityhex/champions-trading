@@ -18,7 +18,9 @@ import {
   rarityLabel,
 } from '@/lib/collections';
 import { toErg, type CollectionOffer, type Offer } from '@/lib/explorer';
-import { offerNet } from '@/lib/transactions';
+import { offerNet, MIN_ROYALTY_BID } from '@/lib/transactions';
+import { royaltyForDisplay, royaltyOn, sellerReceives, type Royalty } from '@/lib/royalties';
+import { issuerBoxOf } from '@/lib/explorer';
 import { shortAddress } from '@/lib/nautilus';
 import { EXPLORER_UI } from '@/lib/contract';
 import { pendingLabel, type Pending } from '@/lib/usePending';
@@ -129,6 +131,20 @@ function TokenDetail({
   const rank = rarityPercentiles(collection).get(tokenId);
   const sources = useMemo(() => detailSources(nft, collection.dir), [nft, collection.dir]);
 
+  // The creator's share is a fact about the token, published at mint time in
+  // its issuer box. Loaded here so the price can be shown split rather than as
+  // a single number that turns into two in the wallet popup.
+  const [royalty, setRoyalty] = useState<Royalty | null>(null);
+  useEffect(() => {
+    let live = true;
+    issuerBoxOf(tokenId).then((box) => {
+      if (live) setRoyalty(royaltyForDisplay(box ?? undefined));
+    });
+    return () => {
+      live = false;
+    };
+  }, [tokenId]);
+
   return (
     <main className="min-h-screen p-4 md:p-8">
       <div className={PAGE_WIDTH}>
@@ -156,6 +172,7 @@ function TokenDetail({
                 action={action}
                 pending={inFlight}
                 busy={busy}
+                royalty={royalty}
                 onBuy={() => listing && actions.buy(listing)}
                 onCancel={() => listing && actions.cancel(listing)}
                 onList={() => setDialog('list')}
@@ -163,6 +180,7 @@ function TokenDetail({
                 connected={Boolean(wallet.address)}
               />
               <Offers
+                royalty={royalty}
                 offers={offers}
                 collectionBids={collectionBids}
                 me={wallet.address}
@@ -282,6 +300,7 @@ function PriceBlock({
   onCancel,
   onList,
   onOffer,
+  royalty,
 }: {
   listing?: { price: bigint; seller: string; boxValue: bigint };
   action: ReturnType<typeof actionFor>;
@@ -292,7 +311,11 @@ function PriceBlock({
   onCancel: () => void;
   onList: () => void;
   onOffer: () => void;
+  /** Read from the token's issuer box; null until it loads, or if it has none. */
+  royalty: Royalty | null;
 }) {
+  const creatorGets = listing ? royaltyOn(listing.price, royalty) : 0n;
+  const sellerGets = listing ? sellerReceives(listing.price, royalty) : 0n;
   return (
     <PixelPanel variant="inset" className="p-3">
       {listing ? (
@@ -302,6 +325,20 @@ function PriceBlock({
           <p className="mb-3 font-pixel text-lg text-gray-500" title={listing.seller}>
             Seller {shortAddress(listing.seller)}
           </p>
+          {/* Itemised rather than folded into one number. The buyer is paying
+              two different people, and a total that quietly exceeds the price
+              on the card is the kind of surprise that gets found in the wallet
+              popup — which is the worst place to find it. */}
+          {creatorGets > 0n && royalty && (
+            <div className="mb-3 border-t border-black/40 pt-2">
+              <Line label="You pay" value={`${toErg(listing.price)} ERG`} strong />
+              <Line
+                label={`Creator royalty (${royalty.percent}%)`}
+                value={`${toErg(creatorGets)} ERG`}
+              />
+              <Line label="Seller receives" value={`${toErg(sellerGets)} ERG`} />
+            </div>
+          )}
         </>
       ) : (
         <p className="mb-3 font-pixel text-xl text-gray-400">Not for sale.</p>
@@ -363,6 +400,20 @@ function PriceBlock({
  * delivery box and the fee out of the bid, so the headline is not what they
  * walk away with.
  */
+/** One row of a money breakdown: label left, figure right. */
+function Line({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
+  return (
+    <div className="flex items-baseline justify-between gap-3">
+      <span className={`font-pixel text-lg ${strong ? 'text-gray-300' : 'text-gray-500'}`}>
+        {label}
+      </span>
+      <span className={`font-pixel text-lg ${strong ? 'text-amber-300' : 'text-gray-400'}`}>
+        {value}
+      </span>
+    </div>
+  );
+}
+
 function Offers({
   offers,
   collectionBids,
@@ -374,9 +425,12 @@ function Offers({
   onWithdraw,
   onAcceptCollection,
   onMake,
+  royalty,
 }: {
   offers: Offer[];
   collectionBids: CollectionOffer[];
+  /** Needed for the net: an accepted bid pays the creator out of the bid. */
+  royalty: Royalty | null;
   me: string | null;
   owned: boolean;
   /** Set when this wallet has the piece listed, which Accept must undo. */
@@ -404,8 +458,11 @@ function Offers({
       {collectionBids.length > 0 && (
         <ul className="mb-2 flex flex-col gap-2">
           {collectionBids.map((o) => {
-            const net = offerNet(o.amount);
-            const safe = net > 0n;
+            const net = offerNet(o.amount, royalty);
+            // The builder refuses a bid below the floor, so a button offering
+            // to accept one is promising something that cannot happen.
+            const belowFloor = Boolean(royalty) && o.amount < MIN_ROYALTY_BID;
+            const safe = net > 0n && !belowFloor;
             return (
               <li key={o.boxId} className="flex items-center justify-between gap-2">
                 <div className="min-w-0">
@@ -449,8 +506,11 @@ function Offers({
         <ul className="flex flex-col gap-2">
           {offers.map((o) => {
             const mine = o.bidder === me;
-            const net = offerNet(o.amount);
-            const safe = net > 0n;
+            const net = offerNet(o.amount, royalty);
+            // The builder refuses a bid below the floor, so a button offering
+            // to accept one is promising something that cannot happen.
+            const belowFloor = Boolean(royalty) && o.amount < MIN_ROYALTY_BID;
+            const safe = net > 0n && !belowFloor;
             return (
               <li key={o.boxId} className="flex items-center justify-between gap-2">
                 <div className="min-w-0">

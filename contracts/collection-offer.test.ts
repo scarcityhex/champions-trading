@@ -10,6 +10,9 @@
 // on evidence the spender supplies, so the evidence has to be unforgeable.
 
 import { describe, expect, it, beforeEach } from 'vitest';
+import { blake2b256, hex } from '@fleet-sdk/crypto';
+import { SInt } from '@fleet-sdk/core';
+import { serializeBox } from '@fleet-sdk/serializer';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { compile } from '@fleet-sdk/compiler';
@@ -23,7 +26,7 @@ import {
   SColl,
   TransactionBuilder,
 } from '@fleet-sdk/core';
-import { SPair } from '@fleet-sdk/serializer';
+import { SBox, SPair } from '@fleet-sdk/serializer';
 import {
   MockChain,
   type KeyedMockChainParty,
@@ -40,12 +43,45 @@ import {
 } from '../lib/transactions';
 import { merkleProof, merkleRootHex } from '../lib/merkle';
 
+/** An issuer box whose id is genuinely the hash of its serialization. */
+const ISSUER_TREE = '0008cd02b55510f92d1f6ebe1572e6a7f745dd63c2aa3ae26c4f921f20df2f5f4215de84';
+
+function issuerFor(rate: number | null, ergoTree = ISSUER_TREE, creationHeight = 725_325) {
+  const box = {
+    value: 2_000_000n, ergoTree, creationHeight, assets: [],
+    additionalRegisters: rate === null ? {} : { R4: SInt(rate).toHex() },
+    transactionId: '00'.repeat(32), index: 0,
+  };
+  const boxId = hex.encode(blake2b256(serializeBox(box as never).toBytes()));
+  return { box: { ...box, boxId } as never, tokenId: boxId };
+}
+
+
 const ERG = 1_000_000_000n;
 const BID = 3n * ERG;
 
 /** A synthetic collection: odd count on purpose, so promoted nodes are covered. */
-const COLLECTION = Array.from({ length: 7 }, (_, i) => `${(i + 1).toString(16).padStart(2, '0')}`.repeat(32));
-const OUTSIDER = 'ff'.repeat(32);
+// Derived, not invented.
+//
+// The contract now authenticates the delivered token against an issuer box —
+// `issuer.id == tokenId` — so a made-up 32-byte string cannot be delivered by
+// anyone. Each member gets its own issuer box, and the collection is the ids
+// those boxes produce. Zero royalty keeps the figures in these tests whole, so
+// only the authenticity path is exercised here.
+// Same script, different creation heights — enough to give each box a distinct
+// id, which is all the collection needs. Inventing public keys per member would
+// mean generating valid curve points for no benefit.
+const ISSUERS = Array.from({ length: 7 }, (_, i) => issuerFor(null, undefined, 725_325 + i));
+const ISSUER_BY_TOKEN = new Map(ISSUERS.map((x) => [x.tokenId, x.box]));
+const COLLECTION = ISSUERS.map((x) => x.tokenId);
+// A real token that simply is not in the tree.
+//
+// It used to be a literal, which the contract now rejects on authenticity
+// before the proof is ever examined — so the forged-proof test would have
+// passed without the Merkle check existing at all. Derived from its own issuer
+// box, the only thing left to fail is the proof.
+const OUTSIDER_ISSUER = issuerFor(null, ISSUER_TREE, 999_999);
+const OUTSIDER = OUTSIDER_ISSUER.tokenId;
 const ROOT = merkleRootHex(COLLECTION);
 
 describe('collection-offer.es', () => {
@@ -103,6 +139,7 @@ describe('collection-offer.es', () => {
       holderAddress: holder.address.toString(),
       holderUtxos: utxosOf(holder),
       height: chain.height,
+      issuerBox: ISSUER_BY_TOKEN.get(COLLECTION[3])!,
     });
 
     expect(chain.execute(tx, { signers: [holder] })).toBe(true);
@@ -140,6 +177,7 @@ describe('collection-offer.es', () => {
         holderAddress: h.address.toString(),
         holderUtxos: h.utxos.toArray() as unknown as FleetBox[],
         height: fresh.height,
+          issuerBox: ISSUER_BY_TOKEN.get(tokenId)!,
       });
       expect(fresh.execute(tx, { signers: [h] }), tokenId).toBe(true);
     }
@@ -172,7 +210,7 @@ describe('collection-offer.es', () => {
         utxos: utxosOf(bidder),
         height: chain.height,
       }),
-    ).toThrow(/settlement costs/);
+    ).toThrow(/lowest workable collection bid/);
   });
 
   // ── Attacks ──────────────────────────────────────────────────────────────
@@ -188,6 +226,7 @@ describe('collection-offer.es', () => {
         holderAddress: holder.address.toString(),
         holderUtxos: utxosOf(holder),
         height: chain.height,
+        issuerBox: ISSUERS[0].box,
       }),
     ).toThrow(/not part of the collection/);
   });
@@ -205,6 +244,10 @@ describe('collection-offer.es', () => {
         SPair(SColl(SByte), SBool),
         stolenPath.map((s) => [s.sibling, s.siblingIsLeft] as [Uint8Array, boolean]),
       ).toHex(),
+      // Slot 2 must be a genuine issuer box, or the script refuses before it
+      // ever evaluates the attack — and the test would pass for the wrong
+      // reason. Supplied here so each attack below is the only thing failing.
+      2: SBox(OUTSIDER_ISSUER.box as never).toHex(),
     });
 
     const tx = new TransactionBuilder(chain.height)
@@ -227,6 +270,10 @@ describe('collection-offer.es', () => {
     const input = new ErgoUnsignedInput(box).setContextExtension({
       0: SColl(SByte, COLLECTION[3]).toHex(),
       1: SColl(SPair(SColl(SByte), SBool), []).toHex(),
+      // Slot 2 must be a genuine issuer box, or the script refuses before it
+      // ever evaluates the attack — and the test would pass for the wrong
+      // reason. Supplied here so each attack below is the only thing failing.
+      2: SBox(ISSUER_BY_TOKEN.get(COLLECTION[3])! as never).toHex(),
     });
 
     const tx = new TransactionBuilder(chain.height)
@@ -253,6 +300,10 @@ describe('collection-offer.es', () => {
         SPair(SColl(SByte), SBool),
         path.map((s) => [s.sibling, s.siblingIsLeft] as [Uint8Array, boolean]),
       ).toHex(),
+      // Slot 2 must be a genuine issuer box, or the script refuses before it
+      // ever evaluates the attack — and the test would pass for the wrong
+      // reason. Supplied here so each attack below is the only thing failing.
+      2: SBox(ISSUER_BY_TOKEN.get(COLLECTION[3])! as never).toHex(),
     });
 
     const tx = new TransactionBuilder(chain.height)
@@ -286,6 +337,10 @@ describe('collection-offer.es', () => {
         SPair(SColl(SByte), SBool),
         path.map((s) => [s.sibling, s.siblingIsLeft] as [Uint8Array, boolean]),
       ).toHex(),
+      // Slot 2, or this is refused for a missing issuer before the
+      // double-settlement protection is ever reached — the test would pass
+      // whether or not that protection existed.
+      2: SBox(ISSUER_BY_TOKEN.get(COLLECTION[3])! as never).toHex(),
     };
     const inputs = utxosOf(offers).map((b) => new ErgoUnsignedInput(b).setContextExtension(ext));
 
@@ -316,8 +371,138 @@ describe('collection-offer.es', () => {
         holderAddress: holder.address.toString(),
         holderUtxos: utxosOf(holder),
         height: chain.height,
+        issuerBox: ISSUER_BY_TOKEN.get(COLLECTION[3])!,
       }),
     ).toThrow(/not part of the collection/);
+  });
+
+  // ── The royalty branch, which nothing exercised until now ─────────────────
+  //
+  // Every fixture above builds its issuers with a null rate, so the collection
+  // contract's royalty check had never run in any test. These give it a real
+  // 5% and try each way around it.
+  describe('paying the creator on a collection bid', () => {
+    const RATE = 50;
+    let author: KeyedMockChainParty;
+    let royalIssuer: { box: never; tokenId: string };
+    let royalRoot: string;
+    let royalBox: FleetBox;
+
+    const tagOf = (id: string) => ({ R4: SColl(SByte, id).toHex() });
+
+    beforeEach(() => {
+      author = chain.newParty('author');
+      royalIssuer = issuerFor(RATE, author.address.ergoTree, 800_001) as never;
+      royalRoot = merkleRootHex([royalIssuer.tokenId]);
+      holder.addBalance({ tokens: [{ tokenId: royalIssuer.tokenId, amount: 1n }] });
+
+      chain.execute(
+        buildCollectionOfferTx({
+          root: royalRoot,
+          amount: BID,
+          bidderAddress: bidder.address.toString(),
+          utxos: utxosOf(bidder),
+          height: chain.height,
+        }),
+        { signers: [bidder] },
+      );
+      royalBox = utxosOf(offers).at(-1)!;
+    });
+
+    const share = () => (BigInt(BID) * BigInt(RATE)) / 1000n;
+
+    /** A settlement built by hand, so it can be wrong on purpose. */
+    function attempt(extra: (b: TransactionBuilder) => void): boolean {
+      const path = merkleProof([royalIssuer.tokenId], royalIssuer.tokenId)!;
+      const input = new ErgoUnsignedInput(royalBox).setContextExtension({
+        0: SColl(SByte, royalIssuer.tokenId).toHex(),
+        1: SColl(
+          SPair(SColl(SByte), SBool),
+          path.map((x) => [x.sibling, x.siblingIsLeft] as [Uint8Array, boolean]),
+        ).toHex(),
+        2: SBox(royalIssuer.box).toHex(),
+      });
+      const b = new TransactionBuilder(chain.height)
+        .from([input], { ensureInclusion: true })
+        .from(utxosOf(holder))
+        .to(
+          new OutputBuilder(SAFE_MIN_BOX_VALUE, bidder.address)
+            .addTokens({ tokenId: royalIssuer.tokenId, amount: 1n })
+            .setAdditionalRegisters(tagOf(royalBox.boxId)),
+        );
+      extra(b);
+      return chain.execute(
+        b.sendChangeTo(holder.address).payFee(RECOMMENDED_MIN_FEE_VALUE).build(),
+        { signers: [holder], throw: false },
+      );
+    }
+
+    it('accepts a settlement that pays the creator', () => {
+      expect(
+        attempt((b) =>
+          b.to(
+            new OutputBuilder(share(), author.address).setAdditionalRegisters(tagOf(royalBox.boxId)),
+          ),
+        ),
+      ).toBe(true);
+      expect(author.balance.nanoergs).toBe(share());
+    });
+
+    it('rejects one that pays nobody', () => {
+      expect(attempt(() => {})).toBe(false);
+    });
+
+    it('rejects the share sent elsewhere', () => {
+      expect(
+        attempt((b) =>
+          b.to(
+            new OutputBuilder(share(), holder.address).setAdditionalRegisters(
+              tagOf(royalBox.boxId),
+            ),
+          ),
+        ),
+      ).toBe(false);
+    });
+
+    it('rejects a share short by a single nanoERG', () => {
+      expect(
+        attempt((b) =>
+          b.to(
+            new OutputBuilder(share() - 1n, author.address).setAdditionalRegisters(
+              tagOf(royalBox.boxId),
+            ),
+          ),
+        ),
+      ).toBe(false);
+    });
+
+    // The separator this contract relies on: a royalty output carries no token,
+    // so the delivery can never be counted as both.
+    it('rejects an output trying to be delivery and royalty at once', () => {
+      const path = merkleProof([royalIssuer.tokenId], royalIssuer.tokenId)!;
+      const input = new ErgoUnsignedInput(royalBox).setContextExtension({
+        0: SColl(SByte, royalIssuer.tokenId).toHex(),
+        1: SColl(
+          SPair(SColl(SByte), SBool),
+          path.map((x) => [x.sibling, x.siblingIsLeft] as [Uint8Array, boolean]),
+        ).toHex(),
+        2: SBox(royalIssuer.box).toHex(),
+      });
+      const tx = new TransactionBuilder(chain.height)
+        .from([input], { ensureInclusion: true })
+        .from(utxosOf(holder))
+        .to(
+          // One box: to the creator, carrying the token, worth the share.
+          new OutputBuilder(share(), author.address)
+            .addTokens({ tokenId: royalIssuer.tokenId, amount: 1n })
+            .setAdditionalRegisters(tagOf(royalBox.boxId)),
+        )
+        .sendChangeTo(holder.address)
+        .payFee(RECOMMENDED_MIN_FEE_VALUE)
+        .build();
+
+      expect(chain.execute(tx, { signers: [holder], throw: false })).toBe(false);
+    });
   });
 });
 

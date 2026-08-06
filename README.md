@@ -68,6 +68,19 @@ weakest kind of state on purpose: delete the file, re-run `npm run index:sales`,
 and it comes back. It is a cache with a long memory, never a source of truth,
 and every append is a commit anyone can diff against the chain.
 
+## Creator royalties
+
+Every sale pays the collection's creator 5%, taken out of the price and required
+by the contract — not added at checkout, and not a convention the front end
+could quietly drop. The rate is read from each token's EIP-24 issuer box, which
+is authenticated by the fact that a token's id IS that box's id.
+
+It applies to every trade — buying a listing, accepting a bid on a specific
+piece, and settling a collection-wide bid. Whoever receives ERG bears it.
+
+`docs/royalties.md` has the mechanism, the V1/V2 distinction that decides how R4
+is read, and how to check a collection's rate yourself.
+
 ## Custody
 
 None. The app builds an unsigned transaction; Nautilus signs it; the chain

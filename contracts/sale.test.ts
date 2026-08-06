@@ -27,14 +27,50 @@ import {
   SByte,
   SColl,
   SGroupElement,
+  SInt,
   SLong,
   SSigmaProp,
 } from '@fleet-sdk/core';
+import { SBox, serializeBox } from '@fleet-sdk/serializer';
+import { blake2b256, hex } from '@fleet-sdk/crypto';
 
 const SALE_SCRIPT = readFileSync(join(__dirname, 'sale.es'), 'utf8');
 const saleTree = compile(SALE_SCRIPT, { version: 1 });
 
-const NFT = '5836c62731c4f5f0d0e4a5f0b3f9a4d0c2e8b1a7f6d3c9e2b8a4f1d7c3e9b2a8';
+/**
+ * An issuer box carrying no royalty, and the token id it produces.
+ *
+ * Derived rather than written down: the purchase branch requires R6 to hold a
+ * box whose id IS the token id, so a literal token id cannot be listed. Zero
+ * royalty keeps the figures in these tests whole-price — the split has its own
+ * suite in lib/royaltyTransactions.test.ts — while still exercising the
+ * authenticity check on every purchase here.
+ */
+function issuerFor(rate: number | null, ergoTree: string) {
+  const box = {
+    value: 2_000_000n,
+    ergoTree,
+    creationHeight: 725_325,
+    assets: [],
+    additionalRegisters: rate === null ? {} : { R4: SInt(rate).toHex() },
+    transactionId: '00'.repeat(32),
+    index: 0,
+  };
+  const boxId = hex.encode(blake2b256(serializeBox(box as never).toBytes()));
+  return { box: { ...box, boxId }, tokenId: boxId };
+}
+
+const ISSUER = issuerFor(
+  null,
+  '0008cd02b55510f92d1f6ebe1572e6a7f745dd63c2aa3ae26c4f921f20df2f5f4215de84',
+);
+const NFT = ISSUER.tokenId;
+
+/** A second, unrelated token — its own issuer box, so its own id. */
+const ISSUER_B = issuerFor(
+  null,
+  '0008cd0338fccd45a1f737d81cb90d0fc9876a278049615c2a75b803a4da2c6d7f5f1764',
+);
 const ERG = 1_000_000_000n;
 const PRICE = 5n * ERG;
 /** ERG parked in the listing box itself; the protocol minimum, plus headroom. */
@@ -47,13 +83,14 @@ describe('sale.es', () => {
   let stranger: KeyedMockChainParty;
   let sale: NonKeyedMockChainParty;
 
-  /** A listing box: one NFT, seller in R4, price in R5. */
-  function list(tokenId = NFT) {
+  /** A listing box: one NFT, seller in R4, price in R5, issuer box in R6. */
+  function list(tokenId = NFT, issuer = ISSUER) {
     sale.addBalance(
       { nanoergs: BOX_MIN, tokens: [{ tokenId, amount: 1n }] },
       {
         R4: SSigmaProp(SGroupElement(seller.key.publicKey)).toHex(),
         R5: SLong(PRICE).toHex(),
+        R6: SBox(issuer.box as never).toHex(),
       },
     );
     return sale.utxos.at(sale.utxos.length - 1)!;
@@ -156,9 +193,14 @@ describe('sale.es', () => {
   // enough value, and each approve on its own. The seller would ship two NFTs
   // and be paid for one. This is the single most important test in the file.
   it('rejects two listings settled by one shared payment box', () => {
-    const NFT_B = '9494a174c9b3f1e8d2a7b5c0f3e6d9a2b8c4f7e1d5a9b3c6f0e4d8a2b7c1f5e9';
+    // Both listings must be genuinely purchasable, or this proves nothing.
+    //
+    // An earlier version gave the second listing a token id with no matching
+    // issuer box, which made it unbuyable on the authenticity check alone — so
+    // the test passed whether or not the R4 tag existed. A security test that
+    // cannot fail is worse than no test, because it reads like cover.
     const boxA = list(NFT);
-    list(NFT_B);
+    list(ISSUER_B.tokenId, ISSUER_B);
 
     const tx = new TransactionBuilder(chain.height)
       .from([...sale.utxos.toArray(), ...buyer.utxos.toArray()])
@@ -172,9 +214,8 @@ describe('sale.es', () => {
   });
 
   it('allows two listings in one transaction when each is paid separately', () => {
-    const NFT_B = '9494a174c9b3f1e8d2a7b5c0f3e6d9a2b8c4f7e1d5a9b3c6f0e4d8a2b7c1f5e9';
     const boxA = list(NFT);
-    const boxB = list(NFT_B);
+    const boxB = list(ISSUER_B.tokenId, ISSUER_B);
 
     const tx = new TransactionBuilder(chain.height)
       .from([...sale.utxos.toArray(), ...buyer.utxos.toArray()])
